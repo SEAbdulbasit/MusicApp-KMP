@@ -82,7 +82,6 @@ kotlin {
             dependsOn(commonMain)
             dependencies {
                 implementation(compose.web.core)
-                implementation(compose.runtime)
             }
         }
 

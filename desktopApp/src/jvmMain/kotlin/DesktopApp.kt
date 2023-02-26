@@ -15,7 +15,7 @@ fun main() = application {
         title = "MusicApp-KMP",
         state = WindowState(
             position = WindowPosition.Aligned(Alignment.Center),
-            size = getPreferredWindowSize(1000, 1000)
+            size = getPreferredWindowSize(800, 800)
         ),
     ) {
         CommonMainDesktop()

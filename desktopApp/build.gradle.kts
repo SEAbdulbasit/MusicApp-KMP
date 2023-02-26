@@ -23,7 +23,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "DesktopAppKt"
+        mainClass = "main"
     }
 }
 

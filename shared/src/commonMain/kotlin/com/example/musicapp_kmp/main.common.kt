@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 @Composable
 internal fun MainCommon() {
     MyApplicationTheme {
+        val viewModel = DashboardViewModel()
         Column {
             val text = remember { mutableStateOf("Hello from Compose Multiplatform") }
             Text(text = text.value)

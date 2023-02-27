@@ -6,17 +6,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.example.musicapp_kmp.dashboard.DashboardScreen
+import com.example.musicapp_kmp.dashboard.DashboardViewModel
 
 @Composable
 internal fun MainCommon() {
     MyApplicationTheme {
         val viewModel = DashboardViewModel()
-        Column {
-            val text = remember { mutableStateOf("Hello from Compose Multiplatform") }
-            Text(text = text.value)
-            Button(onClick = { text.value = "You clicked me!" }, content = {
-                Text("Click Me ")
-            })
-        }
+        DashboardScreen(viewModel)
     }
 }

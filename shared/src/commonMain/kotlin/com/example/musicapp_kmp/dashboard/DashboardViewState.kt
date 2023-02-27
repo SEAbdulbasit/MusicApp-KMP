@@ -1,4 +1,4 @@
-package com.example.musicapp_kmp
+package com.example.musicapp_kmp.dashboard
 
 import com.example.musicapp_kmp.network.models.newreleases.NewReleasedAlbums
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
@@ -9,6 +9,8 @@ import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
  */
 sealed interface DashboardViewState {
     object Loading : DashboardViewState
-    data class Success(val topFiftyCharts: TopFiftyCharts, val newReleasedAlbums: NewReleasedAlbums)
-    data class Failure(val error: String)
+    data class Success(val topFiftyCharts: TopFiftyCharts, val newReleasedAlbums: NewReleasedAlbums) :
+        DashboardViewState
+
+    data class Failure(val error: String) : DashboardViewState
 }

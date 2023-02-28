@@ -41,6 +41,14 @@ class SpotifyApiImpl : SpotifyApi {
         }.body()
     }
 
+    override suspend fun getPlayList(playlistId: String): TopFiftyCharts {
+        return client.get {
+            headers {
+                top50Charts("v1/playlists/$playlistId")
+            }
+        }.body()
+    }
+
     private val client = HttpClient {
         expectSuccess = true
         install(HttpTimeout) {
@@ -60,8 +68,7 @@ class SpotifyApiImpl : SpotifyApi {
             encodedPath = path
             headers {
                 append(
-                    HttpHeaders.Authorization,
-                    TOKEN
+                    HttpHeaders.Authorization, TOKEN
                 )
             }
         }

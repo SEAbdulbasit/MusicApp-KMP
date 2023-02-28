@@ -1,14 +1,11 @@
 package com.example.musicapp_kmp.dashboard
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -37,14 +34,14 @@ import com.seiko.imageloader.rememberAsyncImagePainter
  */
 
 @Composable
-internal fun DashboardScreen(viewModel: DashboardViewModel) {
+internal fun DashboardScreen(viewModel: DashboardViewModel, navigateToDetails: (String) -> Unit) {
     val state = viewModel.dashboardState.collectAsState()
 
     when (val resultedState = state.value) {
         is DashboardViewState.Failure -> Failure(resultedState.error)
         DashboardViewState.Loading -> Loading()
         is DashboardViewState.Success -> {
-            DashboardView(resultedState)
+            DashboardView(resultedState, navigateToDetails)
         }
     }
 }
@@ -62,30 +59,34 @@ internal fun Loading() {
 
 @Composable
 internal fun Failure(message: String) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = message, modifier = Modifier.align(Alignment.Center))
+    Box(modifier = Modifier.fillMaxSize().padding(32.dp)) {
+        Text(
+            text = message,
+            modifier = Modifier.align(Alignment.Center),
+            style = MaterialTheme.typography.body1.copy(color = Color(0xFFEFEEE0))
+        )
     }
 }
 
 
 @Composable
-internal fun DashboardView(dashboardState: DashboardViewState.Success) {
+internal fun DashboardView(dashboardState: DashboardViewState.Success, navigateToDetails: (String) -> Unit) {
     val listState = rememberScrollState()
     Column(
         modifier = Modifier.background(color = Color(0xFF1D2123)).fillMaxSize().verticalScroll(listState)
             .padding(bottom = 32.dp)
     ) {
-        TopChartView(dashboardState.topFiftyCharts)
-        FeaturedPlayLists(dashboardState.featuredPlayList)
-        NewReleases(dashboardState.newReleasedAlbums)
+        TopChartView(dashboardState.topFiftyCharts, navigateToDetails)
+        FeaturedPlayLists(dashboardState.featuredPlayList, navigateToDetails)
+        NewReleases(dashboardState.newReleasedAlbums, navigateToDetails)
     }
 }
 
 @Composable
-internal fun TopChartView(topFiftyCharts: TopFiftyCharts) {
+internal fun TopChartView(topFiftyCharts: TopFiftyCharts, navigateToDetails: (String) -> Unit) {
     Box(
         modifier = Modifier.aspectRatio(ratio = (367.0 / 450.0).toFloat()).clip(RoundedCornerShape(20.dp))
-            .padding(24.dp)
+            .padding(24.dp).clickable(onClick = { navigateToDetails(topFiftyCharts.id ?: "") })
     ) {
         val painter = rememberAsyncImagePainter(
             topFiftyCharts.images?.first()?.url
@@ -131,7 +132,7 @@ internal fun TopChartView(topFiftyCharts: TopFiftyCharts) {
 }
 
 @Composable
-internal fun FeaturedPlayLists(featuredPlayList: FeaturedPlayList) {
+internal fun FeaturedPlayLists(featuredPlayList: FeaturedPlayList, navigateToDetails: (String) -> Unit) {
     Column(modifier = Modifier.padding(top = 46.dp)) {
         Text(
             "Featured Playlist",
@@ -151,7 +152,9 @@ internal fun FeaturedPlayLists(featuredPlayList: FeaturedPlayList) {
                     modifier = Modifier.width(232.dp).clip(RoundedCornerShape(20.dp)).background(Color(0xFF1A1E1F))
                 ) {
 
-                    Column(modifier = Modifier.padding(16.dp)) {
+                    Column(
+                        modifier = Modifier.padding(16.dp).clickable(onClick = { navigateToDetails(playList.id ?: "") })
+                    ) {
                         val painter = rememberAsyncImagePainter(
                             playList.images?.first()?.url
                                 ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
@@ -196,7 +199,7 @@ internal fun FeaturedPlayLists(featuredPlayList: FeaturedPlayList) {
 }
 
 @Composable
-internal fun NewReleases(newReleasedAlbums: NewReleasedAlbums) {
+internal fun NewReleases(newReleasedAlbums: NewReleasedAlbums, navigateToDetails: (String) -> Unit) {
     Column(modifier = Modifier.padding(top = 46.dp).fillMaxWidth()) {
         Text(
             "New releases",
@@ -212,7 +215,7 @@ internal fun NewReleases(newReleasedAlbums: NewReleasedAlbums) {
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
         ) {
             items(items = newReleasedAlbums.albums?.items ?: emptyList()) { album ->
-                Box(Modifier.width(153.dp)) {
+                Box(Modifier.width(153.dp).clickable(onClick = { navigateToDetails(album.id ?: "") })) {
                     Column {
                         val painter = rememberAsyncImagePainter(
                             album.images?.first()?.url

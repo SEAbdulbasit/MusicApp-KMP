@@ -12,4 +12,5 @@ interface SpotifyApi {
     suspend fun getTopFiftyChart(): TopFiftyCharts
     suspend fun getNewReleases(): NewReleasedAlbums
     suspend fun getFeaturedPlaylist(): FeaturedPlayList
+    suspend fun getPlayList(playlistId: String): TopFiftyCharts
 }

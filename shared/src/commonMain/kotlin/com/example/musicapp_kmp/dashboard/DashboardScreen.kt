@@ -14,8 +14,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -24,7 +24,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.musicapp_kmp.network.models.featuredplaylist.FeaturedPlayList
+import com.example.musicapp_kmp.network.models.newreleases.NewReleasedAlbums
+import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
 
 
@@ -40,7 +44,7 @@ internal fun DashboardScreen(viewModel: DashboardViewModel) {
         is DashboardViewState.Failure -> Failure(resultedState.error)
         DashboardViewState.Loading -> Loading()
         is DashboardViewState.Success -> {
-            DashboardView()
+            DashboardView(resultedState)
         }
     }
 }
@@ -65,50 +69,58 @@ internal fun Failure(message: String) {
 
 
 @Composable
-internal fun DashboardView() {
+internal fun DashboardView(dashboardState: DashboardViewState.Success) {
     val listState = rememberScrollState()
-    Column(modifier = Modifier.background(color = Color(0xFF1D2123)).fillMaxSize().verticalScroll(listState)) {
-        TopChartView()
-        TopCarts()
-        NewReleases()
+    Column(
+        modifier = Modifier.background(color = Color(0xFF1D2123)).fillMaxSize().verticalScroll(listState)
+            .padding(bottom = 32.dp)
+    ) {
+        TopChartView(dashboardState.topFiftyCharts)
+        FeaturedPlayLists(dashboardState.featuredPlayList)
+        NewReleases(dashboardState.newReleasedAlbums)
     }
 }
 
 @Composable
-internal fun TopChartView() {
+internal fun TopChartView(topFiftyCharts: TopFiftyCharts) {
     Box(
         modifier = Modifier.aspectRatio(ratio = (367.0 / 450.0).toFloat()).clip(RoundedCornerShape(20.dp))
             .padding(24.dp)
     ) {
-        val painter =
-            rememberAsyncImagePainter("https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg")
+        val painter = rememberAsyncImagePainter(
+            topFiftyCharts.images?.first()?.url
+                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
+        )
         Image(
             painter,
-            "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
+            topFiftyCharts.images?.first()?.url
+                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
             modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(20.dp)),
             contentScale = ContentScale.Crop
         )
         Column(modifier = Modifier.padding(16.dp).align(Alignment.BottomStart)) {
             Text(
-                "R & B Hits",
+                topFiftyCharts.name ?: "",
                 style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Bold),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
                 color = Color.White
             )
             Text(
-                "ll mine, Lie again, Petty call me everyday,\n" + "Out of time, No love, Bad habit,\n" + "and so much more",
+                topFiftyCharts.description ?: "",
                 style = MaterialTheme.typography.body2,
                 color = Color.White,
                 modifier = Modifier.padding(top = 6.dp)
             )
             Row(modifier = Modifier.padding(top = 40.dp)) {
                 Icon(
-                    imageVector = Icons.Filled.CheckCircle,
-                    tint = Color.White,
+                    imageVector = Icons.Filled.FavoriteBorder,
+                    tint = Color(0xFFFACD66),
                     contentDescription = "Explore details",
                     modifier = Modifier.size(30.dp).align(Alignment.Top)
                 )
                 Text(
-                    text = "33k Likes",
+                    text = "${topFiftyCharts.followers?.total ?: 0} Likes",
                     style = MaterialTheme.typography.h5,
                     color = Color.White,
                     modifier = Modifier.padding(start = 16.dp)
@@ -119,10 +131,10 @@ internal fun TopChartView() {
 }
 
 @Composable
-internal fun TopCarts() {
+internal fun FeaturedPlayLists(featuredPlayList: FeaturedPlayList) {
     Column(modifier = Modifier.padding(top = 46.dp)) {
         Text(
-            "Top charts",
+            "Featured Playlist",
             style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold, color = Color(0xFFEFEEE0)),
             modifier = Modifier.padding(start = 16.dp)
         )
@@ -134,32 +146,39 @@ internal fun TopCarts() {
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            items(items = listOf(1, 2)) {
+            items(items = featuredPlayList.playlists?.items ?: emptyList()) { playList ->
                 Box(
                     modifier = Modifier.width(232.dp).clip(RoundedCornerShape(20.dp)).background(Color(0xFF1A1E1F))
                 ) {
 
                     Column(modifier = Modifier.padding(16.dp)) {
-                        val painter =
-                            rememberAsyncImagePainter("https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg")
+                        val painter = rememberAsyncImagePainter(
+                            playList.images?.first()?.url
+                                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
+                        )
                         Image(
                             painter,
-                            "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
+                            playList.images?.first()?.url
+                                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
                             modifier = Modifier.clip(RoundedCornerShape(20.dp)).width(100.dp).height(100.dp),
                             contentScale = ContentScale.Crop
                         )
                         Text(
-                            text = "Golden age of 80s",
+                            text = playList.name ?: "",
                             style = MaterialTheme.typography.body1.copy(color = Color.White),
-                            modifier = Modifier.padding(top = 16.dp)
+                            modifier = Modifier.padding(top = 16.dp),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
                         )
                         Text(
-                            text = "Golden age of 80s",
+                            text = playList.description ?: "",
                             style = MaterialTheme.typography.caption.copy(color = Color.White.copy(alpha = 0.5f)),
-                            modifier = Modifier.padding(top = 8.dp)
+                            modifier = Modifier.padding(top = 8.dp),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
                         )
                         Text(
-                            text = "Golden age of 80s",
+                            text = "${(playList.tracks?.total ?: 0)} tracks",
                             style = MaterialTheme.typography.body2.copy(color = Color.White),
                             modifier = Modifier.padding(top = 24.dp)
                         )
@@ -167,7 +186,7 @@ internal fun TopCarts() {
                     Icon(
                         imageVector = Icons.Default.Favorite,
                         tint = Color(0xFFFACD66),
-                        contentDescription = "Explore details",
+                        contentDescription = "Favorite",
                         modifier = Modifier.padding(top = 16.dp, end = 16.dp).size(30.dp).align(Alignment.TopEnd)
                     )
                 }
@@ -177,8 +196,8 @@ internal fun TopCarts() {
 }
 
 @Composable
-internal fun NewReleases() {
-    Column(modifier = Modifier.padding(top = 46.dp)) {
+internal fun NewReleases(newReleasedAlbums: NewReleasedAlbums) {
+    Column(modifier = Modifier.padding(top = 46.dp).fillMaxWidth()) {
         Text(
             "New releases",
             style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold, color = Color(0xFFEFEEE0)),
@@ -187,31 +206,38 @@ internal fun NewReleases() {
         val listState = rememberLazyListState()
 
         LazyRow(
-            modifier = Modifier.padding(top = 16.dp).fillMaxSize(),
+            modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
             state = listState,
-            horizontalArrangement = Arrangement.spacedBy(30.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
         ) {
-            items(items = listOf(1, 2, 3, 4, 5, 6)) {
-                Box {
+            items(items = newReleasedAlbums.albums?.items ?: emptyList()) { album ->
+                Box(Modifier.width(153.dp)) {
                     Column {
-                        val painter =
-                            rememberAsyncImagePainter("https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg")
+                        val painter = rememberAsyncImagePainter(
+                            album.images?.first()?.url
+                                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
+                        )
                         Image(
                             painter,
-                            "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
-                            modifier = Modifier.clip(RoundedCornerShape(20.dp)).width(153.dp).height(153.dp),
+                            album.images?.first()?.url
+                                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
+                            modifier = Modifier.width(153.dp).height(153.dp).clip(RoundedCornerShape(20.dp)),
                             contentScale = ContentScale.Crop
                         )
                         Text(
-                            text = "Life in a bubble",
+                            text = album.name ?: "",
                             style = MaterialTheme.typography.caption.copy(color = Color.White),
-                            modifier = Modifier.padding(top = 16.dp)
+                            modifier = Modifier.padding(top = 16.dp),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
                         )
                         Text(
-                            text = "Golden age of 80s",
+                            text = "${(album.totalTracks ?: 0)} tracks",
                             style = MaterialTheme.typography.caption.copy(color = Color.White.copy(alpha = 0.5f)),
-                            modifier = Modifier.padding(top = 8.dp)
+                            modifier = Modifier.padding(top = 8.dp),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
                         )
                     }
                 }

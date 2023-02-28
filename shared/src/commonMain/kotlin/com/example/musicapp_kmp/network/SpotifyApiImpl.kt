@@ -1,6 +1,7 @@
 package com.example.musicapp_kmp.network
 
 import com.example.musicapp_kmp.TOKEN
+import com.example.musicapp_kmp.network.models.featuredplaylist.FeaturedPlayList
 import com.example.musicapp_kmp.network.models.newreleases.NewReleasedAlbums
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import io.ktor.client.*
@@ -28,6 +29,14 @@ class SpotifyApiImpl : SpotifyApi {
         return client.get {
             headers {
                 top50Charts("v1/browse/new-releases")
+            }
+        }.body()
+    }
+
+    override suspend fun getFeaturedPlaylist(): FeaturedPlayList {
+        return client.get {
+            headers {
+                top50Charts("v1/browse/featured-playlists")
             }
         }.body()
     }

@@ -19,10 +19,14 @@ class DashboardViewModel {
     init {
         viewModelScope.launch {
             try {
-//                val topFiftyCharts = async { api.getTopFiftyChart() }.await()
-//                val newReleasedAlbums = async { api.getNewReleases() }.await()
-//                dashboardState.value =
-//                    DashboardViewState.Success(topFiftyCharts = topFiftyCharts, newReleasedAlbums = newReleasedAlbums)
+                val topFiftyCharts = async { api.getTopFiftyChart() }.await()
+                val newReleasedAlbums = async { api.getNewReleases() }.await()
+                val featuredPlaylist = async { api.getFeaturedPlaylist() }.await()
+                dashboardState.value = DashboardViewState.Success(
+                    topFiftyCharts = topFiftyCharts,
+                    newReleasedAlbums = newReleasedAlbums,
+                    featuredPlayList = featuredPlaylist
+                )
             } catch (e: Exception) {
                 e.printStackTrace()
                 DashboardViewState.Failure(e.message.toString())

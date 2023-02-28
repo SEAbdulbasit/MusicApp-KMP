@@ -1,21 +1,21 @@
 package com.example.musicapp_kmp.dashboard
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -35,8 +35,34 @@ import com.seiko.imageloader.rememberAsyncImagePainter
 @Composable
 internal fun DashboardScreen(viewModel: DashboardViewModel) {
     val state = viewModel.dashboardState.collectAsState()
-    DashboardView()
+
+    when (val resultedState = state.value) {
+        is DashboardViewState.Failure -> Failure(resultedState.error)
+        DashboardViewState.Loading -> Loading()
+        is DashboardViewState.Success -> {
+            DashboardView()
+        }
+    }
 }
+
+
+@Composable
+internal fun Loading() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        CircularProgressIndicator(
+            modifier = Modifier.align(Alignment.Center),
+            color = Color(0xFFFACD66),
+        )
+    }
+}
+
+@Composable
+internal fun Failure(message: String) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Text(text = message, modifier = Modifier.align(Alignment.Center))
+    }
+}
+
 
 @Composable
 internal fun DashboardView() {
@@ -52,7 +78,7 @@ internal fun DashboardView() {
 internal fun TopChartView() {
     Box(
         modifier = Modifier.aspectRatio(ratio = (367.0 / 450.0).toFloat()).clip(RoundedCornerShape(20.dp))
-            .padding(16.dp)
+            .padding(24.dp)
     ) {
         val painter =
             rememberAsyncImagePainter("https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg")
@@ -110,8 +136,7 @@ internal fun TopCarts() {
         ) {
             items(items = listOf(1, 2)) {
                 Box(
-                    modifier = Modifier.width(232.dp).clip(RoundedCornerShape(20.dp))
-                        .background(Color(0xFF1A1E1F))
+                    modifier = Modifier.width(232.dp).clip(RoundedCornerShape(20.dp)).background(Color(0xFF1A1E1F))
                 ) {
 
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -167,7 +192,7 @@ internal fun NewReleases() {
             horizontalArrangement = Arrangement.spacedBy(30.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            items(items = listOf(1, 2)) {
+            items(items = listOf(1, 2, 3, 4, 5, 6)) {
                 Box {
                     Column {
                         val painter =

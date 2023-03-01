@@ -6,7 +6,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
 import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -23,8 +22,10 @@ internal fun MyApplicationTheme(
         darkColors(
             primary = Color(0xFF1D2123),
             primaryVariant = Color(0xFF3700B3),
-            secondary = Color(0xFACD66),
-            surface = Color(0x1E1E1E)
+            secondary = Color(0xFFFACD66),
+            surface = Color(0xFF1E1E1E),
+            background = Color(0xFF1E1E1E),
+            onSurface = Color(0xFF1E1E1E),
             // onSurface = Color.White//Color(0x1E1E1E)
         )
 //    } else {
@@ -40,7 +41,9 @@ internal fun MyApplicationTheme(
         )
     )
     val shapes = Shapes(
-        small = RoundedCornerShape(4.dp), medium = RoundedCornerShape(4.dp), large = RoundedCornerShape(0.dp)
+        small = RoundedCornerShape(4.dp),
+        medium = RoundedCornerShape(4.dp),
+        large = RoundedCornerShape(0.dp)
     )
 
     MaterialTheme(

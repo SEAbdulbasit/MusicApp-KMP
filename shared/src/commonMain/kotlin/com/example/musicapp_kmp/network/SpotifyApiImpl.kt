@@ -20,7 +20,7 @@ class SpotifyApiImpl : SpotifyApi {
     override suspend fun getTopFiftyChart(): TopFiftyCharts {
         return client.get {
             headers {
-                top50Charts("v1/playlists/37i9dQZEVXbMDoHDwVN2tF")
+                sptifyEndPoint("v1/playlists/37i9dQZEVXbMDoHDwVN2tF")
             }
         }.body()
     }
@@ -28,7 +28,7 @@ class SpotifyApiImpl : SpotifyApi {
     override suspend fun getNewReleases(): NewReleasedAlbums {
         return client.get {
             headers {
-                top50Charts("v1/browse/new-releases")
+                sptifyEndPoint("v1/browse/new-releases")
             }
         }.body()
     }
@@ -36,7 +36,7 @@ class SpotifyApiImpl : SpotifyApi {
     override suspend fun getFeaturedPlaylist(): FeaturedPlayList {
         return client.get {
             headers {
-                top50Charts("v1/browse/featured-playlists")
+                sptifyEndPoint("v1/browse/featured-playlists")
             }
         }.body()
     }
@@ -44,7 +44,7 @@ class SpotifyApiImpl : SpotifyApi {
     override suspend fun getPlayList(playlistId: String): TopFiftyCharts {
         return client.get {
             headers {
-                top50Charts("v1/playlists/$playlistId")
+                sptifyEndPoint("v1/playlists/$playlistId")
             }
         }.body()
     }
@@ -62,7 +62,7 @@ class SpotifyApiImpl : SpotifyApi {
         }
     }
 
-    private fun HttpRequestBuilder.top50Charts(path: String) {
+    private fun HttpRequestBuilder.sptifyEndPoint(path: String) {
         url {
             takeFrom("https://api.spotify.com/v1/")
             encodedPath = path

@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class DashboardViewModel(api: SpotifyApiImpl) {
     val dashboardState = MutableStateFlow<DashboardViewState>(DashboardViewState.Loading)
 
-
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
         exception.printStackTrace()
         dashboardState.value = DashboardViewState.Failure(exception.message.toString())

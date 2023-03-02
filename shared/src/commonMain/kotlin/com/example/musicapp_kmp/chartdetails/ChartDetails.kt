@@ -2,6 +2,7 @@ package com.example.musicapp_kmp.chartdetails
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,20 +22,27 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
+import com.example.musicapp_kmp.chartdetails.OptionChips as OptionChips1
 
 
 /**
  * Created by abdulbasit on 28/02/2023.
  */
 @Composable
-internal fun ChartDetailsScreen(viewModel: ChartDetailsViewModel) {
+internal fun ChartDetailsScreen(
+    viewModel: ChartDetailsViewModel,
+    onPlayAllClicked: (List<Item>) -> Unit
+) {
     val state = viewModel.chartDetailsViewState.collectAsState()
     when (val resultedState = state.value) {
         is ChartDetailsViewState.Failure -> Failure(resultedState.error)
         ChartDetailsViewState.Loading -> Loading()
-        is ChartDetailsViewState.Success -> ChartDetailsView(resultedState.chartDetails)
+        is ChartDetailsViewState.Success -> ChartDetailsView(
+            resultedState.chartDetails, onPlayAllClicked
+        )
     }
 }
 
@@ -57,7 +65,10 @@ internal fun Failure(message: String) {
 
 
 @Composable
-internal fun ChartDetailsView(chartDetails: TopFiftyCharts) {
+internal fun ChartDetailsView(
+    chartDetails: TopFiftyCharts,
+    onPlayAllClicked: (List<Item>) -> Unit
+) {
     val painter = rememberAsyncImagePainter(
         chartDetails.images?.first()?.url
             ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
@@ -82,7 +93,7 @@ internal fun ChartDetailsView(chartDetails: TopFiftyCharts) {
         )
 
         LazyColumn(
-            modifier = Modifier.padding(horizontal = 30.dp, vertical = 32.dp),
+            modifier = Modifier.padding(horizontal = 30.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             item {
@@ -108,13 +119,12 @@ internal fun ChartDetailsView(chartDetails: TopFiftyCharts) {
                     style = MaterialTheme.typography.body2.copy(color = Color(0XFFEFEEE0)),
                     modifier = Modifier.padding(top = 8.dp)
                 )
-                OptionChips()
+                OptionChips1(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
             }
             items(chartDetails.tracks?.items ?: emptyList()) { track ->
                 Box(
                     modifier = Modifier.clip(RoundedCornerShape(20.dp)).fillMaxWidth()
-                        .background(Color(0xFF33373B))
-                        .padding(16.dp)
+                        .background(Color(0xFF33373B)).padding(16.dp)
                 ) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         val painter = rememberAsyncImagePainter(
@@ -164,13 +174,12 @@ internal fun ChartDetailsView(chartDetails: TopFiftyCharts) {
 
 
 @Composable
-internal fun OptionChips() {
+internal fun OptionChips(onPlayAllClicked: (List<Item>) -> Unit, items: List<Item>) {
     Box(
         modifier = Modifier.padding(top = 25.dp).clip(RoundedCornerShape(32.dp))
-            .background(Color(0xFF33373B))
-            .padding(16.dp)
+            .background(Color(0xFF33373B)).padding(16.dp)
     ) {
-        Row {
+        Row(Modifier.clickable(onClick = { onPlayAllClicked(items) })) {
             Icon(
                 imageVector = Icons.Default.PlayArrow,
                 tint = Color(0xFFFACD66),

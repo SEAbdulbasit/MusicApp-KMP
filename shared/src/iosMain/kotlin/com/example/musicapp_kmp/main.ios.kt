@@ -12,7 +12,7 @@ import androidx.compose.ui.window.Application
 import platform.UIKit.UIViewController
 
 fun MainiOS(): UIViewController = Application("Music-App") {
-    Column {
+    Column(Modifier.background(color = Color(0xFF1A1E1F))) {
         Box(
             modifier = Modifier.fillMaxWidth()
                 .height(40.dp).background(color = Color(0xFF1A1E1F))

@@ -7,9 +7,8 @@ import org.jetbrains.skiko.wasm.onWasmReady
 fun main() {
     onWasmReady {
         Window("MusicApp-KMP") {
-            Column(modifier = Modifier.fillMaxSize()) {
-                CommonMainWeb()
-            }
+            CommonMainWeb()
+
         }
     }
 }

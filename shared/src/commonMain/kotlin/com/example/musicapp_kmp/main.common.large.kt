@@ -8,8 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.musicapp_kmp.chartdetails.ChartDetailsScreen
+import com.example.musicapp_kmp.chartdetails.ChartDetailsScreenLarge
 import com.example.musicapp_kmp.chartdetails.ChartDetailsViewModel
 import com.example.musicapp_kmp.dashboard.DashboardScreen
+import com.example.musicapp_kmp.dashboard.DashboardScreenLarge
 import com.example.musicapp_kmp.dashboard.DashboardViewModel
 import com.example.musicapp_kmp.network.SpotifyApiImpl
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
@@ -17,7 +19,7 @@ import com.example.musicapp_kmp.player.MediaPlayerController
 import com.example.musicapp_kmp.playerview.PlayerView
 
 @Composable
-internal fun MainCommon(mediaPlayerController: MediaPlayerController) {
+internal fun MainCommonLarge(mediaPlayerController: MediaPlayerController) {
     MyApplicationTheme {
         val screenNavigationState =
             remember { mutableStateOf<SelectedScreen>(SelectedScreen.Dashboard) }
@@ -29,17 +31,19 @@ internal fun MainCommon(mediaPlayerController: MediaPlayerController) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 when (val screen = screenNavigationState.value) {
                     SelectedScreen.Dashboard -> {
-                        DashboardScreen(dashboardViewModel) {
+                        DashboardScreenLarge(dashboardViewModel) {
                             screenNavigationState.value = SelectedScreen.PlaylistDetails(it)
                         }
                     }
 
                     is SelectedScreen.PlaylistDetails -> {
                         val chartDetailsViewModel = ChartDetailsViewModel(api, screen.playlistId)
-                        ChartDetailsScreen(chartDetailsViewModel) {
+                        ChartDetailsScreenLarge(chartDetailsViewModel) {
                             tracksList.value = it
                         }
                     }
+
+                    else -> {}
                 }
             }
             Box(modifier = Modifier.align(Alignment.BottomEnd)) {
@@ -49,4 +53,10 @@ internal fun MainCommon(mediaPlayerController: MediaPlayerController) {
             }
         }
     }
+}
+
+
+sealed interface SelectedScreen {
+    object Dashboard : SelectedScreen
+    data class PlaylistDetails(val playlistId: String) : SelectedScreen
 }

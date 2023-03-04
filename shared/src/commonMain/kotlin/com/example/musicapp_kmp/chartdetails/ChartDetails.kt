@@ -149,7 +149,7 @@ internal fun ChartDetailsView(
                                 )
                             )
                             Text(
-                                text = track.track?.album?.name ?: "",
+                                text = track.track?.artists?.map { it.name }?.joinToString(",") ?: "",
                                 style = MaterialTheme.typography.caption.copy(
                                     color = Color(
                                         0XFFEFEEE0

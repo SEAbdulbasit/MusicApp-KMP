@@ -38,7 +38,7 @@ internal fun PlayerView(trackList: List<Item>, mediaPlayerController: MediaPlaye
     playTrack(selectedTrack, mediaPlayerController, isLoading, selectedIndex, trackList)
 
     Box(
-        modifier = Modifier.fillMaxWidth().background(Color(0x80101010))
+        modifier = Modifier.fillMaxWidth().background(Color(0xCC101010))
             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 56.dp)
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -73,7 +73,7 @@ internal fun PlayerView(trackList: List<Item>, mediaPlayerController: MediaPlaye
                     )
                 )
                 Text(
-                    text = selectedTrack.track?.album?.name ?: "",
+                    text = selectedTrack.track?.artists?.map { it.name }?.joinToString(",") ?: "",
                     style = MaterialTheme.typography.caption.copy(
                         color = Color(
                             0XFFEFEEE0

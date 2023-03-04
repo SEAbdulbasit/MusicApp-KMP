@@ -13,10 +13,11 @@ import com.example.musicapp_kmp.dashboard.DashboardScreen
 import com.example.musicapp_kmp.dashboard.DashboardViewModel
 import com.example.musicapp_kmp.network.SpotifyApiImpl
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
+import com.example.musicapp_kmp.player.MediaPlayerController
 import com.example.musicapp_kmp.playerview.PlayerView
 
 @Composable
-internal fun MainCommon() {
+internal fun MainCommon(mediaPlayerController: MediaPlayerController) {
     MyApplicationTheme {
         val screenNavigationState =
             remember { mutableStateOf<SelectedScreen>(SelectedScreen.Dashboard) }
@@ -43,7 +44,7 @@ internal fun MainCommon() {
             }
             Box(modifier = Modifier.align(Alignment.BottomEnd)) {
                 if (tracksList.value.isNotEmpty()) {
-                    PlayerView(tracksList.value)
+                    PlayerView(tracksList.value, mediaPlayerController)
                 }
             }
         }

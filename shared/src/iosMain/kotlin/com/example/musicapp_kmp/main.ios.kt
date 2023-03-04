@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Application
+import com.example.musicapp_kmp.player.MediaPlayerController
 import platform.UIKit.UIViewController
 
 fun MainiOS(): UIViewController = Application("Music-App") {
@@ -17,6 +18,7 @@ fun MainiOS(): UIViewController = Application("Music-App") {
             modifier = Modifier.fillMaxWidth()
                 .height(40.dp).background(color = Color(0xFF1A1E1F))
         )
-        MainCommon()
+        val mediaPlayerController = MediaPlayerController()
+        MainCommon(mediaPlayerController)
     }
 }

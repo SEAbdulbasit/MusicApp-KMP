@@ -117,3 +117,6 @@ android {
         targetSdk = 33
     }
 }
+dependencies {
+    implementation("androidx.lifecycle:lifecycle-common:2.5.1")
+}

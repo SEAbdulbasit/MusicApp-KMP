@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
-import com.example.musicapp_kmp.chartdetails.OptionChips as OptionChips1
 
 
 /**
@@ -88,7 +87,7 @@ internal fun ChartDetailsViewLarge(
                     painter = painter,
                     contentDescription = chartDetails.images?.first()?.url
                         ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
-                    modifier = Modifier.padding(top = 24.dp, bottom = 24.dp).height(284.dp).width(284.dp)
+                    modifier = Modifier.padding(top = 24.dp, bottom = 20.dp).height(284.dp).width(284.dp)
                         .aspectRatio(1f).clip(RoundedCornerShape(25.dp)),
                     contentScale = ContentScale.Crop,
                 )
@@ -108,9 +107,10 @@ internal fun ChartDetailsViewLarge(
                     Text(
                         text = "${chartDetails.tracks?.items?.size ?: 0} songs",
                         style = MaterialTheme.typography.body2.copy(color = Color(0XFFEFEEE0)),
-                        modifier = Modifier.padding(top = 8.dp)
+                        modifier = Modifier.padding(top = 10.dp)
                     )
-                    OptionChips1(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
+                    Spacer(Modifier.height(40.dp).fillMaxWidth())
+                    OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
                 }
 
             }

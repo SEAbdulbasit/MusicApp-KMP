@@ -9,17 +9,11 @@ import java.util.*
 
 actual class MediaPlayerController {
     private var mediaPlayer: MediaPlayer? = null
+    private var listener: MediaPlayerListener? = null
 
-    actual fun prepare(
-        pathSource: String,
-        listener: MediaPlayerListener
-    ) {
-        if (mediaPlayer?.status()?.isPlaying == true) {
-            mediaPlayer?.controls()?.stop()
-            mediaPlayer?.release()
-        }
-
+    private fun initMediaPlayer() {
         NativeDiscovery().discover()
+
         mediaPlayer =
                 // see https://github.com/caprica/vlcj/issues/887#issuecomment-503288294 for why we're using CallbackMediaPlayerComponent for macOS.
             if (isMacOS()) {
@@ -32,17 +26,38 @@ actual class MediaPlayerController {
             ?.addMediaPlayerEventListener(object : MediaPlayerEventAdapter() {
                 override fun mediaPlayerReady(mediaPlayer: MediaPlayer?) {
                     super.mediaPlayerReady(mediaPlayer)
-                    listener.onReady()
+                    listener?.onReady()
                 }
 
                 override fun finished(mediaPlayer: MediaPlayer?) {
                     super.finished(mediaPlayer)
-                    listener.onVideoCompleted()
+                    listener?.onVideoCompleted()
+                }
+
+                override fun error(mediaPlayer: MediaPlayer?) {
+                    super.error(mediaPlayer)
+                    listener?.onError()
                 }
             })
 
-        mediaPlayer?.media()?.play(pathSource)
+    }
 
+    actual fun prepare(
+        pathSource: String,
+        listener: MediaPlayerListener
+    ) {
+
+        if (mediaPlayer == null) {
+            initMediaPlayer()
+            this.listener = listener
+        }
+
+        if (mediaPlayer?.status()?.isPlaying == true) {
+            mediaPlayer?.controls()?.stop()
+        }
+
+
+        mediaPlayer?.media()?.play(pathSource)
     }
 
     actual fun start() {

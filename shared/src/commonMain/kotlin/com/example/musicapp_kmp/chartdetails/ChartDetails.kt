@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
-import com.example.musicapp_kmp.chartdetails.OptionChips as OptionChips1
+import com.example.musicapp_kmp.chartdetails.OptionChips
 
 
 /**
@@ -119,7 +119,8 @@ internal fun ChartDetailsView(
                     style = MaterialTheme.typography.body2.copy(color = Color(0XFFEFEEE0)),
                     modifier = Modifier.padding(top = 8.dp)
                 )
-                OptionChips1(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
+                Spacer(Modifier.height(32.dp).fillMaxWidth())
+                OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
             }
             items(chartDetails.tracks?.items ?: emptyList()) { track ->
                 Box(
@@ -172,14 +173,15 @@ internal fun ChartDetailsView(
     }
 }
 
-
 @Composable
 internal fun OptionChips(onPlayAllClicked: (List<Item>) -> Unit, items: List<Item>) {
     Box(
-        modifier = Modifier.padding(top = 25.dp).clip(RoundedCornerShape(32.dp))
-            .background(Color(0xFF33373B)).padding(16.dp)
+        modifier = Modifier.clip(RoundedCornerShape(32.dp))
+            .background(Color(0xFF33373B)).clickable(onClick = { onPlayAllClicked(items) }).padding(
+                start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp
+            )
     ) {
-        Row(Modifier.clickable(onClick = { onPlayAllClicked(items) })) {
+        Row {
             Icon(
                 imageVector = Icons.Default.PlayArrow,
                 tint = Color(0xFFFACD66),

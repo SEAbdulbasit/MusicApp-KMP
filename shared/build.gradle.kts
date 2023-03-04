@@ -87,6 +87,7 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.common)
+                implementation ("uk.co.caprica:vlcj:4.8.2")
             }
         }
 

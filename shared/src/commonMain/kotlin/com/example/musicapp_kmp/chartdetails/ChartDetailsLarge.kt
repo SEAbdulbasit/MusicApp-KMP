@@ -161,7 +161,7 @@ internal fun ChartDetailsViewLarge(
                         )
                     }
                     Text(
-                        text = (track.track?.durationMs ?: 0).toString(),
+                        text = "${(((track.track?.durationMs ?: 0) / (1000 * 60)) % 60)}:${(((track.track?.durationMs ?: 0) / (1000)) % 60)}",
                         style = MaterialTheme.typography.caption.copy(color = Color(0XFFEFEEE0)),
                         modifier = Modifier.align(
                             Alignment.Bottom

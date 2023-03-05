@@ -150,10 +150,10 @@ internal fun FeaturedPlayLists(featuredPlayList: FeaturedPlayList, navigateToDet
             items(items = featuredPlayList.playlists?.items ?: emptyList()) { playList ->
                 Box(
                     modifier = Modifier.width(232.dp).clip(RoundedCornerShape(20.dp)).background(Color(0xFF1A1E1F))
+                        .clickable(onClick = { navigateToDetails(playList.id ?: "") })
                 ) {
-
                     Column(
-                        modifier = Modifier.padding(16.dp).clickable(onClick = { navigateToDetails(playList.id ?: "") })
+                        modifier = Modifier.padding(16.dp)
                     ) {
                         val painter = rememberAsyncImagePainter(
                             playList.images?.first()?.url

@@ -12,6 +12,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
-import com.example.musicapp_kmp.chartdetails.OptionChips
 
 
 /**
@@ -33,10 +33,11 @@ import com.example.musicapp_kmp.chartdetails.OptionChips
  */
 @Composable
 internal fun ChartDetailsScreen(
-    viewModel: ChartDetailsViewModel,
-    onPlayAllClicked: (List<Item>) -> Unit
+    viewModel: ChartDetailsViewModel, onBackClicked: () -> Unit, onPlayAllClicked: (List<Item>) -> Unit
 ) {
+
     val state = viewModel.chartDetailsViewState.collectAsState()
+
     when (val resultedState = state.value) {
         is ChartDetailsViewState.Failure -> Failure(resultedState.error)
         ChartDetailsViewState.Loading -> Loading()
@@ -44,6 +45,12 @@ internal fun ChartDetailsScreen(
             resultedState.chartDetails, onPlayAllClicked
         )
     }
+    Icon(
+        imageVector = Icons.Filled.ArrowBack,
+        tint = Color(0xFFFACD66),
+        contentDescription = "Forward",
+        modifier = Modifier.padding(all = 16.dp).size(32.dp).clickable(onClick = onBackClicked)
+    )
 }
 
 @Composable
@@ -66,12 +73,10 @@ internal fun Failure(message: String) {
 
 @Composable
 internal fun ChartDetailsView(
-    chartDetails: TopFiftyCharts,
-    onPlayAllClicked: (List<Item>) -> Unit
+    chartDetails: TopFiftyCharts, onPlayAllClicked: (List<Item>) -> Unit
 ) {
     val painter = rememberAsyncImagePainter(
-        chartDetails.images?.first()?.url
-            ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
+        chartDetails.images?.first()?.url ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -101,13 +106,12 @@ internal fun ChartDetailsView(
                     painter = painter,
                     contentDescription = chartDetails.images?.first()?.url
                         ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
-                    modifier = Modifier.padding(top = 24.dp, bottom = 24.dp).fillMaxWidth()
-                        .aspectRatio(1f).clip(RoundedCornerShape(25.dp)),
+                    modifier = Modifier.padding(top = 24.dp, bottom = 24.dp).fillMaxWidth().aspectRatio(1f)
+                        .clip(RoundedCornerShape(25.dp)),
                     contentScale = ContentScale.Crop,
                 )
                 Text(
-                    text = chartDetails.name ?: "",
-                    style = MaterialTheme.typography.h4.copy(color = Color(0XFFA4C7C6))
+                    text = chartDetails.name ?: "", style = MaterialTheme.typography.h4.copy(color = Color(0XFFA4C7C6))
                 )
                 Text(
                     text = chartDetails.description ?: "",
@@ -124,8 +128,8 @@ internal fun ChartDetailsView(
             }
             items(chartDetails.tracks?.items ?: emptyList()) { track ->
                 Box(
-                    modifier = Modifier.clip(RoundedCornerShape(20.dp)).fillMaxWidth()
-                        .background(Color(0xFF33373B)).padding(16.dp)
+                    modifier = Modifier.clip(RoundedCornerShape(20.dp)).fillMaxWidth().background(Color(0xFF33373B))
+                        .padding(16.dp)
                 ) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         val painter = rememberAsyncImagePainter(
@@ -136,14 +140,12 @@ internal fun ChartDetailsView(
                             painter,
                             track.track?.album?.images?.first()?.url
                                 ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
-                            modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp)
-                                .height(40.dp),
+                            modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp).height(40.dp),
                             contentScale = ContentScale.Crop
                         )
                         Column(Modifier.weight(1f).padding(start = 8.dp).align(Alignment.Top)) {
                             Text(
-                                text = track.track?.name ?: "",
-                                style = MaterialTheme.typography.caption.copy(
+                                text = track.track?.name ?: "", style = MaterialTheme.typography.caption.copy(
                                     color = Color(
                                         0XFFEFEEE0
                                     )
@@ -176,8 +178,8 @@ internal fun ChartDetailsView(
 @Composable
 internal fun OptionChips(onPlayAllClicked: (List<Item>) -> Unit, items: List<Item>) {
     Box(
-        modifier = Modifier.clip(RoundedCornerShape(32.dp))
-            .background(Color(0xFF33373B)).clickable(onClick = { onPlayAllClicked(items) }).padding(
+        modifier = Modifier.clip(RoundedCornerShape(32.dp)).background(Color(0xFF33373B))
+            .clickable(onClick = { onPlayAllClicked(items) }).padding(
                 start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp
             )
     ) {
@@ -186,12 +188,10 @@ internal fun OptionChips(onPlayAllClicked: (List<Item>) -> Unit, items: List<Ite
                 imageVector = Icons.Default.PlayArrow,
                 tint = Color(0xFFFACD66),
                 contentDescription = "Play All",
-                modifier = Modifier.padding(end = 8.dp).size(16.dp)
-                    .align(Alignment.CenterVertically)
+                modifier = Modifier.padding(end = 8.dp).size(16.dp).align(Alignment.CenterVertically)
             )
             Text(
-                text = "Play All",
-                style = MaterialTheme.typography.caption.copy(color = Color(0XFFEFEEE0))
+                text = "Play All", style = MaterialTheme.typography.caption.copy(color = Color(0XFFEFEEE0))
             )
         }
     }

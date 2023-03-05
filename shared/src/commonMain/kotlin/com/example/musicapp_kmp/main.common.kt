@@ -18,12 +18,13 @@ import com.example.musicapp_kmp.playerview.PlayerView
 
 @Composable
 internal fun MainCommon(mediaPlayerController: MediaPlayerController) {
+    val api = SpotifyApiImpl()
+    val dashboardViewModel = DashboardViewModel(api)
+
     MyApplicationTheme {
         val screenNavigationState =
             remember { mutableStateOf<SelectedScreen>(SelectedScreen.Dashboard) }
         val tracksList = remember { mutableStateOf<List<Item>>(emptyList()) }
-        val api = SpotifyApiImpl()
-        val dashboardViewModel = DashboardViewModel(api)
 
         Box {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -36,9 +37,9 @@ internal fun MainCommon(mediaPlayerController: MediaPlayerController) {
 
                     is SelectedScreen.PlaylistDetails -> {
                         val chartDetailsViewModel = ChartDetailsViewModel(api, screen.playlistId)
-                        ChartDetailsScreen(chartDetailsViewModel) {
-                            tracksList.value = it
-                        }
+                        ChartDetailsScreen(viewModel = chartDetailsViewModel,
+                            onPlayAllClicked = { tracksList.value = it },
+                            onBackClicked = { screenNavigationState.value = SelectedScreen.Dashboard })
                     }
                 }
             }
@@ -49,4 +50,10 @@ internal fun MainCommon(mediaPlayerController: MediaPlayerController) {
             }
         }
     }
+}
+
+
+sealed interface SelectedScreen {
+    object Dashboard : SelectedScreen
+    data class PlaylistDetails(val playlistId: String) : SelectedScreen
 }

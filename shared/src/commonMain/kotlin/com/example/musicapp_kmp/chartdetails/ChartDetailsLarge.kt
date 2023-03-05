@@ -7,12 +7,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -33,9 +32,11 @@ import com.seiko.imageloader.rememberAsyncImagePainter
 @Composable
 internal fun ChartDetailsScreenLarge(
     viewModel: ChartDetailsViewModel,
+    onBackClicked: () -> Unit,
     onPlayAllClicked: (List<Item>) -> Unit
 ) {
     val state = viewModel.chartDetailsViewState.collectAsState()
+
     when (val resultedState = state.value) {
         is ChartDetailsViewState.Failure -> Failure(resultedState.error)
         ChartDetailsViewState.Loading -> Loading()
@@ -43,6 +44,13 @@ internal fun ChartDetailsScreenLarge(
             resultedState.chartDetails, onPlayAllClicked
         )
     }
+
+    Icon(
+        imageVector = Icons.Filled.ArrowBack,
+        tint = Color(0xFFFACD66),
+        contentDescription = "Forward",
+        modifier = Modifier.padding(all = 8.dp).size(32.dp).clickable(onClick = onBackClicked)
+    )
 }
 
 

@@ -131,28 +131,22 @@ private fun playTrack(
     selectedIndex: MutableState<Int>,
     trackList: List<Item>
 ) {
-    selectedTrack.track?.previewUrl?.let {
-        mediaPlayerController.prepare(it, listener = object : MediaPlayerListener {
-            override fun onReady() {
-                mediaPlayerController.start()
-                isLoading.value = false
-            }
-
-            override fun onVideoCompleted() {
-                if (selectedIndex.value < trackList.size - 1) {
-                    selectedIndex.value = selectedIndex.value + 1
-                }
-            }
-
-            override fun onError() {
-                if (selectedIndex.value < trackList.size - 1) {
-                    selectedIndex.value = selectedIndex.value + 1
-                }
-            }
-        })
-    } ?: run {
-        if (selectedIndex.value < trackList.size - 1) {
-            selectedIndex.value = selectedIndex.value + 1
+    mediaPlayerController.prepare(selectedTrack.track?.previewUrl ?: "", listener = object : MediaPlayerListener {
+        override fun onReady() {
+            mediaPlayerController.start()
+            isLoading.value = false
         }
-    }
+
+        override fun onVideoCompleted() {
+            if (selectedIndex.value < trackList.size - 1) {
+                selectedIndex.value = selectedIndex.value + 1
+            }
+        }
+
+        override fun onError() {
+            if (selectedIndex.value < trackList.size - 1) {
+                selectedIndex.value = selectedIndex.value + 1
+            }
+        }
+    })
 }

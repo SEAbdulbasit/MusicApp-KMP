@@ -63,17 +63,20 @@ internal fun Failure(message: String) {
         Text(
             text = message,
             modifier = Modifier.align(Alignment.Center),
-            style = MaterialTheme.typography.body1.copy(color = Color(0xFFEFEEE0))
+            style = MaterialTheme.typography.body1.copy(color = Color(0xFFFACD66))
         )
     }
 }
 
-
 @Composable
-internal fun DashboardView(dashboardState: DashboardViewState.Success, navigateToDetails: (String) -> Unit) {
+internal fun DashboardView(
+    dashboardState: DashboardViewState.Success,
+    navigateToDetails: (String) -> Unit
+) {
     val listState = rememberScrollState()
     Column(
-        modifier = Modifier.background(color = Color(0xFF1D2123)).fillMaxSize().verticalScroll(listState)
+        modifier = Modifier.background(color = Color(0xFF1D2123)).fillMaxSize()
+            .verticalScroll(listState)
             .padding(bottom = 32.dp)
     ) {
         TopChartView(dashboardState.topFiftyCharts, navigateToDetails)
@@ -85,7 +88,8 @@ internal fun DashboardView(dashboardState: DashboardViewState.Success, navigateT
 @Composable
 internal fun TopChartView(topFiftyCharts: TopFiftyCharts, navigateToDetails: (String) -> Unit) {
     Box(
-        modifier = Modifier.aspectRatio(ratio = (367.0 / 450.0).toFloat()).clip(RoundedCornerShape(20.dp))
+        modifier = Modifier.aspectRatio(ratio = (367.0 / 450.0).toFloat())
+            .clip(RoundedCornerShape(20.dp))
             .padding(24.dp).clickable(onClick = { navigateToDetails(topFiftyCharts.id ?: "") })
     ) {
         val painter = rememberAsyncImagePainter(
@@ -132,11 +136,17 @@ internal fun TopChartView(topFiftyCharts: TopFiftyCharts, navigateToDetails: (St
 }
 
 @Composable
-internal fun FeaturedPlayLists(featuredPlayList: FeaturedPlayList, navigateToDetails: (String) -> Unit) {
+internal fun FeaturedPlayLists(
+    featuredPlayList: FeaturedPlayList,
+    navigateToDetails: (String) -> Unit
+) {
     Column(modifier = Modifier.padding(top = 46.dp)) {
         Text(
             "Featured Playlist",
-            style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold, color = Color(0xFFEFEEE0)),
+            style = MaterialTheme.typography.h6.copy(
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFEFEEE0)
+            ),
             modifier = Modifier.padding(start = 16.dp)
         )
         val listState = rememberLazyListState()
@@ -149,7 +159,8 @@ internal fun FeaturedPlayLists(featuredPlayList: FeaturedPlayList, navigateToDet
         ) {
             items(items = featuredPlayList.playlists?.items ?: emptyList()) { playList ->
                 Box(
-                    modifier = Modifier.width(232.dp).clip(RoundedCornerShape(20.dp)).background(Color(0xFF1A1E1F))
+                    modifier = Modifier.width(232.dp).clip(RoundedCornerShape(20.dp))
+                        .background(Color(0xFF1A1E1F))
                         .clickable(onClick = { navigateToDetails(playList.id ?: "") })
                 ) {
                     Column(
@@ -163,7 +174,8 @@ internal fun FeaturedPlayLists(featuredPlayList: FeaturedPlayList, navigateToDet
                             painter,
                             playList.images?.first()?.url
                                 ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
-                            modifier = Modifier.clip(RoundedCornerShape(20.dp)).width(100.dp).height(100.dp),
+                            modifier = Modifier.clip(RoundedCornerShape(20.dp)).width(100.dp)
+                                .height(100.dp),
                             contentScale = ContentScale.Crop
                         )
                         Text(
@@ -175,7 +187,11 @@ internal fun FeaturedPlayLists(featuredPlayList: FeaturedPlayList, navigateToDet
                         )
                         Text(
                             text = playList.description ?: "",
-                            style = MaterialTheme.typography.caption.copy(color = Color.White.copy(alpha = 0.5f)),
+                            style = MaterialTheme.typography.caption.copy(
+                                color = Color.White.copy(
+                                    alpha = 0.5f
+                                )
+                            ),
                             modifier = Modifier.padding(top = 8.dp),
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1
@@ -190,7 +206,8 @@ internal fun FeaturedPlayLists(featuredPlayList: FeaturedPlayList, navigateToDet
                         imageVector = Icons.Default.Favorite,
                         tint = Color(0xFFFACD66),
                         contentDescription = "Favorite",
-                        modifier = Modifier.padding(top = 16.dp, end = 16.dp).size(30.dp).align(Alignment.TopEnd)
+                        modifier = Modifier.padding(top = 16.dp, end = 16.dp).size(30.dp)
+                            .align(Alignment.TopEnd)
                     )
                 }
             }
@@ -199,11 +216,17 @@ internal fun FeaturedPlayLists(featuredPlayList: FeaturedPlayList, navigateToDet
 }
 
 @Composable
-internal fun NewReleases(newReleasedAlbums: NewReleasedAlbums, navigateToDetails: (String) -> Unit) {
+internal fun NewReleases(
+    newReleasedAlbums: NewReleasedAlbums,
+    navigateToDetails: (String) -> Unit
+) {
     Column(modifier = Modifier.padding(top = 46.dp).fillMaxWidth()) {
         Text(
             "New releases",
-            style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold, color = Color(0xFFEFEEE0)),
+            style = MaterialTheme.typography.h6.copy(
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFEFEEE0)
+            ),
             modifier = Modifier.padding(start = 16.dp)
         )
         val listState = rememberLazyListState()
@@ -225,7 +248,8 @@ internal fun NewReleases(newReleasedAlbums: NewReleasedAlbums, navigateToDetails
                             painter,
                             album.images?.first()?.url
                                 ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
-                            modifier = Modifier.width(153.dp).height(153.dp).clip(RoundedCornerShape(20.dp))
+                            modifier = Modifier.width(153.dp).height(153.dp)
+                                .clip(RoundedCornerShape(20.dp))
                                 .clickable(onClick = { navigateToDetails(album.id ?: "") }),
                             contentScale = ContentScale.Crop
                         )
@@ -238,7 +262,11 @@ internal fun NewReleases(newReleasedAlbums: NewReleasedAlbums, navigateToDetails
                         )
                         Text(
                             text = "${(album.totalTracks ?: 0)} tracks",
-                            style = MaterialTheme.typography.caption.copy(color = Color.White.copy(alpha = 0.5f)),
+                            style = MaterialTheme.typography.caption.copy(
+                                color = Color.White.copy(
+                                    alpha = 0.5f
+                                )
+                            ),
                             modifier = Modifier.padding(top = 8.dp),
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1

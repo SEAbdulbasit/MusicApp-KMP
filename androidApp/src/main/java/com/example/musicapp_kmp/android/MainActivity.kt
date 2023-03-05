@@ -22,20 +22,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-@Composable
-fun ComponentActivity.LifecycleEventListener(event: (Lifecycle.Event) -> Unit) {
-    val eventHandler by rememberUpdatedState(newValue = event)
-    val lifecycle = this@LifecycleEventListener.lifecycle
-    DisposableEffect(lifecycle) {
-        val observer = LifecycleEventObserver { _, event ->
-            eventHandler(event)
-        }
-
-        lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycle.removeObserver(observer)
-        }
-    }
-}

@@ -66,7 +66,7 @@ kotlin {
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
-                implementation("io.github.qdsfdhvh:image-loader:1.2.9")
+                implementation("io.github.qdsfdhvh:image-loader:1.2.10")
             }
         }
         val commonTest by getting {
@@ -87,7 +87,7 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.common)
-                implementation ("uk.co.caprica:vlcj:4.8.2")
+                implementation("uk.co.caprica:vlcj:4.8.2")
             }
         }
 

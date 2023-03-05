@@ -20,12 +20,11 @@ import com.example.musicapp_kmp.playerview.PlayerView
 internal fun MainCommon(mediaPlayerController: MediaPlayerController) {
     val api = SpotifyApiImpl()
     val dashboardViewModel = DashboardViewModel(api)
+    val tracksList = remember { mutableStateOf<List<Item>>(emptyList()) }
 
     MyApplicationTheme {
         val screenNavigationState =
             remember { mutableStateOf<SelectedScreen>(SelectedScreen.Dashboard) }
-        val tracksList = remember { mutableStateOf<List<Item>>(emptyList()) }
-
         Box {
             Box(modifier = Modifier.fillMaxWidth()) {
                 when (val screen = screenNavigationState.value) {
@@ -43,11 +42,12 @@ internal fun MainCommon(mediaPlayerController: MediaPlayerController) {
                     }
                 }
             }
-            Box(modifier = Modifier.align(Alignment.BottomEnd)) {
+            Box {
                 if (tracksList.value.isNotEmpty()) {
                     PlayerView(tracksList.value, mediaPlayerController)
                 }
             }
+
         }
     }
 }

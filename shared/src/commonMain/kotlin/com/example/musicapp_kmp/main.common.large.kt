@@ -1,10 +1,8 @@
 package com.example.musicapp_kmp
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.musicapp_kmp.chartdetails.ChartDetailsScreenLarge
@@ -18,37 +16,48 @@ import com.example.musicapp_kmp.playerview.PlayerView
 
 @Composable
 internal fun MainCommonLarge(mediaPlayerController: MediaPlayerController) {
+    var tracksList by remember { mutableStateOf<List<Item>>(emptyList()) }
     val api = SpotifyApiImpl()
     val dashboardViewModel = DashboardViewModel(api)
 
     MyApplicationTheme {
-        val screenNavigationState =
-            remember { mutableStateOf<SelectedScreen>(SelectedScreen.Dashboard) }
-        val tracksList = remember { mutableStateOf<List<Item>>(emptyList()) }
-
-        Box {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                when (val screen = screenNavigationState.value) {
-                    SelectedScreen.Dashboard -> {
-                        DashboardScreenLarge(dashboardViewModel) {
-                            screenNavigationState.value = SelectedScreen.PlaylistDetails(it)
-                        }
-                    }
-
-                    is SelectedScreen.PlaylistDetails -> {
-                        val chartDetailsViewModel = ChartDetailsViewModel(api, screen.playlistId)
-                        ChartDetailsScreenLarge(
-                            viewModel = chartDetailsViewModel,
-                            onPlayAllClicked = { tracksList.value = it },
-                            onBackClicked = { screenNavigationState.value = SelectedScreen.Dashboard })
-                    }
-                }
+        Box(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                MusicView(dashboardViewModel = dashboardViewModel,
+                    api = api,
+                    onPlayAllClicked = { tracksList = it })
             }
             Box(modifier = Modifier.align(Alignment.BottomEnd)) {
-                if (tracksList.value.isNotEmpty()) {
-                    PlayerView(tracksList.value, mediaPlayerController)
+                if (tracksList.isNotEmpty()) {
+                    PlayerView(tracksList, mediaPlayerController)
                 }
             }
+        }
+    }
+}
+
+
+@Composable
+internal fun MusicView(
+    dashboardViewModel: DashboardViewModel,
+    api: SpotifyApiImpl,
+    onPlayAllClicked: (List<Item>) -> Unit,
+) {
+    val screenNavigationState = remember { mutableStateOf<SelectedScreen>(SelectedScreen.Dashboard) }
+    when (val state = screenNavigationState.value) {
+        SelectedScreen.Dashboard -> {
+            DashboardScreenLarge(dashboardViewModel) {
+                screenNavigationState.value = SelectedScreen.PlaylistDetails(it)
+            }
+        }
+
+        is SelectedScreen.PlaylistDetails -> {
+            val chartDetailsViewModel = ChartDetailsViewModel(api, state.playlistId)
+            ChartDetailsScreenLarge(viewModel = chartDetailsViewModel,
+                onPlayAllClicked = onPlayAllClicked,
+                onBackClicked = {
+                    screenNavigationState.value = SelectedScreen.Dashboard
+                })
         }
     }
 }

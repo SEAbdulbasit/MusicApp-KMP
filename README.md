@@ -10,8 +10,9 @@ The app uses different media players on different platforms:
 For iOS, AVKit is used
 For Android, Media Player is used
 For Desktop, VLCJ media player is used
-For the Web, an HTML media player is used
-Integration with Low-Level APIs
+For the Web, an HTML media player is used.
+
+## Integration with Low-Level APIs
 One of the objectives of building this app was to explore how Compose UI interacts with low-level APIs. The experience
 was challenging yet fun, and the process taught me a lot.
 Out of all the media players used, integrating with the Web Media Player was the easiest. I'm grateful to IceRock

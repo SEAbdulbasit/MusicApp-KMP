@@ -26,6 +26,13 @@ git clone https://github.com/SEAbdulbasit/MusicApp-KMP.git
 - Open the project in Android Studio or IntelliJ IDEA.
 - Search for **_TOKEN_** file in the code and replace the placeholder with your **Spotify access token**. You can generate a new token from the [Spotify Developer Dashboard](https://developer.spotify.com/console/get-album-tracks/).
 - Run the app on your desired platform.
+  There are a few known issues with the Music Player app using Compose Multiplatform UI:
+
+## Known Issues
+
+- When you click "Select All" on Android, Web, and Desktop, the app will auto-play the selected tracks and continue playing the next track when the previous one ends.
+On iOS, there are issues with the callbacks for `onReady` and `onVideoCompleted`
+which is causing the player to not start automatically. I was unable to configure the callbacks but hopefully, will be fixing that soon.
 
 ## Demo
 

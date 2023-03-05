@@ -17,7 +17,7 @@ actual class MediaPlayerController {
     }
 
     actual fun isPlaying(): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 
     actual fun release() {

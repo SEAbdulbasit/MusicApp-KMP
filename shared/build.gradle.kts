@@ -66,7 +66,7 @@ kotlin {
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
-                implementation("io.github.qdsfdhvh:image-loader:1.2.10")
+                implementation("io.github.qdsfdhvh:image-loader:1.2.9")
             }
         }
         val commonTest by getting {
@@ -95,6 +95,8 @@ kotlin {
             dependsOn(commonMain)
             dependencies {
                 implementation(compose.web.core)
+                implementation("io.ktor:ktor-client-js:2.2.1")
+                implementation("io.ktor:ktor-client-json-js:2.1.0")
             }
         }
 
@@ -117,7 +119,4 @@ android {
         minSdk = 24
         targetSdk = 33
     }
-}
-dependencies {
-    implementation("androidx.lifecycle:lifecycle-common:2.5.1")
 }

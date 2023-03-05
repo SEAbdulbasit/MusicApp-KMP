@@ -26,6 +26,11 @@ git clone https://github.com/SEAbdulbasit/MusicApp-KMP.git
 - Search for **_TOKEN_** file in the code and replace the placeholder with your **Spotify access token**. You can generate a new token from the [Spotify Developer Dashboard](https://developer.spotify.com/console/get-album-tracks/).
 - Run the app on your desired platform.
 
+## Demo
+
+![Screenshot 2023-03-05 at 4 44 45 PM](https://user-images.githubusercontent.com/33172684/222960302-eccb34b4-d77c-4c95-96af-3d4528323c42.png)
+
+
 ## Repository
 To explore what Compose UI can do, check out the repository for the latest
 updates: https://github.com/SEAbdulbasit/MusicApp-KMP.

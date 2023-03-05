@@ -215,7 +215,7 @@ internal fun NewReleases(newReleasedAlbums: NewReleasedAlbums, navigateToDetails
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
         ) {
             items(items = newReleasedAlbums.albums?.items ?: emptyList()) { album ->
-                Box(Modifier.width(153.dp).clickable(onClick = { navigateToDetails(album.id ?: "") })) {
+                Box(Modifier.width(153.dp)) {
                     Column {
                         val painter = rememberAsyncImagePainter(
                             album.images?.first()?.url
@@ -225,7 +225,8 @@ internal fun NewReleases(newReleasedAlbums: NewReleasedAlbums, navigateToDetails
                             painter,
                             album.images?.first()?.url
                                 ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
-                            modifier = Modifier.width(153.dp).height(153.dp).clip(RoundedCornerShape(20.dp)),
+                            modifier = Modifier.width(153.dp).height(153.dp).clip(RoundedCornerShape(20.dp))
+                                .clickable(onClick = { navigateToDetails(album.id ?: "") }),
                             contentScale = ContentScale.Crop
                         )
                         Text(

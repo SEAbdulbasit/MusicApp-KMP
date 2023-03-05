@@ -16,7 +16,7 @@ import com.example.musicapp_kmp.playerview.PlayerView
 
 @Composable
 internal fun MainCommonLarge(mediaPlayerController: MediaPlayerController) {
-    var tracksList by remember { mutableStateOf<List<Item>>(emptyList()) }
+    var tracksList = remember { mutableStateOf<List<Item>>(emptyList()) }
     val api = SpotifyApiImpl()
     val dashboardViewModel = DashboardViewModel(api)
 
@@ -25,11 +25,11 @@ internal fun MainCommonLarge(mediaPlayerController: MediaPlayerController) {
             Box(modifier = Modifier.fillMaxSize()) {
                 MusicView(dashboardViewModel = dashboardViewModel,
                     api = api,
-                    onPlayAllClicked = { tracksList = it })
+                    onPlayAllClicked = { tracksList.value = it })
             }
             Box(modifier = Modifier.align(Alignment.BottomEnd)) {
-                if (tracksList.isNotEmpty()) {
-                    PlayerView(tracksList, mediaPlayerController)
+                if (tracksList.value.isNotEmpty()) {
+                    PlayerView(tracksList.value, mediaPlayerController)
                 }
             }
         }

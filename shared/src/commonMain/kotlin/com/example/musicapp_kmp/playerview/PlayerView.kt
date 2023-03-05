@@ -13,10 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +29,10 @@ import com.seiko.imageloader.rememberAsyncImagePainter
 @Composable
 internal fun PlayerView(trackList: List<Item>, mediaPlayerController: MediaPlayerController) {
     val selectedIndex = remember { mutableStateOf(0) }
+
+    //the index was not getting reset
+    LaunchedEffect(trackList) { selectedIndex.value = 0 }
+
     val selectedTrack = trackList[selectedIndex.value]
     var isLoading = remember { mutableStateOf(true) }
 

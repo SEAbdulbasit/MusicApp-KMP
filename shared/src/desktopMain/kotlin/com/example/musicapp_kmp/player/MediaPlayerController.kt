@@ -22,29 +22,27 @@ actual class MediaPlayerController {
                 EmbeddedMediaPlayerComponent()
             }.mediaPlayer()
 
-        mediaPlayer?.events()
-            ?.addMediaPlayerEventListener(object : MediaPlayerEventAdapter() {
-                override fun mediaPlayerReady(mediaPlayer: MediaPlayer?) {
-                    super.mediaPlayerReady(mediaPlayer)
-                    listener?.onReady()
-                }
+        mediaPlayer?.events()?.addMediaPlayerEventListener(object : MediaPlayerEventAdapter() {
+            override fun mediaPlayerReady(mediaPlayer: MediaPlayer?) {
+                super.mediaPlayerReady(mediaPlayer)
+                listener?.onReady()
+            }
 
-                override fun finished(mediaPlayer: MediaPlayer?) {
-                    super.finished(mediaPlayer)
-                    listener?.onVideoCompleted()
-                }
+            override fun finished(mediaPlayer: MediaPlayer?) {
+                super.finished(mediaPlayer)
+                listener?.onVideoCompleted()
+            }
 
-                override fun error(mediaPlayer: MediaPlayer?) {
-                    super.error(mediaPlayer)
-                    listener?.onError()
-                }
-            })
+            override fun error(mediaPlayer: MediaPlayer?) {
+                super.error(mediaPlayer)
+                listener?.onError()
+            }
+        })
 
     }
 
     actual fun prepare(
-        pathSource: String,
-        listener: MediaPlayerListener
+        pathSource: String, listener: MediaPlayerListener
     ) {
 
         if (mediaPlayer == null) {

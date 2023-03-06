@@ -52,13 +52,14 @@ If you find my work helpful, please consider giving it a ⭐ ❤️.
 
 TravelApp: https://github.com/SEAbdulbasit/TravelApp-KMP
 
-## Technologies Used
+## Technologies and Libraries Used
 
 - Kotlin
 - Compose Multiplatform UI
 - AVKit Media Player
 - VLCJ media player
 - HTML media player
+- [Compose Image Loader](https://github.com/qdsfdhvh/compose-imageloader)
 
 ## Credits
 

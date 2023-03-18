@@ -1,7 +1,5 @@
 package com.example.musicapp_kmp.chartdetails
 
-import com.example.musicapp_kmp.network.models.featuredplaylist.FeaturedPlayList
-import com.example.musicapp_kmp.network.models.newreleases.NewReleasedAlbums
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 
 

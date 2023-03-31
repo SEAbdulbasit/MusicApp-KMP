@@ -11,6 +11,7 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 
 
 /**
@@ -58,7 +59,17 @@ class SpotifyApiImpl : SpotifyApi {
             socketTimeoutMillis = timeout
         }
         install(ContentNegotiation) {
-            json()
+            json(
+                json = Json {
+                    encodeDefaults = true
+                    isLenient = true
+                    allowSpecialFloatingPointValues = true
+                    allowStructuredMapKeys = true
+                    prettyPrint = false
+                    ignoreUnknownKeys = true
+                    useArrayPolymorphism = false
+                }
+            )
         }
     }
 

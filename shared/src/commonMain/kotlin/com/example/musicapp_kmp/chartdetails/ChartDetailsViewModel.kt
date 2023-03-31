@@ -1,8 +1,10 @@
 package com.example.musicapp_kmp.chartdetails
 
-import com.example.musicapp_kmp.network.SpotifyApiImpl
+import com.arkivanov.essenty.instancekeeper.InstanceKeeper
+import com.example.musicapp_kmp.network.SpotifyApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -10,7 +12,7 @@ import kotlinx.coroutines.launch
 /**
  * Created by abdulbasit on 26/02/2023.
  */
-class ChartDetailsViewModel(api: SpotifyApiImpl, playlistId: String) {
+class ChartDetailsViewModel(api: SpotifyApi, playlistId: String) : InstanceKeeper.Instance {
 
     private val viewModelScope = CoroutineScope(Dispatchers.Unconfined)
     val chartDetailsViewState = MutableStateFlow<ChartDetailsViewState>(ChartDetailsViewState.Loading)
@@ -27,5 +29,9 @@ class ChartDetailsViewModel(api: SpotifyApiImpl, playlistId: String) {
                 chartDetailsViewState.value = ChartDetailsViewState.Failure(e.message.toString())
             }
         }
+    }
+
+    override fun onDestroy() {
+        viewModelScope.cancel()
     }
 }

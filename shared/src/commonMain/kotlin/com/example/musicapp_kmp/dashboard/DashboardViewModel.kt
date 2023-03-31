@@ -1,6 +1,7 @@
 package com.example.musicapp_kmp.dashboard
 
-import com.example.musicapp_kmp.network.SpotifyApiImpl
+import com.arkivanov.essenty.instancekeeper.InstanceKeeper
+import com.example.musicapp_kmp.network.SpotifyApi
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -8,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 /**
  * Created by abdulbasit on 26/02/2023.
  */
-class DashboardViewModel(api: SpotifyApiImpl) {
+class DashboardViewModel(api: SpotifyApi) : InstanceKeeper.Instance {
     val dashboardState = MutableStateFlow<DashboardViewState>(DashboardViewState.Loading)
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
@@ -35,5 +36,9 @@ class DashboardViewModel(api: SpotifyApiImpl) {
                 dashboardState.value = DashboardViewState.Failure(e.message.toString())
             }
         }
+    }
+
+    override fun onDestroy() {
+        viewModelScope.cancel()
     }
 }

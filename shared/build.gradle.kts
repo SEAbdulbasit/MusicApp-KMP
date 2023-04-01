@@ -49,8 +49,11 @@ kotlin {
         framework {
             baseName = "shared"
             isStatic = true
+            export("com.arkivanov.decompose:decompose:1.0.0-compose-experimental")
+            export("com.arkivanov.essenty:lifecycle:1.0.0")
         }
-        extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
+        extraSpecAttributes["resources"] =
+            "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 
     sourceSets {
@@ -71,6 +74,7 @@ kotlin {
                 implementation("io.github.qdsfdhvh:image-loader:1.2.10")
                 api("com.arkivanov.decompose:decompose:1.0.0-compose-experimental")
                 api("com.arkivanov.decompose:extensions-compose-jetbrains:1.0.0-compose-experimental")
+                implementation("com.arkivanov.essenty:lifecycle:1.0.0")
             }
         }
         val commonTest by getting {

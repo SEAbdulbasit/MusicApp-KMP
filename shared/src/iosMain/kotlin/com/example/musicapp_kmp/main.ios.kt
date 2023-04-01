@@ -25,8 +25,7 @@ import platform.UIKit.UIViewController
 
 fun MainiOS(
     lifecycle: LifecycleRegistry,
-
-    ): UIViewController = Application("Music-App") {
+): UIViewController = Application("Music-App") {
     val api = SpotifyApiImpl()
     val mediaPlayerController = MediaPlayerController()
 

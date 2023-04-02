@@ -18,6 +18,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.musicapp_kmp.decompose.DashboardMainComponent
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
 
@@ -27,24 +28,30 @@ import com.seiko.imageloader.rememberAsyncImagePainter
  */
 
 @Composable
-internal fun DashboardScreenLarge(viewModel: DashboardViewModel, navigateToDetails: (String) -> Unit) {
-    val state = viewModel.dashboardState.collectAsState()
+internal fun DashboardScreenLarge(
+    component: DashboardMainComponent,
+) {
+    val state = component.viewModel.dashboardState.collectAsState()
 
     when (val resultedState = state.value) {
         is DashboardViewState.Failure -> Failure(resultedState.error)
         DashboardViewState.Loading -> Loading()
         is DashboardViewState.Success -> {
-            DashboardViewLarge(resultedState, navigateToDetails)
+            DashboardViewLarge(
+                resultedState
+            ) { component.onOutPut(DashboardMainComponent.Output.PlaylistSelected(it)) }
         }
     }
 }
 
 @Composable
-internal fun DashboardViewLarge(dashboardState: DashboardViewState.Success, navigateToDetails: (String) -> Unit) {
+internal fun DashboardViewLarge(
+    dashboardState: DashboardViewState.Success, navigateToDetails: (String) -> Unit
+) {
     val listState = rememberScrollState()
     Column(
-        modifier = Modifier.background(color = Color(0xFF1D2123)).fillMaxSize().verticalScroll(listState)
-            .padding(bottom = 32.dp)
+        modifier = Modifier.background(color = Color(0xFF1D2123)).fillMaxSize()
+            .verticalScroll(listState).padding(bottom = 32.dp)
     ) {
         TopChartViewLarge(dashboardState.topFiftyCharts, navigateToDetails)
         FeaturedPlayLists(dashboardState.featuredPlayList, navigateToDetails)
@@ -54,7 +61,9 @@ internal fun DashboardViewLarge(dashboardState: DashboardViewState.Success, navi
 
 
 @Composable
-internal fun TopChartViewLarge(topFiftyCharts: TopFiftyCharts, navigateToDetails: (String) -> Unit) {
+internal fun TopChartViewLarge(
+    topFiftyCharts: TopFiftyCharts, navigateToDetails: (String) -> Unit
+) {
     Box(
         modifier = Modifier.clip(RoundedCornerShape(20.dp)).width(686.dp).height(450.dp)
             .padding(24.dp).clickable(onClick = { navigateToDetails(topFiftyCharts.id ?: "") })

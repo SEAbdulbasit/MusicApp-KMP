@@ -23,11 +23,15 @@ import androidx.compose.ui.unit.dp
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.player.MediaPlayerController
 import com.example.musicapp_kmp.player.MediaPlayerListener
+import com.example.musicapp_kmp.player.PlayerComponent
 import com.seiko.imageloader.rememberAsyncImagePainter
 
 
 @Composable
-internal fun PlayerView(trackList: List<Item>, mediaPlayerController: MediaPlayerController) {
+internal fun PlayerView(playerComponent: PlayerComponent) {
+    val mediaPlayerController = playerComponent.playerController
+    val trackList = playerComponent.trackList
+
     val selectedIndex = remember { mutableStateOf(0) }
 
     //the index was not getting reset

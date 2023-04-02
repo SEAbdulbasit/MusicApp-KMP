@@ -8,6 +8,7 @@ import com.arkivanov.decompose.defaultComponentContext
 import com.example.musicapp_kmp.MainAndroid
 import com.example.musicapp_kmp.decompose.MusicRootImpl
 import com.example.musicapp_kmp.network.SpotifyApiImpl
+import com.example.musicapp_kmp.player.MediaPlayerController
 
 class MainActivity : ComponentActivity() {
 
@@ -18,7 +19,8 @@ class MainActivity : ComponentActivity() {
         val api = SpotifyApiImpl()
         val root = MusicRootImpl(
             componentContext = defaultComponentContext(),
-            api = api
+            api = api,
+            mediaPlayerController = MediaPlayerController()
         )
         setContent {
             MainAndroid(root)

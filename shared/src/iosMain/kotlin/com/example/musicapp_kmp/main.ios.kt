@@ -27,18 +27,16 @@ fun MainiOS(
     lifecycle: LifecycleRegistry,
 ): UIViewController = Application("Music-App") {
     val api = SpotifyApiImpl()
-    val mediaPlayerController = MediaPlayerController()
 
-    val rootComponent =
-        MusicRootImpl(
-            componentContext = DefaultComponentContext(lifecycle = lifecycle),
-            api = api
-        )
+    val rootComponent = MusicRootImpl(
+        componentContext = DefaultComponentContext(lifecycle = lifecycle),
+        api = api,
+        mediaPlayerController = MediaPlayerController()
+    )
 
     Column(Modifier.background(color = Color(0xFF1A1E1F))) {
         Box(
-            modifier = Modifier.fillMaxWidth()
-                .height(40.dp).background(color = Color(0xFF1A1E1F))
+            modifier = Modifier.fillMaxWidth().height(40.dp).background(color = Color(0xFF1A1E1F))
         )
         CompositionLocalProvider(
             LocalImageLoader provides ImageLoader {
@@ -53,7 +51,7 @@ fun MainiOS(
                 }
             },
         ) {
-            MainCommon(mediaPlayerController, rootComponent)
+            MainCommon(rootComponent)
         }
     }
 }

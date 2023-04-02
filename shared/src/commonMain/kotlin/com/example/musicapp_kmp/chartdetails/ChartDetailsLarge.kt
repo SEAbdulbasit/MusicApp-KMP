@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.example.musicapp_kmp.decompose.ChartDetailsComponent
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
@@ -31,33 +32,34 @@ import com.seiko.imageloader.rememberAsyncImagePainter
  */
 @Composable
 internal fun ChartDetailsScreenLarge(
-    viewModel: ChartDetailsViewModel,
-    onBackClicked: () -> Unit,
-    onPlayAllClicked: (List<Item>) -> Unit
+    component: ChartDetailsComponent,
 ) {
-    val state = viewModel.chartDetailsViewState.collectAsState()
+    val state = component.viewModel.chartDetailsViewState.collectAsState()
 
     when (val resultedState = state.value) {
         is ChartDetailsViewState.Failure -> Failure(resultedState.error)
         ChartDetailsViewState.Loading -> Loading()
         is ChartDetailsViewState.Success -> ChartDetailsViewLarge(
-            resultedState.chartDetails, onPlayAllClicked
-        )
+            resultedState.chartDetails
+        ) {
+            component.onOutPut(ChartDetailsComponent.Output.OnPlayAllSelected(it))
+        }
     }
 
     Icon(
         imageVector = Icons.Filled.ArrowBack,
         tint = Color(0xFFFACD66),
         contentDescription = "Forward",
-        modifier = Modifier.padding(all = 8.dp).size(32.dp).clickable(onClick = onBackClicked)
+        modifier = Modifier.padding(all = 8.dp).size(32.dp).clickable(onClick = {
+            component.onOutPut(ChartDetailsComponent.Output.GoBack)
+        })
     )
 }
 
 
 @Composable
 internal fun ChartDetailsViewLarge(
-    chartDetails: TopFiftyCharts,
-    onPlayAllClicked: (List<Item>) -> Unit
+    chartDetails: TopFiftyCharts, onPlayAllClicked: (List<Item>) -> Unit
 ) {
     val painter = rememberAsyncImagePainter(
         chartDetails.images?.first()?.url
@@ -95,8 +97,8 @@ internal fun ChartDetailsViewLarge(
                     painter = painter,
                     contentDescription = chartDetails.images?.first()?.url
                         ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
-                    modifier = Modifier.padding(top = 24.dp, bottom = 20.dp).height(284.dp).width(284.dp)
-                        .aspectRatio(1f).clip(RoundedCornerShape(25.dp)),
+                    modifier = Modifier.padding(top = 24.dp, bottom = 20.dp).height(284.dp)
+                        .width(284.dp).aspectRatio(1f).clip(RoundedCornerShape(25.dp)),
                     contentScale = ContentScale.Crop,
                 )
                 Column(

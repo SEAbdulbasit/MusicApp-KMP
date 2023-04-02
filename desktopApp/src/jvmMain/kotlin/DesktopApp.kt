@@ -5,20 +5,42 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.example.travelapp_kmp.CommonMainDesktop
 import java.awt.Dimension
 import java.awt.Toolkit
 
-fun main() = application {
-    Window(
-        onCloseRequest = ::exitApplication,
-        title = "MusicApp-KMP",
-        state = WindowState(
-            position = WindowPosition.Aligned(Alignment.Center),
-            size = getPreferredWindowSize(800, 800)
-        ),
-    ) {
-        CommonMainDesktop()
+fun main() {
+
+
+    val rootComponent = invokeOnAwtSync {
+        setMainThreadId(Thread.currentThread().id)
+
+        val lifecycle = LifecycleRegistry()
+
+        val rootComponent = RootComponent(
+            componentContext = DefaultComponentContext(lifecycle = lifecycle),
+            storeFactory = DefaultStoreFactory(),
+        )
+
+        lifecycle.resume()
+
+        rootComponent
+    }
+
+
+    application {
+        Window(
+            onCloseRequest = ::exitApplication,
+            title = "MusicApp-KMP",
+            state = WindowState(
+                position = WindowPosition.Aligned(Alignment.Center),
+                size = getPreferredWindowSize(800, 800)
+            ),
+        ) {
+            CommonMainDesktop()
+        }
     }
 }
 

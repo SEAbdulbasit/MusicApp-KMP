@@ -51,7 +51,7 @@ fun MainiOS(
                 }
             },
         ) {
-            MainCommon(rootComponent)
+            MainCommon(rootComponent, false)
         }
     }
 }

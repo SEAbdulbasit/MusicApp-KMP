@@ -13,12 +13,11 @@ import com.example.musicapp_kmp.chartdetails.ChartDetailsScreenLarge
 import com.example.musicapp_kmp.dashboard.DashboardScreen
 import com.example.musicapp_kmp.dashboard.DashboardScreenLarge
 import com.example.musicapp_kmp.decompose.MusicRoot
-import com.example.musicapp_kmp.decompose.MusicRootImpl
 import com.example.musicapp_kmp.playerview.PlayerView
 
 @Composable
 internal fun MainCommon(
-    rootComponent: MusicRootImpl,
+    rootComponent: MusicRoot,
     isLargeScreen: Boolean
 ) {
     val dialogOverlay by rootComponent.dialogOverlay.subscribeAsState()
@@ -36,6 +35,7 @@ internal fun MainCommon(
                             else
                                 DashboardScreen(child.dashboardMainComponent)
                         }
+
                         is MusicRoot.Child.Details -> {
                             if (isLargeScreen)
                                 ChartDetailsScreenLarge(child.detailsComponent)
@@ -52,9 +52,4 @@ internal fun MainCommon(
             }
         }
     }
-}
-
-sealed interface SelectedScreen {
-    object Dashboard : SelectedScreen
-    data class PlaylistDetails(val playlistId: String) : SelectedScreen
 }

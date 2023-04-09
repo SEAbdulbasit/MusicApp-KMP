@@ -43,6 +43,13 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
     val selectedTrack = trackList[selectedIndex.value]
     val isLoading = remember { mutableStateOf(true) }
 
+    val trackUpdateCallbacks: (String) -> Unit = {
+        selectedIndex.value = trackList.indexOfFirst { item -> item.track?.id.orEmpty() == it }
+    }
+
+    //when we select a track then
+    playerComponent.onOutPut(PlayerComponent.Output.RegisterCallbacks(trackUpdateCallbacks))
+
     LaunchedEffect(selectedTrack) {
         playerComponent.onOutPut(PlayerComponent.Output.OnTrackUpdated(selectedTrack.track?.id ?: ""))
     }

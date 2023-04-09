@@ -14,15 +14,13 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.example.musicapp_kmp.decompose.ChartDetailsComponent
@@ -45,9 +43,13 @@ internal fun ChartDetailsScreen(
     when (val resultedState = state.value) {
         is ChartDetailsViewState.Failure -> Failure(resultedState.error)
         ChartDetailsViewState.Loading -> Loading()
-        is ChartDetailsViewState.Success -> ChartDetailsView(chartDetails = resultedState.chartDetails,
-            onPlayAllClicked = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnPlayAllSelected(it)) },
-            onEventRegister = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnPlayerEvent(it)) })
+        is ChartDetailsViewState.Success ->
+            ChartDetailsView(
+                chartDetails = resultedState.chartDetails,
+                playingTrackId = resultedState.playingTrackId,
+                onPlayAllClicked = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnPlayAllSelected(it)) },
+                onPlayTrack = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnTrackSelected(it)) },
+                onEventRegister = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnPlayerEvent(it)) })
     }
     Icon(
         imageVector = Icons.Filled.ArrowBack,
@@ -79,10 +81,14 @@ internal fun Failure(message: String) {
 
 @Composable
 internal fun ChartDetailsView(
-    chartDetails: TopFiftyCharts, onPlayAllClicked: (List<Item>) -> Unit, onEventRegister: (PlayerEvent) -> Unit
+    chartDetails: TopFiftyCharts,
+    onPlayAllClicked: (List<Item>) -> Unit,
+    onPlayTrack: (String) -> Unit,
+    onEventRegister: (PlayerEvent) -> Unit,
+    playingTrackId: Any
 ) {
 
-    val selectedTrack = remember { mutableStateOf("") }
+    val selectedTrack = remember { mutableStateOf(playingTrackId) }
 
     val events = object : PlayerEvent {
         override fun onTrackUpdated(trackId: String) {
@@ -144,20 +150,45 @@ internal fun ChartDetailsView(
             items(chartDetails.tracks?.items ?: emptyList()) { track ->
                 Box(
                     modifier = Modifier.clip(RoundedCornerShape(20.dp)).fillMaxWidth().background(
-                        if (track.track?.id.orEmpty() == selectedTrack.value) Color(0xFFFACD66)
+                        if (track.track?.id.orEmpty() == selectedTrack.value) Color(0xCCFACD66)
                         else Color(0xFF33373B)
                     ).padding(16.dp)
                 ) {
+                    var active by remember { mutableStateOf(false) }
                     Row(modifier = Modifier.fillMaxWidth()) {
                         val painter = rememberAsyncImagePainter(
                             track.track?.album?.images?.first()?.url.orEmpty()
                         )
-                        Image(
-                            painter = painter,
-                            contentDescription = track.track?.album?.images?.first()?.url.orEmpty(),
-                            modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp).height(40.dp),
-                            contentScale = ContentScale.Crop
-                        )
+                        Box(modifier = Modifier
+                            .clickable {
+                                onPlayTrack(track.track?.id.orEmpty())
+                            }) {
+                            Image(
+                                painter,
+                                track.track?.album?.images?.first()?.url.orEmpty(),
+                                modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp).height(40.dp)
+                                    .pointerInput(track) {
+                                        while (true) {
+                                            val event = awaitPointerEventScope { awaitPointerEvent() }
+                                            when (event.type) {
+                                                // androidx.compose.ui.input.pointer.PointerEventType.Enter -> active = true
+                                                // androidx.compose.ui.input.pointer.PointerEventType.Exit -> active = false
+                                            }
+                                        }
+                                    },
+                                contentScale = ContentScale.Crop
+                            )
+                            if (active) {
+                                Icon(
+                                    imageVector = Icons.Default.PlayArrow,
+                                    tint = Color(0xFFFACD66),
+                                    contentDescription = "Play All",
+                                    modifier = Modifier.size(40.dp)
+                                        .clip(RoundedCornerShape(5.dp))
+                                        .background(Color.Black.copy(alpha = 0.7f))
+                                )
+                            }
+                        }
                         Column(Modifier.weight(1f).padding(start = 8.dp).align(Alignment.Top)) {
                             Text(
                                 text = track.track?.name.orEmpty(), style = MaterialTheme.typography.caption.copy(

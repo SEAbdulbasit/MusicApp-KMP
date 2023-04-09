@@ -13,10 +13,11 @@ class ChartDetailsComponentImpl(
     componentContext: ComponentContext,
     val spotifyApi: SpotifyApi,
     val playlistId: String,
+    val playingTrackId: String,
     val output: (ChartDetailsComponent.Output) -> Unit,
 ) : ChartDetailsComponent, ComponentContext by componentContext {
     override val viewModel: ChartDetailsViewModel
-        get() = instanceKeeper.getOrCreate { ChartDetailsViewModel(spotifyApi, playlistId) }
+        get() = instanceKeeper.getOrCreate { ChartDetailsViewModel(spotifyApi, playlistId,playingTrackId) }
 
     override fun onOutPut(output: ChartDetailsComponent.Output) {
         output(output)

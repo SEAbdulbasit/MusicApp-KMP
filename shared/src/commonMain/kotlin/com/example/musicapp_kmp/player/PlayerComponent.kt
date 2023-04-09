@@ -17,6 +17,7 @@ interface PlayerComponent {
         object OnPause : Output()
         object OnPlay : Output()
         data class OnTrackUpdated(val trackId: String) : Output()
+        data class RegisterCallbacks(val trackUpdateCallback: (String) -> Unit) : Output()
     }
 
 }

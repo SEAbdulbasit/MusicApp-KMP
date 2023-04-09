@@ -22,7 +22,7 @@ class MusicRootImpl(
     componentContext: ComponentContext,
     private val mediaPlayerController: MediaPlayerController,
     private val dashboardMain: (ComponentContext, (DashboardMainComponent.Output) -> Unit) -> DashboardMainComponent,
-    private val chartDetails: (ComponentContext, playlistId: String, (ChartDetailsComponent.Output) -> Unit) -> ChartDetailsComponent,
+    private val chartDetails: (ComponentContext, playlistId: String, playingTrackId: String, (ChartDetailsComponent.Output) -> Unit) -> ChartDetailsComponent,
 ) : MusicRoot, ComponentContext by componentContext {
     constructor(
         componentContext: ComponentContext, api: SpotifyApi, mediaPlayerController: MediaPlayerController
@@ -33,9 +33,13 @@ class MusicRootImpl(
                 componentContext = childContext, spotifyApi = api, output = output
             )
         },
-        chartDetails = { childContext, playlistId, output ->
+        chartDetails = { childContext, playlistId, playingTrackId, output ->
             ChartDetailsComponentImpl(
-                componentContext = childContext, spotifyApi = api, playlistId = playlistId, output = output
+                componentContext = childContext,
+                spotifyApi = api,
+                playlistId = playlistId,
+                output = output,
+                playingTrackId = playingTrackId
             )
         })
 
@@ -60,18 +64,23 @@ class MusicRootImpl(
 
         is Configuration.Details -> MusicRoot.Child.Details(
             chartDetails(
-                componentContext, configuration.playlistId, ::detailsOutput
+                componentContext, configuration.playlistId, currentPlayingTrack, ::detailsOutput
             )
         )
     }
 
-    var playerEvent: PlayerEvent? = null
+    private var playerEvent: PlayerEvent? = null
+
+    //to keep track of the playing track
+    private var currentPlayingTrack = "-1"
 
     private fun dashboardOutput(output: DashboardMainComponent.Output) {
         when (output) {
-            is DashboardMainComponent.Output.PlaylistSelected -> navigation.push(
-                Configuration.Details(output.playlistId) { playerEvent -> this.playerEvent = playerEvent }
-            )
+            is DashboardMainComponent.Output.PlaylistSelected -> navigation.push(Configuration.Details(
+                output.playlistId, currentPlayingTrack
+            ) { playerEvent ->
+                this.playerEvent = playerEvent
+            })
         }
     }
 
@@ -79,11 +88,12 @@ class MusicRootImpl(
         when (output) {
             is ChartDetailsComponent.Output.GoBack -> navigation.pop()
             is ChartDetailsComponent.Output.OnPlayAllSelected -> dialogNavigation.activate(DialogConfig(output.playlist))
-            is ChartDetailsComponent.Output.OnPlayerEvent -> {
-                playerEvent = output.playerEvent
-            }
+            is ChartDetailsComponent.Output.OnTrackSelected -> trackUpdateCallbacks?.invoke(output.trackId)
+            is ChartDetailsComponent.Output.OnPlayerEvent -> playerEvent = output.playerEvent
         }
     }
+
+    private var trackUpdateCallbacks: ((String) -> Unit?)? = null
 
     private val player = childOverlay<DialogConfig, PlayerComponent>(
         source = dialogNavigation,
@@ -97,8 +107,14 @@ class MusicRootImpl(
                     when (it) {
                         PlayerComponent.Output.OnPause -> TODO()
                         PlayerComponent.Output.OnPlay -> TODO()
+
                         is PlayerComponent.Output.OnTrackUpdated -> {
+                            currentPlayingTrack = it.trackId
                             playerEvent?.onTrackUpdated(it.trackId)
+                        }
+
+                        is PlayerComponent.Output.RegisterCallbacks -> {
+                            trackUpdateCallbacks = it.trackUpdateCallback
                         }
                     }
                 })
@@ -117,12 +133,13 @@ class MusicRootImpl(
         object Dashboard : Configuration()
 
         @Parcelize
-        data class Details(val playlistId: String, val callback: (PlayerEvent) -> Unit) : Configuration()
+        data class Details(val playlistId: String, val playingTrackId: String, val callback: (PlayerEvent) -> Unit) :
+            Configuration()
     }
 
     @Parcelize
     private data class DialogConfig(
-        val playlist: List<Item>,
+        val playlist: List<Item>
     ) : Parcelable
 }
 

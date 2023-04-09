@@ -14,6 +14,7 @@ interface ChartDetailsComponent {
     sealed class Output {
         object GoBack : Output()
         data class OnPlayAllSelected(val playlist: List<Item>) : Output()
+        data class OnTrackSelected(val trackId: String) : Output()
         data class OnPlayerEvent(val playerEvent: PlayerEvent) : Output()
     }
 }

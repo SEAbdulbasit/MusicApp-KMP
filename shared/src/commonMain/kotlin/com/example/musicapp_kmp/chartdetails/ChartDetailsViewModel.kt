@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 /**
  * Created by abdulbasit on 26/02/2023.
  */
-class ChartDetailsViewModel(api: SpotifyApi, playlistId: String) : InstanceKeeper.Instance {
+class ChartDetailsViewModel(api: SpotifyApi, playlistId: String, playingTrackId: String) : InstanceKeeper.Instance {
 
     private val viewModelScope = CoroutineScope(Dispatchers.Unconfined)
     val chartDetailsViewState = MutableStateFlow<ChartDetailsViewState>(ChartDetailsViewState.Loading)
@@ -22,7 +22,8 @@ class ChartDetailsViewModel(api: SpotifyApi, playlistId: String) : InstanceKeepe
             try {
                 val playlist = api.getPlayList(playlistId)
                 chartDetailsViewState.value = ChartDetailsViewState.Success(
-                    chartDetails = playlist
+                    chartDetails = playlist,
+                    playingTrackId = playingTrackId
                 )
             } catch (e: Exception) {
                 e.printStackTrace()

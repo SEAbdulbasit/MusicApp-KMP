@@ -1,5 +1,7 @@
 package com.example.musicapp_kmp.decompose
 
+import com.arkivanov.essenty.parcelable.Parcelable
+import com.arkivanov.essenty.parcelable.Parcelize
 import com.example.musicapp_kmp.chartdetails.ChartDetailsViewModel
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 
@@ -15,6 +17,12 @@ interface ChartDetailsComponent {
         object GoBack : Output()
         data class OnPlayAllSelected(val playlist: List<Item>) : Output()
         data class OnTrackSelected(val trackId: String) : Output()
-        data class OnPlayerEvent(val playerEvent: PlayerEvent) : Output()
+    }
+
+    @Parcelize
+    sealed interface Input : Parcelable {
+
+        @Parcelize
+        data class TrackUpdated(val trackId: String) : Input, Parcelable
     }
 }

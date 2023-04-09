@@ -1,5 +1,6 @@
 package com.example.musicapp_kmp.decompose
 
+import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.playerview.PlayerViewModel
 
 
@@ -16,7 +17,11 @@ interface PlayerComponent {
         object OnPause : Output()
         object OnPlay : Output()
         data class OnTrackUpdated(val trackId: String) : Output()
-        data class RegisterCallbacks(val trackUpdateCallback: (String) -> Unit) : Output()
+    }
+
+    sealed interface Input {
+        data class PlayTrack(val trackId: String) : Input
+        data class UpdateTracks(val tracksList: List<Item>) : Input
     }
 
 }

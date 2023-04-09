@@ -23,7 +23,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.example.musicapp_kmp.decompose.ChartDetailsComponent
-import com.example.musicapp_kmp.decompose.PlayerEvent
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
@@ -41,11 +40,12 @@ internal fun ChartDetailsScreenLarge(
     when (val resultedState = state.value) {
         is ChartDetailsViewState.Failure -> Failure(resultedState.error)
         ChartDetailsViewState.Loading -> Loading()
-        is ChartDetailsViewState.Success -> ChartDetailsViewLarge(chartDetails = resultedState.chartDetails,
+        is ChartDetailsViewState.Success -> ChartDetailsViewLarge(
+            chartDetails = resultedState.chartDetails,
             playingTrackId = resultedState.playingTrackId,
             onPlayAllClicked = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnPlayAllSelected(it)) },
-            onPlayTrack = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnTrackSelected(it)) },
-            onEventRegister = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnPlayerEvent(it)) })
+            onPlayTrack = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnTrackSelected(it)) }
+        )
     }
     Icon(
         imageVector = Icons.Filled.ArrowBack,
@@ -62,20 +62,14 @@ internal fun ChartDetailsViewLarge(
     chartDetails: TopFiftyCharts,
     onPlayAllClicked: (List<Item>) -> Unit,
     onPlayTrack: (String) -> Unit,
-    onEventRegister: (PlayerEvent) -> Unit,
     playingTrackId: String
 ) {
-
     val painter = rememberAsyncImagePainter(chartDetails.images?.first()?.url.orEmpty())
     val selectedTrack = remember { mutableStateOf(playingTrackId) }
 
-    val events = object : PlayerEvent {
-        override fun onTrackUpdated(trackId: String) {
-            selectedTrack.value = trackId
-        }
+    LaunchedEffect(playingTrackId) {
+        selectedTrack.value = playingTrackId
     }
-
-    onEventRegister(events)
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -157,8 +151,8 @@ internal fun ChartDetailsViewLarge(
                                     while (true) {
                                         val event = awaitPointerEventScope { awaitPointerEvent() }
                                         when (event.type) {
-                                           // androidx.compose.ui.input.pointer.PointerEventType.Enter -> active = true
-                                           // androidx.compose.ui.input.pointer.PointerEventType.Exit -> active = false
+                                            // androidx.compose.ui.input.pointer.PointerEventType.Enter -> active = true
+                                            // androidx.compose.ui.input.pointer.PointerEventType.Exit -> active = false
                                         }
                                     }
                                 },

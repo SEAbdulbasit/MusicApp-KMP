@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 internal fun PlayerView(playerComponent: PlayerComponent) {
     val state = playerComponent.viewModel.chartDetailsViewState.collectAsState()
     val mediaPlayerController = state.value.mediaPlayerController
+    val selectedTrackPlaying = state.value.playingTrackId
     val trackList = state.value.trackList
 
     val selectedIndex = remember { mutableStateOf(0) }
@@ -41,15 +42,14 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
     //the index was not getting reset
     LaunchedEffect(trackList) { selectedIndex.value = 0 }
 
-    val selectedTrack = trackList[selectedIndex.value]
-    val isLoading = remember { mutableStateOf(true) }
-
-    val trackUpdateCallbacks: (String) -> Unit = {
-        selectedIndex.value = trackList.indexOfFirst { item -> item.track?.id.orEmpty() == it }
+    LaunchedEffect(selectedTrackPlaying) {
+        if (selectedTrackPlaying.isEmpty().not())
+            selectedIndex.value =
+                trackList.indexOfFirst { item -> item.track?.id.orEmpty() == selectedTrackPlaying }
     }
 
-    //when we select a track then
-    playerComponent.onOutPut(PlayerComponent.Output.RegisterCallbacks(trackUpdateCallbacks))
+    val selectedTrack = trackList[selectedIndex.value]
+    val isLoading = remember { mutableStateOf(true) }
 
     LaunchedEffect(selectedTrack) {
         playerComponent.onOutPut(PlayerComponent.Output.OnTrackUpdated(selectedTrack.track?.id.orEmpty()))

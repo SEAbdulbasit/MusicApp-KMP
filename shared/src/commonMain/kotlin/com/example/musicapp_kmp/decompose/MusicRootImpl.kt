@@ -12,6 +12,11 @@ import com.arkivanov.essenty.parcelable.Parcelize
 import com.example.musicapp_kmp.network.SpotifyApi
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.player.MediaPlayerController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 
 /**
  * Created by abdulbasit on 19/03/2023.
@@ -20,8 +25,16 @@ class MusicRootImpl(
     componentContext: ComponentContext,
     private val mediaPlayerController: MediaPlayerController,
     private val dashboardMain: (ComponentContext, (DashboardMainComponent.Output) -> Unit) -> DashboardMainComponent,
-    private val chartDetails: (ComponentContext, playlistId: String, playingTrackId: String, (ChartDetailsComponent.Output) -> Unit) -> ChartDetailsComponent,
+    private val chartDetails: (
+        ComponentContext, playlistId: String, playingTrackId: String, chatDetailsInput: SharedFlow<ChartDetailsComponent.Input>, (ChartDetailsComponent.Output) -> Unit
+    ) -> ChartDetailsComponent,
 ) : MusicRoot, ComponentContext by componentContext {
+
+    //to keep track of the playing track
+    private var currentPlayingTrack = "-1"
+    private val musicPlayerInput = MutableSharedFlow<PlayerComponent.Input>()
+    private val chatDetailsInput = MutableSharedFlow<ChartDetailsComponent.Input>()
+
     constructor(
         componentContext: ComponentContext, api: SpotifyApi, mediaPlayerController: MediaPlayerController
     ) : this(componentContext = componentContext,
@@ -31,13 +44,14 @@ class MusicRootImpl(
                 componentContext = childContext, spotifyApi = api, output = output
             )
         },
-        chartDetails = { childContext, playlistId, playingTrackId, output ->
+        chartDetails = { childContext, playlistId, playingTrackId, chartDetailsInput, output ->
             ChartDetailsComponentImpl(
                 componentContext = childContext,
                 spotifyApi = api,
                 playlistId = playlistId,
                 output = output,
-                playingTrackId = playingTrackId
+                playingTrackId = playingTrackId,
+                chatDetailsInput = chartDetailsInput
             )
         })
 
@@ -55,64 +69,66 @@ class MusicRootImpl(
         configuration: Configuration, componentContext: ComponentContext
     ): MusicRoot.Child = when (configuration) {
         Configuration.Dashboard -> MusicRoot.Child.Dashboard(
-            dashboardMain(
-                componentContext, ::dashboardOutput
-            )
+            dashboardMain(componentContext, ::dashboardOutput)
         )
 
         is Configuration.Details -> MusicRoot.Child.Details(
             chartDetails(
-                componentContext, configuration.playlistId, currentPlayingTrack, ::detailsOutput
+                componentContext,
+                configuration.playlistId,
+                currentPlayingTrack,
+                chatDetailsInput,
+                ::detailsOutput
             )
         )
     }
 
-    private var playerEvent: PlayerEvent? = null
-
-    //to keep track of the playing track
-    private var currentPlayingTrack = "-1"
-
     private fun dashboardOutput(output: DashboardMainComponent.Output) {
         when (output) {
-            is DashboardMainComponent.Output.PlaylistSelected -> navigation.push(Configuration.Details(
-                output.playlistId, currentPlayingTrack
-            ) { playerEvent ->
-                this.playerEvent = playerEvent
-            })
+            is DashboardMainComponent.Output.PlaylistSelected -> navigation.push(
+                Configuration.Details(
+                    output.playlistId, currentPlayingTrack
+                )
+            )
         }
     }
 
     private fun detailsOutput(output: ChartDetailsComponent.Output) {
         when (output) {
             is ChartDetailsComponent.Output.GoBack -> navigation.pop()
-            is ChartDetailsComponent.Output.OnPlayAllSelected -> dialogNavigation.activate(DialogConfig(output.playlist))
-            is ChartDetailsComponent.Output.OnTrackSelected -> trackUpdateCallbacks?.invoke(output.trackId)
-            is ChartDetailsComponent.Output.OnPlayerEvent -> playerEvent = output.playerEvent
+            is ChartDetailsComponent.Output.OnPlayAllSelected -> {
+                dialogNavigation.activate(DialogConfig(output.playlist))
+                CoroutineScope(Dispatchers.Default).launch {
+                    musicPlayerInput.emit(PlayerComponent.Input.UpdateTracks(output.playlist))
+                }
+            }
+
+            is ChartDetailsComponent.Output.OnTrackSelected -> {
+                CoroutineScope(Dispatchers.Default).launch {
+                    musicPlayerInput.emit(PlayerComponent.Input.PlayTrack(output.trackId))
+                }
+            }
         }
     }
 
-    private var trackUpdateCallbacks: ((String) -> Unit?)? = null
-
-    private val player = childOverlay<DialogConfig, PlayerComponent>(
-        source = dialogNavigation,
+    private val player = childOverlay<DialogConfig, PlayerComponent>(source = dialogNavigation,
         persistent = false,
         handleBackButton = false,
         childFactory = { config, _ ->
             PlayerComponentImpl(componentContext = componentContext,
                 mediaPlayerController = mediaPlayerController,
                 trackList = config.playlist,
+                playerInputs = musicPlayerInput,
                 output = {
                     when (it) {
                         PlayerComponent.Output.OnPause -> TODO()
                         PlayerComponent.Output.OnPlay -> TODO()
 
                         is PlayerComponent.Output.OnTrackUpdated -> {
-                            currentPlayingTrack = it.trackId
-                            playerEvent?.onTrackUpdated(it.trackId)
-                        }
-
-                        is PlayerComponent.Output.RegisterCallbacks -> {
-                            trackUpdateCallbacks = it.trackUpdateCallback
+                            CoroutineScope(Dispatchers.Default).launch {
+                                currentPlayingTrack = it.trackId
+                                chatDetailsInput.emit(ChartDetailsComponent.Input.TrackUpdated(it.trackId))
+                            }
                         }
                     }
                 })
@@ -131,8 +147,10 @@ class MusicRootImpl(
         object Dashboard : Configuration()
 
         @Parcelize
-        data class Details(val playlistId: String, val playingTrackId: String, val callback: (PlayerEvent) -> Unit) :
-            Configuration()
+        data class Details(
+            val playlistId: String,
+            val playingTrackId: String,
+        ) : Configuration(), Parcelable
     }
 
     @Parcelize
@@ -140,9 +158,3 @@ class MusicRootImpl(
         val playlist: List<Item>
     ) : Parcelable
 }
-
-
-interface PlayerEvent {
-    fun onTrackUpdated(trackId: String)
-}
-

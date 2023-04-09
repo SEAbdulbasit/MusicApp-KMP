@@ -33,7 +33,7 @@ fun MainAndroid(root: MusicRootImpl) {
                 }
             },
         ) {
-            MainCommon(root)
+            MainCommon(root, false)
         }
     }
 }

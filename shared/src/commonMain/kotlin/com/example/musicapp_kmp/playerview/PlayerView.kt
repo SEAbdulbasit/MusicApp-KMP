@@ -20,10 +20,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.example.musicapp_kmp.decompose.PlayerComponent
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.player.MediaPlayerController
 import com.example.musicapp_kmp.player.MediaPlayerListener
-import com.example.musicapp_kmp.player.PlayerComponent
 import com.seiko.imageloader.rememberAsyncImagePainter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,8 +32,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun PlayerView(playerComponent: PlayerComponent) {
-    val mediaPlayerController = playerComponent.playerController
-    val trackList = playerComponent.trackList
+    val state = playerComponent.viewModel.chartDetailsViewState.collectAsState()
+    val mediaPlayerController = state.value.mediaPlayerController
+    val trackList = state.value.trackList
 
     val selectedIndex = remember { mutableStateOf(0) }
 
@@ -51,7 +52,7 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
     playerComponent.onOutPut(PlayerComponent.Output.RegisterCallbacks(trackUpdateCallbacks))
 
     LaunchedEffect(selectedTrack) {
-        playerComponent.onOutPut(PlayerComponent.Output.OnTrackUpdated(selectedTrack.track?.id ?: ""))
+        playerComponent.onOutPut(PlayerComponent.Output.OnTrackUpdated(selectedTrack.track?.id.orEmpty()))
     }
 
     playTrack(selectedTrack, mediaPlayerController, isLoading, selectedIndex, trackList)
@@ -84,8 +85,7 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
             }
             Column(Modifier.weight(1f).padding(start = 8.dp).align(Alignment.Top)) {
                 Text(
-                    text = selectedTrack.track?.name ?: "",
-                    style = MaterialTheme.typography.caption.copy(
+                    text = selectedTrack.track?.name ?: "", style = MaterialTheme.typography.caption.copy(
                         color = Color(
                             0XFFEFEEE0
                         )
@@ -106,8 +106,8 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                     imageVector = Icons.Default.ArrowBack,
                     tint = Color(0xFFFACD66),
                     contentDescription = "Back",
-                    modifier = Modifier.padding(end = 8.dp).size(32.dp)
-                        .align(Alignment.CenterVertically).clickable(onClick = {
+                    modifier = Modifier.padding(end = 8.dp).size(32.dp).align(Alignment.CenterVertically)
+                        .clickable(onClick = {
                             if (selectedIndex.value - 1 >= 0) {
                                 selectedIndex.value = selectedIndex.value - 1
                             }
@@ -117,8 +117,8 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                     imageVector = Icons.Filled.PlayArrow,
                     tint = Color(0xFFFACD66),
                     contentDescription = "Play",
-                    modifier = Modifier.padding(end = 8.dp).size(32.dp)
-                        .align(Alignment.CenterVertically).clickable(onClick = {
+                    modifier = Modifier.padding(end = 8.dp).size(32.dp).align(Alignment.CenterVertically)
+                        .clickable(onClick = {
                             if (mediaPlayerController.isPlaying()) {
                                 mediaPlayerController.pause()
                             } else {
@@ -130,8 +130,8 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                     imageVector = Icons.Default.ArrowForward,
                     tint = Color(0xFFFACD66),
                     contentDescription = "Forward",
-                    modifier = Modifier.padding(end = 8.dp).size(32.dp)
-                        .align(Alignment.CenterVertically).clickable(onClick = {
+                    modifier = Modifier.padding(end = 8.dp).size(32.dp).align(Alignment.CenterVertically)
+                        .clickable(onClick = {
                             if (selectedIndex.value < trackList.size - 1) {
                                 selectedIndex.value = selectedIndex.value + 1
                             }

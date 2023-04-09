@@ -12,8 +12,6 @@ import com.arkivanov.essenty.parcelable.Parcelize
 import com.example.musicapp_kmp.network.SpotifyApi
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.player.MediaPlayerController
-import com.example.musicapp_kmp.player.PlayerComponent
-import com.example.musicapp_kmp.player.PlayerComponentImpl
 
 /**
  * Created by abdulbasit on 19/03/2023.

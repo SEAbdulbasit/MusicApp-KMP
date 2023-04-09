@@ -1,6 +1,6 @@
-package com.example.musicapp_kmp.player
+package com.example.musicapp_kmp.decompose
 
-import com.example.musicapp_kmp.network.models.topfiftycharts.Item
+import com.example.musicapp_kmp.playerview.PlayerViewModel
 
 
 /**
@@ -8,8 +8,7 @@ import com.example.musicapp_kmp.network.models.topfiftycharts.Item
  */
 
 interface PlayerComponent {
-    val playerController: MediaPlayerController
-    val trackList: List<Item>
+    val viewModel: PlayerViewModel
 
     fun onOutPut(output: Output)
 

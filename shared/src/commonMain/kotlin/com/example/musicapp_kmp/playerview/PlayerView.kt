@@ -25,9 +25,6 @@ import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.player.MediaPlayerController
 import com.example.musicapp_kmp.player.MediaPlayerListener
 import com.seiko.imageloader.rememberAsyncImagePainter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -38,6 +35,8 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
     val trackList = state.value.trackList
 
     val selectedIndex = remember { mutableStateOf(0) }
+    val isLoading = remember { mutableStateOf(true) }
+    val selectedTrack = trackList[selectedIndex.value]
 
     //the index was not getting reset
     LaunchedEffect(trackList) { selectedIndex.value = 0 }
@@ -48,8 +47,6 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                 trackList.indexOfFirst { item -> item.track?.id.orEmpty() == selectedTrackPlaying }
     }
 
-    val selectedTrack = trackList[selectedIndex.value]
-    val isLoading = remember { mutableStateOf(true) }
 
     LaunchedEffect(selectedTrack) {
         playerComponent.onOutPut(PlayerComponent.Output.OnTrackUpdated(selectedTrack.track?.id.orEmpty()))
@@ -63,14 +60,12 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             val painter = rememberAsyncImagePainter(
-                selectedTrack.track?.album?.images?.first()?.url
-                    ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
+                selectedTrack.track?.album?.images?.first()?.url.orEmpty()
             )
             Box(modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(49.dp).height(49.dp)) {
                 Image(
                     painter,
-                    selectedTrack.track?.album?.images?.first()?.url
-                        ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
+                    selectedTrack.track?.album?.images?.first()?.url.orEmpty(),
                     modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(49.dp).height(49.dp),
                     contentScale = ContentScale.Crop
                 )
@@ -150,26 +145,24 @@ private fun playTrack(
     trackList: List<Item>,
 ) {
     selectedTrack.track?.previewUrl?.let {
-        CoroutineScope(Dispatchers.Unconfined).launch {
-            mediaPlayerController.prepare(it, listener = object : MediaPlayerListener {
-                override fun onReady() {
-                    mediaPlayerController.start()
-                    isLoading.value = false
-                }
+        mediaPlayerController.prepare(it, listener = object : MediaPlayerListener {
+            override fun onReady() {
+                mediaPlayerController.start()
+                isLoading.value = false
+            }
 
-                override fun onVideoCompleted() {
-                    if (selectedIndex.value < trackList.size - 1) {
-                        selectedIndex.value = selectedIndex.value + 1
-                    }
+            override fun onVideoCompleted() {
+                if (selectedIndex.value < trackList.size - 1) {
+                    selectedIndex.value = selectedIndex.value + 1
                 }
+            }
 
-                override fun onError() {
-                    if (selectedIndex.value < trackList.size - 1) {
-                        selectedIndex.value = selectedIndex.value + 1
-                    }
+            override fun onError() {
+                if (selectedIndex.value < trackList.size - 1) {
+                    selectedIndex.value = selectedIndex.value + 1
                 }
-            })
-        }
+            }
+        })
     } ?: run {
         if (selectedIndex.value < trackList.size - 1) {
             selectedIndex.value = selectedIndex.value + 1

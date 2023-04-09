@@ -47,6 +47,7 @@ internal fun ChartDetailsScreenLarge(
             onPlayTrack = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnTrackSelected(it)) }
         )
     }
+
     Icon(
         imageVector = Icons.Filled.ArrowBack,
         tint = Color(0xFFFACD66),

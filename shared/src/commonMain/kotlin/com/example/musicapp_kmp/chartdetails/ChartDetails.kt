@@ -38,7 +38,6 @@ internal fun ChartDetailsScreen(
 ) {
 
     val state = chartDetailsComponent.viewModel.chartDetailsViewState.collectAsState()
-
     when (val resultedState = state.value) {
         is ChartDetailsViewState.Failure -> Failure(resultedState.error)
         ChartDetailsViewState.Loading -> Loading()
@@ -87,10 +86,11 @@ internal fun ChartDetailsView(
 ) {
 
     val selectedTrack = remember { mutableStateOf(playingTrackId) }
+    val painter = rememberAsyncImagePainter(chartDetails.images?.first()?.url.orEmpty())
 
-    val painter = rememberAsyncImagePainter(
-        chartDetails.images?.first()?.url.orEmpty()
-    )
+    LaunchedEffect(playingTrackId) {
+        selectedTrack.value = playingTrackId
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(

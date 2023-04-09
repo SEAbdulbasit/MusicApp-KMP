@@ -14,6 +14,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.example.musicapp_kmp.decompose.ChartDetailsComponent
+import com.example.musicapp_kmp.decompose.PlayerEvent
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
@@ -32,18 +35,28 @@ import com.seiko.imageloader.rememberAsyncImagePainter
  */
 @Composable
 internal fun ChartDetailsScreenLarge(
-    component: ChartDetailsComponent,
+    chartDetailsComponent: ChartDetailsComponent,
 ) {
-    val state = component.viewModel.chartDetailsViewState.collectAsState()
+    val state = chartDetailsComponent.viewModel.chartDetailsViewState.collectAsState()
+    val selectedTrack = remember { mutableStateOf("") }
+
+    val events = object : PlayerEvent {
+        override fun onTrackUpdated(trackId: String) {
+            if (trackId.isNotBlank())
+                selectedTrack.value = trackId
+        }
+    }
+
+    chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnPlayerEvent(events))
 
     when (val resultedState = state.value) {
         is ChartDetailsViewState.Failure -> Failure(resultedState.error)
         ChartDetailsViewState.Loading -> Loading()
         is ChartDetailsViewState.Success -> ChartDetailsViewLarge(
-            resultedState.chartDetails
-        ) {
-            component.onOutPut(ChartDetailsComponent.Output.OnPlayAllSelected(it))
-        }
+            chartDetails = resultedState.chartDetails,
+            onPlayAllClicked = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnPlayAllSelected(it)) },
+            selectedTrack = selectedTrack.value
+        )
     }
 
     Icon(
@@ -51,26 +64,22 @@ internal fun ChartDetailsScreenLarge(
         tint = Color(0xFFFACD66),
         contentDescription = "Forward",
         modifier = Modifier.padding(all = 8.dp).size(32.dp).clickable(onClick = {
-            component.onOutPut(ChartDetailsComponent.Output.GoBack)
+            chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack)
         })
     )
 }
 
-
 @Composable
 internal fun ChartDetailsViewLarge(
-    chartDetails: TopFiftyCharts, onPlayAllClicked: (List<Item>) -> Unit
+    chartDetails: TopFiftyCharts, onPlayAllClicked: (List<Item>) -> Unit, selectedTrack: String
 ) {
-    val painter = rememberAsyncImagePainter(
-        chartDetails.images?.first()?.url
-            ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
-    )
+
+    val painter = rememberAsyncImagePainter(chartDetails.images?.first()?.url.orEmpty())
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter,
-            chartDetails.images?.first()?.url
-                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
+            chartDetails.images?.first()?.url.orEmpty(),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
@@ -95,22 +104,20 @@ internal fun ChartDetailsViewLarge(
             Row(modifier = Modifier.padding(16.dp)) {
                 Image(
                     painter = painter,
-                    contentDescription = chartDetails.images?.first()?.url
-                        ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
-                    modifier = Modifier.padding(top = 24.dp, bottom = 20.dp).height(284.dp)
-                        .width(284.dp).aspectRatio(1f).clip(RoundedCornerShape(25.dp)),
+                    contentDescription = chartDetails.images?.first()?.url.orEmpty(),
+                    modifier = Modifier.padding(top = 24.dp, bottom = 20.dp).height(284.dp).width(284.dp)
+                        .aspectRatio(1f).clip(RoundedCornerShape(25.dp)),
                     contentScale = ContentScale.Crop,
                 )
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier.align(Alignment.Bottom).padding(16.dp)
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.align(Alignment.Bottom).padding(16.dp)
                 ) {
                     Text(
-                        text = chartDetails.name ?: "",
+                        text = chartDetails.name.orEmpty(),
                         style = MaterialTheme.typography.h4.copy(color = Color(0XFFA4C7C6))
                     )
                     Text(
-                        text = chartDetails.description ?: "",
+                        text = chartDetails.description.orEmpty(),
                         style = MaterialTheme.typography.body2.copy(color = Color(0XFFEFEEE0)),
                         modifier = Modifier.padding(top = 8.dp)
                     )
@@ -127,33 +134,32 @@ internal fun ChartDetailsViewLarge(
         }
         items(chartDetails.tracks?.items ?: emptyList()) { track ->
             Box(
-                modifier = Modifier.clip(RoundedCornerShape(20.dp)).fillMaxWidth()
-                    .background(Color(0xFF33373B)).padding(16.dp)
+                modifier = Modifier.clip(RoundedCornerShape(20.dp)).fillMaxWidth().background(
+                    if ((track.track?.id ?: "") == selectedTrack) Color(0xFFFACD66)
+                    else Color(0xFF33373B)
+                )
+                    .padding(16.dp)
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     val painter = rememberAsyncImagePainter(
-                        track.track?.album?.images?.first()?.url
-                            ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
+                        track.track?.album?.images?.first()?.url.orEmpty()
                     )
                     Image(
                         painter,
-                        track.track?.album?.images?.first()?.url
-                            ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
-                        modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp)
-                            .height(40.dp),
+                        track.track?.album?.images?.first()?.url.orEmpty(),
+                        modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp).height(40.dp),
                         contentScale = ContentScale.Crop
                     )
                     Column(Modifier.weight(1f).padding(start = 8.dp).align(Alignment.Top)) {
                         Text(
-                            text = track.track?.name ?: "",
-                            style = MaterialTheme.typography.caption.copy(
+                            text = track.track?.name.orEmpty(), style = MaterialTheme.typography.caption.copy(
                                 color = Color(
                                     0XFFEFEEE0
                                 )
                             )
                         )
                         Text(
-                            text = track.track?.artists?.map { it.name }?.joinToString(",") ?: "",
+                            text = track.track?.artists?.map { it.name }?.joinToString(",").orEmpty(),
                             style = MaterialTheme.typography.caption.copy(
                                 color = Color(
                                     0XFFEFEEE0

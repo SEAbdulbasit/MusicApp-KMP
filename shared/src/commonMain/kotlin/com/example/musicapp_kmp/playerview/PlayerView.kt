@@ -25,6 +25,9 @@ import com.example.musicapp_kmp.player.MediaPlayerController
 import com.example.musicapp_kmp.player.MediaPlayerListener
 import com.example.musicapp_kmp.player.PlayerComponent
 import com.seiko.imageloader.rememberAsyncImagePainter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -38,7 +41,11 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
     LaunchedEffect(trackList) { selectedIndex.value = 0 }
 
     val selectedTrack = trackList[selectedIndex.value]
-    var isLoading = remember { mutableStateOf(true) }
+    val isLoading = remember { mutableStateOf(true) }
+
+    LaunchedEffect(selectedTrack) {
+        playerComponent.onOutPut(PlayerComponent.Output.OnTrackUpdated(selectedTrack.track?.id ?: ""))
+    }
 
     playTrack(selectedTrack, mediaPlayerController, isLoading, selectedIndex, trackList)
 
@@ -133,27 +140,29 @@ private fun playTrack(
     mediaPlayerController: MediaPlayerController,
     isLoading: MutableState<Boolean>,
     selectedIndex: MutableState<Int>,
-    trackList: List<Item>
+    trackList: List<Item>,
 ) {
     selectedTrack.track?.previewUrl?.let {
-        mediaPlayerController.prepare(it, listener = object : MediaPlayerListener {
-            override fun onReady() {
-                mediaPlayerController.start()
-                isLoading.value = false
-            }
-
-            override fun onVideoCompleted() {
-                if (selectedIndex.value < trackList.size - 1) {
-                    selectedIndex.value = selectedIndex.value + 1
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            mediaPlayerController.prepare(it, listener = object : MediaPlayerListener {
+                override fun onReady() {
+                    mediaPlayerController.start()
+                    isLoading.value = false
                 }
-            }
 
-            override fun onError() {
-                if (selectedIndex.value < trackList.size - 1) {
-                    selectedIndex.value = selectedIndex.value + 1
+                override fun onVideoCompleted() {
+                    if (selectedIndex.value < trackList.size - 1) {
+                        selectedIndex.value = selectedIndex.value + 1
+                    }
                 }
-            }
-        })
+
+                override fun onError() {
+                    if (selectedIndex.value < trackList.size - 1) {
+                        selectedIndex.value = selectedIndex.value + 1
+                    }
+                }
+            })
+        }
     } ?: run {
         if (selectedIndex.value < trackList.size - 1) {
             selectedIndex.value = selectedIndex.value + 1

@@ -25,9 +25,7 @@ class MusicRootImpl(
     private val chartDetails: (ComponentContext, playlistId: String, (ChartDetailsComponent.Output) -> Unit) -> ChartDetailsComponent,
 ) : MusicRoot, ComponentContext by componentContext {
     constructor(
-        componentContext: ComponentContext,
-        api: SpotifyApi,
-        mediaPlayerController: MediaPlayerController
+        componentContext: ComponentContext, api: SpotifyApi, mediaPlayerController: MediaPlayerController
     ) : this(componentContext = componentContext,
         mediaPlayerController = mediaPlayerController,
         dashboardMain = { childContext, output ->
@@ -37,10 +35,7 @@ class MusicRootImpl(
         },
         chartDetails = { childContext, playlistId, output ->
             ChartDetailsComponentImpl(
-                componentContext = childContext,
-                spotifyApi = api,
-                playlistId = playlistId,
-                output = output
+                componentContext = childContext, spotifyApi = api, playlistId = playlistId, output = output
             )
         })
 
@@ -62,6 +57,7 @@ class MusicRootImpl(
                 componentContext, ::dashboardOutput
             )
         )
+
         is Configuration.Details -> MusicRoot.Child.Details(
             chartDetails(
                 componentContext, configuration.playlistId, ::detailsOutput
@@ -69,12 +65,12 @@ class MusicRootImpl(
         )
     }
 
+    var playerEvent: PlayerEvent? = null
+
     private fun dashboardOutput(output: DashboardMainComponent.Output) {
         when (output) {
             is DashboardMainComponent.Output.PlaylistSelected -> navigation.push(
-                Configuration.Details(
-                    output.playlistId
-                )
+                Configuration.Details(output.playlistId) { playerEvent -> this.playerEvent = playerEvent }
             )
         }
     }
@@ -82,20 +78,30 @@ class MusicRootImpl(
     private fun detailsOutput(output: ChartDetailsComponent.Output) {
         when (output) {
             is ChartDetailsComponent.Output.GoBack -> navigation.pop()
-            is ChartDetailsComponent.Output.OnPlayAllSelected -> {
-                dialogNavigation.activate(DialogConfig(output.playlist))
+            is ChartDetailsComponent.Output.OnPlayAllSelected -> dialogNavigation.activate(DialogConfig(output.playlist))
+            is ChartDetailsComponent.Output.OnPlayerEvent -> {
+                playerEvent = output.playerEvent
             }
         }
     }
 
-    private val player = childOverlay<DialogConfig, PlayerComponent>(source = dialogNavigation,
+    private val player = childOverlay<DialogConfig, PlayerComponent>(
+        source = dialogNavigation,
         persistent = false,
         handleBackButton = false,
         childFactory = { config, _ ->
             PlayerComponentImpl(componentContext = componentContext,
                 mediaPlayerController = mediaPlayerController,
                 trackList = config.playlist,
-                output = {})
+                output = {
+                    when (it) {
+                        PlayerComponent.Output.OnPause -> TODO()
+                        PlayerComponent.Output.OnPlay -> TODO()
+                        is PlayerComponent.Output.OnTrackUpdated -> {
+                            playerEvent?.onTrackUpdated(it.trackId)
+                        }
+                    }
+                })
         })
 
     override val childStack: Value<ChildStack<*, MusicRoot.Child>>
@@ -111,12 +117,17 @@ class MusicRootImpl(
         object Dashboard : Configuration()
 
         @Parcelize
-        data class Details(val playlistId: String) : Configuration()
+        data class Details(val playlistId: String, val callback: (PlayerEvent) -> Unit) : Configuration()
     }
 
     @Parcelize
     private data class DialogConfig(
         val playlist: List<Item>,
     ) : Parcelable
+}
+
+
+interface PlayerEvent {
+    fun onTrackUpdated(trackId: String)
 }
 

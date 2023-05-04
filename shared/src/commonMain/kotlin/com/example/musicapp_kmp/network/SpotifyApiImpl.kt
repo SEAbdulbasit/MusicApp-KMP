@@ -58,7 +58,7 @@ class SpotifyApiImpl : SpotifyApi {
             socketTimeoutMillis = timeout
         }
         install(ContentNegotiation) {
-            json()
+            json(kotlinx.serialization.json.Json { isLenient = true; ignoreUnknownKeys = true })
         }
     }
 

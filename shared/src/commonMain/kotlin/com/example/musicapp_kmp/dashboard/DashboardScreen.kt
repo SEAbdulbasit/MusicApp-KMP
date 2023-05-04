@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.musicapp_kmp.decompose.DashboardMainComponent
 import com.example.musicapp_kmp.network.models.featuredplaylist.FeaturedPlayList
 import com.example.musicapp_kmp.network.models.newreleases.NewReleasedAlbums
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
@@ -34,18 +35,19 @@ import com.seiko.imageloader.rememberAsyncImagePainter
  */
 
 @Composable
-internal fun DashboardScreen(viewModel: DashboardViewModel, navigateToDetails: (String) -> Unit) {
-    val state = viewModel.dashboardState.collectAsState()
+internal fun DashboardScreen(dashboardMainComponent: DashboardMainComponent) {
+    val state = dashboardMainComponent.viewModel.dashboardState.collectAsState()
 
     when (val resultedState = state.value) {
         is DashboardViewState.Failure -> Failure(resultedState.error)
         DashboardViewState.Loading -> Loading()
         is DashboardViewState.Success -> {
-            DashboardView(resultedState, navigateToDetails)
+            DashboardView(resultedState) {
+                dashboardMainComponent.onOutPut(DashboardMainComponent.Output.PlaylistSelected(it))
+            }
         }
     }
 }
-
 
 @Composable
 internal fun Loading() {

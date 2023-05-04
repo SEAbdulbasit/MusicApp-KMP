@@ -10,6 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Application
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
+import com.example.musicapp_kmp.decompose.MusicRootImpl
+import com.example.musicapp_kmp.network.SpotifyApiImpl
 import com.example.musicapp_kmp.player.MediaPlayerController
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
@@ -19,11 +23,20 @@ import com.seiko.imageloader.util.DebugLogger
 import com.seiko.imageloader.util.LogPriority
 import platform.UIKit.UIViewController
 
-fun MainiOS(): UIViewController = Application("Music-App") {
+fun MainiOS(
+    lifecycle: LifecycleRegistry,
+): UIViewController = Application("Music-App") {
+    val api = SpotifyApiImpl()
+
+    val rootComponent = MusicRootImpl(
+        componentContext = DefaultComponentContext(lifecycle = lifecycle),
+        api = api,
+        mediaPlayerController = MediaPlayerController()
+    )
+
     Column(Modifier.background(color = Color(0xFF1A1E1F))) {
         Box(
-            modifier = Modifier.fillMaxWidth()
-                .height(40.dp).background(color = Color(0xFF1A1E1F))
+            modifier = Modifier.fillMaxWidth().height(40.dp).background(color = Color(0xFF1A1E1F))
         )
         CompositionLocalProvider(
             LocalImageLoader provides ImageLoader {
@@ -38,8 +51,7 @@ fun MainiOS(): UIViewController = Application("Music-App") {
                 }
             },
         ) {
-            val mediaPlayerController = MediaPlayerController()
-            MainCommon(mediaPlayerController)
+            MainCommon(rootComponent, false)
         }
     }
 }

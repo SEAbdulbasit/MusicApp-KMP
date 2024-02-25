@@ -1,7 +1,9 @@
-# Music Player App Using Compose Multiplatform
+# Music Player App Using Compose Multiplatform KMP
 
-This is a music player app built using Compose Multiplatform UI that works on #Android, #iOS, #Desktop, and #Web
-platforms.
+This is a music player app built using Compose Multiplatform UI that works on Android, iOS, Desktop, and Web
+platforms. It uses the spotify api for fetching the top 50 charts and getting the trending albums. The Google login is still in pending
+and for now, you need to add the spotify token manually. You can easily hit the endpoint [here](https://developer.spotify.com/documentation/web-api/reference/get-an-album) to get the album
+and then get the token and set in the app.
 
 ## Platforms
 
@@ -9,7 +11,7 @@ The app uses different media players on different platforms:
 
 For iOS, AVKit is used
 For Android, Media Player is used
-For Desktop, VLCJ media player is used
+For Desktop, VLC media player is used
 For the Web, an HTML media player is used.
 
 ## Integration with Low-Level APIs
@@ -35,7 +37,7 @@ git clone https://github.com/SEAbdulbasit/MusicApp-KMP.git
 
 ## Known Issues
 
-- When you click "Select All" on Android, Web, and Desktop, the app will auto-play the selected tracks and continue
+- When you click "Select All" on Android, Web, and Desktop, the app will autoplay the selected tracks and continue
   playing the next track when the previous one ends.
   On iOS, there are issues with the callbacks for `onReady` and `onVideoCompleted`
   which is causing the player to not start automatically. I was unable to configure the callbacks but hopefully, will be
@@ -64,12 +66,14 @@ TravelApp: https://github.com/SEAbdulbasit/TravelApp-KMP
 - Kotlin
 - Compose Multiplatform UI
 - AVKit Media Player
-- VLCJ media player
+- VLC media player
 - HTML media player
 - [Compose Image Loader](https://github.com/qdsfdhvh/compose-imageloader)
+- Decompose
 
-## Credits
-
-I'm grateful to IceRock Development and Aleksey Mikhailov for their demo application, which was an invaluable resource.
+TODO
+-  Add google login
+- Add local db to save favorite playlist
+- Add implementation for recent releases
 
 

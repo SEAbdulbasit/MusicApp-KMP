@@ -62,11 +62,11 @@ kotlin {
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
                 implementation("io.github.qdsfdhvh:image-loader:1.2.10")
-                api("com.arkivanov.decompose:decompose:1.0.0-compose-experimental")
-                api("com.arkivanov.decompose:extensions-compose-jetbrains:1.0.0-compose-experimental")
-                implementation("com.arkivanov.essenty:lifecycle:1.0.0")
+                api("com.arkivanov.decompose:decompose:2.2.2")
+                api("com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental")
+                implementation("com.arkivanov.essenty:lifecycle:1.3.0")
             }
         }
         val commonTest by getting {
@@ -94,9 +94,9 @@ kotlin {
         val jsMain by getting {
             dependsOn(commonMain)
             dependencies {
-                implementation(compose.web.core)
-                implementation("io.ktor:ktor-client-js:2.2.1")
-                implementation("io.ktor:ktor-client-json-js:2.1.0")
+                implementation(compose.html.core)
+                implementation("io.ktor:ktor-client-js:2.3.8")
+                implementation("io.ktor:ktor-client-json-js:2.2.1")
             }
         }
 

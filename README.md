@@ -5,6 +5,9 @@ platforms. It uses the spotify api for fetching the top 50 charts and getting th
 and for now, you need to add the spotify token manually. You can easily hit the endpoint [here](https://developer.spotify.com/documentation/web-api/reference/get-an-album) to get the album
 and then get the token and set in the app.
 
+## Live
+You can find it live [here](https://seabdulbasit.github.io/MusicApp-KMP/)
+
 ## Platforms
 
 The app uses different media players on different platforms:

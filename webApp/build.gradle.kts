@@ -3,18 +3,29 @@ plugins {
     id("org.jetbrains.compose")
 }
 
+
 kotlin {
     js(IR) {
-        browser()
+        moduleName = "webApp"
+        browser {
+            commonWebpackConfig {
+                outputFileName = "webApp.js"
+            }
+        }
         binaries.executable()
     }
+
     sourceSets {
         val jsMain by getting {
+
             dependencies {
                 implementation(project(":shared"))
-                implementation(npm("path-browserify", "^1.0.1"))
-                implementation(npm("os-browserify", "^0.3.0"))
+                implementation(compose.runtime)
+                implementation(compose.ui)
+                implementation(compose.foundation)
+                implementation(compose.material)
             }
+
         }
     }
 }

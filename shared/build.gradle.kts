@@ -46,14 +46,6 @@ kotlin {
         version = "1.0"
         ios.deploymentTarget = "14.1"
         podfile = project.file("../iosApp/Podfile")
-        framework {
-            baseName = "shared"
-            isStatic = true
-            export("com.arkivanov.decompose:decompose:1.0.0-compose-experimental")
-            export("com.arkivanov.essenty:lifecycle:1.0.0")
-        }
-        extraSpecAttributes["resources"] =
-            "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 
     sourceSets {

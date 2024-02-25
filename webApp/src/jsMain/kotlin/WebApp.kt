@@ -1,4 +1,5 @@
-import androidx.compose.ui.window.Window
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.window.CanvasBasedWindow
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
@@ -7,6 +8,7 @@ import com.example.musicapp_kmp.network.SpotifyApiImpl
 import com.example.musicapp_kmp.player.MediaPlayerController
 import org.jetbrains.skiko.wasm.onWasmReady
 
+@OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     onWasmReady {
         val lifecycle = LifecycleRegistry()
@@ -18,7 +20,7 @@ fun main() {
             )
 
         lifecycle.resume()
-        Window("MusicApp-KMP") {
+        CanvasBasedWindow("MusicApp-KMP") {
             CommonMainWeb(rootComponent)
         }
     }

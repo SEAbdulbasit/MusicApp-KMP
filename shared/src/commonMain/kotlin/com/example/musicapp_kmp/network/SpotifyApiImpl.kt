@@ -1,9 +1,11 @@
 package com.example.musicapp_kmp.network
 
 import com.example.musicapp_kmp.TOKEN
+import com.example.musicapp_kmp.dummydata.topFiftyChartsResponse
 import com.example.musicapp_kmp.network.models.featuredplaylist.FeaturedPlayList
 import com.example.musicapp_kmp.network.models.newreleases.NewReleasedAlbums
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
+import featurePlaylistResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -11,13 +13,18 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
+import newReleases
 
 
 /**
  * Created by abdulbasit on 26/02/2023.
- */
+// */
 class SpotifyApiImpl : SpotifyApi {
     override suspend fun getTopFiftyChart(): TopFiftyCharts {
+        if (TOKEN.isEmpty()) {
+            return Json.decodeFromString<TopFiftyCharts>(topFiftyChartsResponse)
+        }
         return client.get {
             headers {
                 sptifyEndPoint("v1/playlists/37i9dQZEVXbMDoHDwVN2tF")
@@ -26,6 +33,9 @@ class SpotifyApiImpl : SpotifyApi {
     }
 
     override suspend fun getNewReleases(): NewReleasedAlbums {
+        if (TOKEN.isEmpty()) {
+            return Json.decodeFromString<NewReleasedAlbums>(newReleases)
+        }
         return client.get {
             headers {
                 sptifyEndPoint("v1/browse/new-releases")
@@ -34,6 +44,9 @@ class SpotifyApiImpl : SpotifyApi {
     }
 
     override suspend fun getFeaturedPlaylist(): FeaturedPlayList {
+        if (TOKEN.isEmpty()) {
+            return Json.decodeFromString<FeaturedPlayList>(featurePlaylistResponse)
+        }
         return client.get {
             headers {
                 sptifyEndPoint("v1/browse/featured-playlists")
@@ -42,6 +55,9 @@ class SpotifyApiImpl : SpotifyApi {
     }
 
     override suspend fun getPlayList(playlistId: String): TopFiftyCharts {
+        if (TOKEN.isEmpty()) {
+            return Json.decodeFromString<TopFiftyCharts>(topFiftyChartsResponse)
+        }
         return client.get {
             headers {
                 sptifyEndPoint("v1/playlists/$playlistId")
@@ -58,7 +74,7 @@ class SpotifyApiImpl : SpotifyApi {
             socketTimeoutMillis = timeout
         }
         install(ContentNegotiation) {
-            json(kotlinx.serialization.json.Json { isLenient = true; ignoreUnknownKeys = true })
+            json(Json { isLenient = true; ignoreUnknownKeys = true })
         }
     }
 
@@ -72,6 +88,5 @@ class SpotifyApiImpl : SpotifyApi {
                 )
             }
         }
-
     }
 }

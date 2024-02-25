@@ -25,7 +25,7 @@ data class Item(
     @SerialName("primary_color")
     val primaryColor: String?,
     @SerialName("public")
-    val `public`: String?,
+    val `public`: Boolean?,
     @SerialName("snapshot_id")
     val snapshotId: String?,
     @SerialName("tracks")

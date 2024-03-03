@@ -64,9 +64,11 @@ internal fun DashboardViewLarge(
 internal fun TopChartViewLarge(
     topFiftyCharts: TopFiftyCharts, navigateToDetails: (String) -> Unit
 ) {
+    Box(modifier = Modifier.fillMaxWidth()){
     Box(
         modifier = Modifier.clip(RoundedCornerShape(20.dp)).width(686.dp).height(450.dp)
-            .padding(24.dp).clickable(onClick = { navigateToDetails(topFiftyCharts.id ?: "") })
+            .padding(24.dp).clickable(onClick = { navigateToDetails(topFiftyCharts.id ?: "") }).align(
+                Alignment.Center)
     ) {
         val painter = rememberAsyncImagePainter(
             topFiftyCharts.images?.first()?.url
@@ -79,7 +81,7 @@ internal fun TopChartViewLarge(
             modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(20.dp)),
             contentScale = ContentScale.Crop
         )
-        Column(modifier = Modifier.padding(16.dp).align(Alignment.BottomStart)) {
+        Column(modifier = Modifier.padding(20.dp).align(Alignment.BottomStart)) {
             Text(
                 topFiftyCharts.name ?: "",
                 style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Bold),
@@ -91,9 +93,9 @@ internal fun TopChartViewLarge(
                 topFiftyCharts.description ?: "",
                 style = MaterialTheme.typography.body2,
                 color = Color.White,
-                modifier = Modifier.padding(top = 6.dp)
+                modifier = Modifier.padding(top = 40.dp)
             )
-            Row(modifier = Modifier.padding(top = 40.dp)) {
+            Row(modifier = Modifier.padding(top = 20.dp)) {
                 Icon(
                     imageVector = Icons.Filled.FavoriteBorder,
                     tint = Color(0xFFFACD66),
@@ -108,6 +110,7 @@ internal fun TopChartViewLarge(
                 )
             }
         }
+    }
     }
 }
 

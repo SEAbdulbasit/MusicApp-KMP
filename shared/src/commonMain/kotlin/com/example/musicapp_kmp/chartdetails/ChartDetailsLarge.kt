@@ -100,13 +100,14 @@ internal fun ChartDetailsViewLarge(
     }
 
     LazyColumn(
-        modifier = Modifier.padding(horizontal = 36.dp),
+        modifier = Modifier.padding(horizontal = 63.dp),
         contentPadding = PaddingValues(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
 
         item {
-            Row(modifier = Modifier.padding(16.dp)) {
+            Box(modifier = Modifier.fillMaxSize()){
+            Row(modifier = Modifier.padding(16.dp).align(Alignment.TopCenter)) {
                 Image(
                     painter = painter,
                     contentDescription = chartDetails.images?.first()?.url.orEmpty(),
@@ -135,6 +136,7 @@ internal fun ChartDetailsViewLarge(
                     OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
                 }
 
+            }
             }
         }
         items(chartDetails.tracks?.items ?: emptyList()) { track ->

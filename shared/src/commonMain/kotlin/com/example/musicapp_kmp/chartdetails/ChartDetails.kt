@@ -5,10 +5,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -49,14 +53,22 @@ internal fun ChartDetailsScreen(
                 onPlayTrack = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnTrackSelected(it)) }
             )
     }
-    Icon(
+    IconButton(onClick = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack) }) {
+        Icon(
+            Icons.Filled.ArrowBack,
+            contentDescription = "Forward",
+            tint = Color(0xFFFACD66),
+            modifier = Modifier.padding(all = 16.dp).size(32.dp)
+        )
+    }
+   /* Icon(
         imageVector = Icons.Filled.ArrowBack,
         tint = Color(0xFFFACD66),
         contentDescription = "Forward",
         modifier = Modifier.padding(all = 16.dp).size(32.dp).clickable(onClick = {
             chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack)
         })
-    )
+    )*/
 }
 
 @Composable
@@ -109,7 +121,8 @@ internal fun ChartDetailsView(
             )
         )
 
-        LazyColumn(
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
             modifier = Modifier.padding(horizontal = 30.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {

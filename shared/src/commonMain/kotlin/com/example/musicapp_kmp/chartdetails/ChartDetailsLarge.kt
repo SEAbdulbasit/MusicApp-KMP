@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -47,15 +48,23 @@ internal fun ChartDetailsScreenLarge(
             onPlayTrack = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnTrackSelected(it)) }
         )
     }
+    IconButton(onClick = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack) }) {
+        Icon(
+            Icons.Filled.ArrowBack,
+            contentDescription = "Forward",
+            tint = Color(0xFFFACD66),
+            modifier = Modifier.padding(all = 16.dp).size(32.dp)
+        )
+    }
 
-    Icon(
+    /*Icon(
         imageVector = Icons.Filled.ArrowBack,
         tint = Color(0xFFFACD66),
         contentDescription = "Forward",
         modifier = Modifier.padding(all = 8.dp).size(32.dp).clickable(onClick = {
             chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack)
         })
-    )
+    )*/
 }
 
 @Composable
@@ -91,13 +100,14 @@ internal fun ChartDetailsViewLarge(
     }
 
     LazyColumn(
-        modifier = Modifier.padding(horizontal = 30.dp),
+        modifier = Modifier.padding(horizontal = 63.dp),
         contentPadding = PaddingValues(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
 
         item {
-            Row(modifier = Modifier.padding(16.dp)) {
+            Box(modifier = Modifier.fillMaxSize()){
+            Row(modifier = Modifier.padding(16.dp).align(Alignment.TopCenter)) {
                 Image(
                     painter = painter,
                     contentDescription = chartDetails.images?.first()?.url.orEmpty(),
@@ -126,6 +136,7 @@ internal fun ChartDetailsViewLarge(
                     OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
                 }
 
+            }
             }
         }
         items(chartDetails.tracks?.items ?: emptyList()) { track ->

@@ -10,7 +10,7 @@ plugins {
 val ktorVersion = extra["ktor.version"]
 
 kotlin {
-    android {
+    androidTarget() {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"
@@ -18,12 +18,23 @@ kotlin {
         }
     }
 
-    ios()
-    iosSimulatorArm64()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
+    }
+
     jvm("desktop")
     js(IR) {
         browser()
     }
+
+    applyDefaultHierarchyTemplate()
 
     macosX64 {
         binaries {
@@ -49,65 +60,36 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(compose.ui)
-                implementation(compose.foundation)
-                implementation(compose.material)
-                implementation(compose.runtime)
+        val desktopMain by getting
 
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-client-json:$ktorVersion")
-                implementation("io.ktor:ktor-client-logging:$ktorVersion")
-                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
-                implementation("io.github.qdsfdhvh:image-loader:1.2.10")
-                api("com.arkivanov.decompose:decompose:2.2.2")
-                api("com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental")
-                implementation("com.arkivanov.essenty:lifecycle:1.3.0")
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
+        commonMain.dependencies {
+            implementation(compose.ui)
+            implementation(compose.foundation)
+            implementation(compose.material)
+            implementation(compose.runtime)
+
+            implementation("io.ktor:ktor-client-core:$ktorVersion")
+            implementation("io.ktor:ktor-client-json:$ktorVersion")
+            implementation("io.ktor:ktor-client-logging:$ktorVersion")
+            implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+            implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+            implementation("io.github.qdsfdhvh:image-loader:1.2.10")
+            api("com.arkivanov.decompose:decompose:2.2.2")
+            api("com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental")
+            implementation("com.arkivanov.essenty:lifecycle:1.3.0")
         }
 
-        val androidMain by getting
-        val androidUnitTest by getting
-        val iosMain by getting {
-            dependsOn(commonMain)
-        }
-        val iosSimulatorArm64Main by getting {
-            dependsOn(iosMain)
+        desktopMain.dependencies {
+            implementation(compose.desktop.common)
+            implementation("uk.co.caprica:vlcj:4.8.2")
         }
 
-        val desktopMain by getting {
-            dependencies {
-                implementation(compose.desktop.common)
-                implementation("uk.co.caprica:vlcj:4.8.2")
-            }
-        }
-
-        val jsMain by getting {
-            dependsOn(commonMain)
-            dependencies {
-                implementation(compose.html.core)
-                implementation("io.ktor:ktor-client-js:2.3.8")
-                implementation("io.ktor:ktor-client-json-js:2.2.1")
-            }
-        }
-
-        val macosMain by creating {
-            dependsOn(commonMain)
-        }
-        val macosX64Main by getting {
-            dependsOn(macosMain)
-        }
-        val macosArm64Main by getting {
-            dependsOn(macosMain)
+        jsMain.dependencies {
+            implementation(compose.html.core)
+            implementation("io.ktor:ktor-client-js:2.3.8")
+            implementation("io.ktor:ktor-client-json-js:2.2.1")
         }
     }
 }
@@ -117,6 +99,5 @@ android {
     compileSdk = 33
     defaultConfig {
         minSdk = 24
-        targetSdk = 33
     }
 }

@@ -1,6 +1,6 @@
 package com.example.musicapp_kmp.dummydata
 
-const val topFiftyChartsResponse = """
+val topFiftyChartsResponse = """
     {
     "collaborative": false,
     "description": "Your daily update of the most played tracks right now - Global.",

@@ -1,6 +1,4 @@
-package com.example.musicapp_kmp.dummydata
-
-const val featurePlaylistResponse = """
+val featurePlaylistResponse = """
    {
     "message": "Popular Playlists",
     "playlists": {
@@ -736,7 +734,7 @@ const val featurePlaylistResponse = """
                     }
 """
 
-const val newReleases = """{
+val newReleases="""{
     "albums": {
         "href": "https://api.spotify.com/v1/browse/new-releases?offset=0&limit=20&locale=en-GB%2Cen%3Bq%3D0.9%2Caz-AZ%3Bq%3D0.8%2Caz%3Bq%3D0.7%2Cen-US%3Bq%3D0.6",
         "items": [

@@ -1,12 +1,11 @@
 package com.example.musicapp_kmp.network
 
 import com.example.musicapp_kmp.TOKEN
-import com.example.musicapp_kmp.dummydata.featurePlaylistResponse
-import com.example.musicapp_kmp.dummydata.newReleases
 import com.example.musicapp_kmp.dummydata.topFiftyChartsResponse
 import com.example.musicapp_kmp.network.models.featuredplaylist.FeaturedPlayList
 import com.example.musicapp_kmp.network.models.newreleases.NewReleasedAlbums
 import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
+import featurePlaylistResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -15,6 +14,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import newReleases
 
 
 /**

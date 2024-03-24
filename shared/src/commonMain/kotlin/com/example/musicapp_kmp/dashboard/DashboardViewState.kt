@@ -9,7 +9,7 @@ import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
  * Created by abdulbasit on 26/02/2023.
  */
 sealed interface DashboardViewState {
-    object Loading : DashboardViewState
+    data object Loading : DashboardViewState
     data class Success(
         val topFiftyCharts: TopFiftyCharts,
         val newReleasedAlbums: NewReleasedAlbums,

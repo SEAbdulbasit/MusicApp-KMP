@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.example.musicapp_kmp.decompose.ChartDetailsComponent
@@ -121,7 +120,7 @@ internal fun ChartDetailsView(
                     contentScale = ContentScale.Crop,
                 )
                 Text(
-                    text = chartDetails.name ?: "", style = MaterialTheme.typography.h4.copy(color = Color(0XFFA4C7C6))
+                    text = chartDetails.name.orEmpty(), style = MaterialTheme.typography.h4.copy(color = Color(0XFFA4C7C6))
                 )
                 Text(
                     text = chartDetails.description.orEmpty(),
@@ -143,11 +142,9 @@ internal fun ChartDetailsView(
                         else Color(0xFF33373B)
                     ).padding(16.dp)
                 ) {
-                    var active by remember { mutableStateOf(false) }
+                    val active by remember { mutableStateOf(false) }
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        val painter = rememberAsyncImagePainter(
-                            track.track?.album?.images?.first()?.url.orEmpty()
-                        )
+                        val painter = rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
                         Box(modifier = Modifier
                             .clickable {
                                 onPlayTrack(track.track?.id.orEmpty())
@@ -155,16 +152,7 @@ internal fun ChartDetailsView(
                             Image(
                                 painter,
                                 track.track?.album?.images?.first()?.url.orEmpty(),
-                                modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp).height(40.dp)
-                                    .pointerInput(track) {
-                                        while (true) {
-                                            val event = awaitPointerEventScope { awaitPointerEvent() }
-                                            when (event.type) {
-                                                // androidx.compose.ui.input.pointer.PointerEventType.Enter -> active = true
-                                                // androidx.compose.ui.input.pointer.PointerEventType.Exit -> active = false
-                                            }
-                                        }
-                                    },
+                                modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp).height(40.dp),
                                 contentScale = ContentScale.Crop
                             )
                             if (active) {

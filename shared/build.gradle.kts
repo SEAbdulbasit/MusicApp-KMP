@@ -10,7 +10,7 @@ plugins {
 val ktorVersion = extra["ktor.version"]
 
 kotlin {
-    androidTarget() {
+    androidTarget {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"

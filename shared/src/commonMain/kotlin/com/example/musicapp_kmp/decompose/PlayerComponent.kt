@@ -14,8 +14,8 @@ interface PlayerComponent {
     fun onOutPut(output: Output)
 
     sealed class Output {
-        object OnPause : Output()
-        object OnPlay : Output()
+        data object OnPause : Output()
+        data object OnPlay : Output()
         data class OnTrackUpdated(val trackId: String) : Output()
     }
 

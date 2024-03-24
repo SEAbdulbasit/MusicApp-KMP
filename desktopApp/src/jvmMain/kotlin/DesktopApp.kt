@@ -1,6 +1,5 @@
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
@@ -77,8 +76,6 @@ fun getPreferredWindowSize(desiredWidth: Int, desiredHeight: Int): DpSize {
     return DpSize(width.dp, height.dp)
 }
 
-
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun SaveStateDialog(
     onSaveState: () -> Unit,

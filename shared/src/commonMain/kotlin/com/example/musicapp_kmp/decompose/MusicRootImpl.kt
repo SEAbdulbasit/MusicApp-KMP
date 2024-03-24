@@ -144,7 +144,7 @@ class MusicRootImpl(
 
     private sealed class Configuration : Parcelable {
         @Parcelize
-        object Dashboard : Configuration()
+        data object Dashboard : Configuration()
 
         @Parcelize
         data class Details(

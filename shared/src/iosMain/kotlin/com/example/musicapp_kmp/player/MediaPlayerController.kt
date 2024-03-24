@@ -19,7 +19,7 @@ actual class MediaPlayerController {
     private var listener: WeakReference<MediaPlayerListener>? = null
     private var observer: NSObjectProtocol? = null
 
-    var playerController: AVPlayerViewController? = null
+    private var playerController: AVPlayerViewController? = null
         set(value) {
             field = value
             checkReady()

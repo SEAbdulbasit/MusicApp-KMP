@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.example.musicapp_kmp.decompose.ChartDetailsComponent
@@ -106,37 +105,38 @@ internal fun ChartDetailsViewLarge(
     ) {
 
         item {
-            Box(modifier = Modifier.fillMaxSize()){
-            Row(modifier = Modifier.padding(16.dp).align(Alignment.TopCenter)) {
-                Image(
-                    painter = painter,
-                    contentDescription = chartDetails.images?.first()?.url.orEmpty(),
-                    modifier = Modifier.padding(top = 24.dp, bottom = 20.dp).height(284.dp).width(284.dp)
-                        .aspectRatio(1f).clip(RoundedCornerShape(25.dp)),
-                    contentScale = ContentScale.Crop,
-                )
-                Column(
-                    horizontalAlignment = Alignment.Start, modifier = Modifier.align(Alignment.Bottom).padding(16.dp)
-                ) {
-                    Text(
-                        text = chartDetails.name.orEmpty(),
-                        style = MaterialTheme.typography.h4.copy(color = Color(0XFFA4C7C6))
+            Box(modifier = Modifier.fillMaxSize()) {
+                Row(modifier = Modifier.padding(16.dp).align(Alignment.TopCenter)) {
+                    Image(
+                        painter = painter,
+                        contentDescription = chartDetails.images?.first()?.url.orEmpty(),
+                        modifier = Modifier.padding(top = 24.dp, bottom = 20.dp).height(284.dp).width(284.dp)
+                            .aspectRatio(1f).clip(RoundedCornerShape(25.dp)),
+                        contentScale = ContentScale.Crop,
                     )
-                    Text(
-                        text = chartDetails.description.orEmpty(),
-                        style = MaterialTheme.typography.body2.copy(color = Color(0XFFEFEEE0)),
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                    Text(
-                        text = "${chartDetails.tracks?.items?.size ?: 0} songs",
-                        style = MaterialTheme.typography.body2.copy(color = Color(0XFFEFEEE0)),
-                        modifier = Modifier.padding(top = 10.dp)
-                    )
-                    Spacer(Modifier.height(40.dp).fillMaxWidth())
-                    OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
-                }
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        modifier = Modifier.align(Alignment.Bottom).padding(16.dp)
+                    ) {
+                        Text(
+                            text = chartDetails.name.orEmpty(),
+                            style = MaterialTheme.typography.h4.copy(color = Color(0XFFA4C7C6))
+                        )
+                        Text(
+                            text = chartDetails.description.orEmpty(),
+                            style = MaterialTheme.typography.body2.copy(color = Color(0XFFEFEEE0)),
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
+                        Text(
+                            text = "${chartDetails.tracks?.items?.size ?: 0} songs",
+                            style = MaterialTheme.typography.body2.copy(color = Color(0XFFEFEEE0)),
+                            modifier = Modifier.padding(top = 10.dp)
+                        )
+                        Spacer(Modifier.height(40.dp).fillMaxWidth())
+                        OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
+                    }
 
-            }
+                }
             }
         }
         items(chartDetails.tracks?.items ?: emptyList()) { track ->
@@ -147,10 +147,8 @@ internal fun ChartDetailsViewLarge(
                 ).padding(16.dp)
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    var active by remember { mutableStateOf(false) }
-                    val painter = rememberAsyncImagePainter(
-                        track.track?.album?.images?.first()?.url.orEmpty()
-                    )
+                    val active by remember { mutableStateOf(false) }
+                    val painter = rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
                     Box(modifier = Modifier
                         .clickable {
                             onPlayTrack(track.track?.id.orEmpty())
@@ -158,16 +156,7 @@ internal fun ChartDetailsViewLarge(
                         Image(
                             painter,
                             track.track?.album?.images?.first()?.url.orEmpty(),
-                            modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp).height(40.dp)
-                                .pointerInput(track) {
-                                    while (true) {
-                                        val event = awaitPointerEventScope { awaitPointerEvent() }
-                                        when (event.type) {
-                                            // androidx.compose.ui.input.pointer.PointerEventType.Enter -> active = true
-                                            // androidx.compose.ui.input.pointer.PointerEventType.Exit -> active = false
-                                        }
-                                    }
-                                },
+                            modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp).height(40.dp),
                             contentScale = ContentScale.Crop
                         )
                         if (active) {

@@ -66,29 +66,25 @@ internal fun TopChartViewLarge(
 ) {
     Box(
         modifier = Modifier.clip(RoundedCornerShape(20.dp)).width(686.dp).height(450.dp)
-            .padding(24.dp).clickable(onClick = { navigateToDetails(topFiftyCharts.id ?: "") })
+            .padding(24.dp).clickable(onClick = { navigateToDetails(topFiftyCharts.id.orEmpty()) })
     ) {
-        val painter = rememberAsyncImagePainter(
-            topFiftyCharts.images?.first()?.url
-                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
-        )
+        val painter = rememberAsyncImagePainter(topFiftyCharts.images?.first()?.url.orEmpty())
         Image(
             painter,
-            topFiftyCharts.images?.first()?.url
-                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
+            topFiftyCharts.images?.first()?.url.orEmpty(),
             modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(20.dp)),
             contentScale = ContentScale.Crop
         )
         Column(modifier = Modifier.padding(16.dp).align(Alignment.BottomStart)) {
             Text(
-                topFiftyCharts.name ?: "",
+                topFiftyCharts.name.orEmpty(),
                 style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Bold),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 color = Color.White
             )
             Text(
-                topFiftyCharts.description ?: "",
+                topFiftyCharts.description.orEmpty(),
                 style = MaterialTheme.typography.body2,
                 color = Color.White,
                 modifier = Modifier.padding(top = 6.dp)

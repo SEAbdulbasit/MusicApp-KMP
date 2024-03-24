@@ -80,14 +80,14 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
             }
             Column(Modifier.weight(1f).padding(start = 8.dp).align(Alignment.Top)) {
                 Text(
-                    text = selectedTrack.track?.name ?: "", style = MaterialTheme.typography.caption.copy(
+                    text = selectedTrack.track?.name.orEmpty(), style = MaterialTheme.typography.caption.copy(
                         color = Color(
                             0XFFEFEEE0
                         )
                     )
                 )
                 Text(
-                    text = selectedTrack.track?.artists?.map { it.name }?.joinToString(",") ?: "",
+                    text = selectedTrack.track?.artists?.map { it.name }?.joinToString(",").orEmpty(),
                     style = MaterialTheme.typography.caption.copy(
                         color = Color(
                             0XFFEFEEE0
@@ -104,7 +104,7 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                     modifier = Modifier.padding(end = 8.dp).size(32.dp).align(Alignment.CenterVertically)
                         .clickable(onClick = {
                             if (selectedIndex.value - 1 >= 0) {
-                                selectedIndex.value = selectedIndex.value - 1
+                                selectedIndex.value -= 1
                             }
                         })
                 )
@@ -128,7 +128,7 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                     modifier = Modifier.padding(end = 8.dp).size(32.dp).align(Alignment.CenterVertically)
                         .clickable(onClick = {
                             if (selectedIndex.value < trackList.size - 1) {
-                                selectedIndex.value = selectedIndex.value + 1
+                                selectedIndex.value += 1
                             }
                         })
                 )
@@ -153,19 +153,19 @@ private fun playTrack(
 
             override fun onVideoCompleted() {
                 if (selectedIndex.value < trackList.size - 1) {
-                    selectedIndex.value = selectedIndex.value + 1
+                    selectedIndex.value += 1
                 }
             }
 
             override fun onError() {
                 if (selectedIndex.value < trackList.size - 1) {
-                    selectedIndex.value = selectedIndex.value + 1
+                    selectedIndex.value += 1
                 }
             }
         })
     } ?: run {
         if (selectedIndex.value < trackList.size - 1) {
-            selectedIndex.value = selectedIndex.value + 1
+            selectedIndex.value += 1
         } else {
             // selectedIndex.value = 0
         }

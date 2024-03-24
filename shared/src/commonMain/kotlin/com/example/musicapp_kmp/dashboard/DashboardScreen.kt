@@ -92,29 +92,27 @@ internal fun TopChartView(topFiftyCharts: TopFiftyCharts, navigateToDetails: (St
     Box(
         modifier = Modifier.aspectRatio(ratio = (367.0 / 450.0).toFloat())
             .clip(RoundedCornerShape(20.dp))
-            .padding(24.dp).clickable(onClick = { navigateToDetails(topFiftyCharts.id ?: "") })
+            .padding(24.dp).clickable(onClick = { navigateToDetails(topFiftyCharts.id.orEmpty()) })
     ) {
         val painter = rememberAsyncImagePainter(
-            topFiftyCharts.images?.first()?.url
-                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
+            topFiftyCharts.images?.first()?.url.orEmpty()
         )
         Image(
             painter,
-            topFiftyCharts.images?.first()?.url
-                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
+            topFiftyCharts.images?.first()?.url.orEmpty(),
             modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(20.dp)),
             contentScale = ContentScale.Crop
         )
         Column(modifier = Modifier.padding(16.dp).align(Alignment.BottomStart)) {
             Text(
-                topFiftyCharts.name ?: "",
+                topFiftyCharts.name.orEmpty(),
                 style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Bold),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 color = Color.White
             )
             Text(
-                topFiftyCharts.description ?: "",
+                topFiftyCharts.description.orEmpty(),
                 style = MaterialTheme.typography.body2,
                 color = Color.White,
                 modifier = Modifier.padding(top = 6.dp)
@@ -163,7 +161,7 @@ internal fun FeaturedPlayLists(
                 Box(
                     modifier = Modifier.width(232.dp).clip(RoundedCornerShape(20.dp))
                         .background(Color(0xFF1A1E1F))
-                        .clickable(onClick = { navigateToDetails(playList.id ?: "") })
+                        .clickable(onClick = { navigateToDetails(playList.id.orEmpty()) })
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp)
@@ -181,14 +179,14 @@ internal fun FeaturedPlayLists(
                             contentScale = ContentScale.Crop
                         )
                         Text(
-                            text = playList.name ?: "",
+                            text = playList.name.orEmpty(),
                             style = MaterialTheme.typography.body1.copy(color = Color.White),
                             modifier = Modifier.padding(top = 16.dp),
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1
                         )
                         Text(
-                            text = playList.description ?: "",
+                            text = playList.description.orEmpty(),
                             style = MaterialTheme.typography.caption.copy(
                                 color = Color.White.copy(
                                     alpha = 0.5f
@@ -252,11 +250,11 @@ internal fun NewReleases(
                                 ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
                             modifier = Modifier.width(153.dp).height(153.dp)
                                 .clip(RoundedCornerShape(20.dp))
-                                .clickable(onClick = { navigateToDetails(album.id ?: "") }),
+                                .clickable(onClick = { navigateToDetails(album.id.orEmpty()) }),
                             contentScale = ContentScale.Crop
                         )
                         Text(
-                            text = album.name ?: "",
+                            text = album.name.orEmpty(),
                             style = MaterialTheme.typography.caption.copy(color = Color.White),
                             modifier = Modifier.padding(top = 16.dp),
                             overflow = TextOverflow.Ellipsis,

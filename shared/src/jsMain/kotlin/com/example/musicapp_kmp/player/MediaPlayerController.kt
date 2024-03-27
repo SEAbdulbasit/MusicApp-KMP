@@ -3,7 +3,7 @@ package com.example.musicapp_kmp.player
 import kotlinx.browser.document
 import org.w3c.dom.HTMLAudioElement
 
-actual class MediaPlayerController {
+actual class MediaPlayerController actual constructor(val platformContext: PlatformContext) {
     private val audioElement = document.createElement("audio") as HTMLAudioElement
 
     actual fun prepare(

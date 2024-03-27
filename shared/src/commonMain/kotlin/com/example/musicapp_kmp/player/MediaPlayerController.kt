@@ -1,6 +1,6 @@
 package com.example.musicapp_kmp.player
 
-expect class MediaPlayerController {
+expect class MediaPlayerController(platformContext: PlatformContext) {
     fun prepare(pathSource: String, listener: MediaPlayerListener)
 
     fun start()
@@ -13,3 +13,5 @@ expect class MediaPlayerController {
 
     fun release()
 }
+
+expect class PlatformContext

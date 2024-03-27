@@ -9,7 +9,7 @@ import platform.Foundation.NSURL
 import platform.darwin.NSObjectProtocol
 import kotlin.native.ref.WeakReference
 
-actual class MediaPlayerController {
+actual class MediaPlayerController actual constructor(val platformContext: PlatformContext) {
 
     private var player: AVPlayer? = null
         set(value) {

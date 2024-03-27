@@ -1,74 +1,60 @@
 package com.example.musicapp_kmp.player
 
-import android.media.MediaPlayer
-import android.net.Uri
+import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
+import androidx.media3.common.Player.STATE_ENDED
+import androidx.media3.common.Player.STATE_READY
+import androidx.media3.exoplayer.ExoPlayer
 
-actual class MediaPlayerController {
-    private var mediaPlayer: MediaPlayer? = null
-    private var uri: Uri? = null
-
-    private var isSurfaceReady = false
-        set(value) {
-            field = value
-            if (value.and(isMediaPlayerReady)) onReady()
-        }
-    private var isMediaPlayerReady = false
-        set(value) {
-            field = value
-            if (value.and(isSurfaceReady)) onReady()
-        }
-
-    private lateinit var listener: MediaPlayerListener
-
-    private fun onReady() {
-        listener.onReady()
-    }
+actual class MediaPlayerController actual constructor(platformContext: PlatformContext) {
+    val player = ExoPlayer.Builder(platformContext.applicationContext).build()
 
     actual fun prepare(pathSource: String, listener: MediaPlayerListener) {
-        if (mediaPlayer?.isPlaying == true) {
-            mediaPlayer?.stop()
-            mediaPlayer?.release()
-        }
-        this.listener = listener
-        this.uri = Uri.parse(pathSource)
-        mediaPlayer = MediaPlayer().apply {
-            setOnCompletionListener { this@MediaPlayerController.listener.onVideoCompleted() }
-            setOnPreparedListener { this@MediaPlayerController.listener.onReady() }
-            setOnErrorListener { mediaPlayer, i, i2 ->
-                this@MediaPlayerController.listener.onError()
-                mediaPlayer.release()
-                true
+        val mediaItem = MediaItem.fromUri(pathSource)
+        player.addListener(object : Player.Listener {
+            override fun onPlayerError(error: PlaybackException) {
+                super.onPlayerError(error)
+                listener.onError()
             }
-        }
-        mediaPlayer?.setDataSource(pathSource)
-        mediaPlayer?.prepareAsync()
 
+            override fun onPlaybackStateChanged(playbackState: Int) {
+                super.onPlaybackStateChanged(playbackState)
+                when (playbackState) {
+                    STATE_READY -> listener.onReady()
+                    STATE_ENDED -> listener.onVideoCompleted()
+                }
+            }
+
+            override fun onPlayerErrorChanged(error: PlaybackException?) {
+                super.onPlayerErrorChanged(error)
+                listener.onError()
+            }
+        })
+        player.setMediaItem(mediaItem)
+        player.prepare()
+        player.play()
     }
 
     actual fun start() {
-        mediaPlayer?.start()
+        player.play()
     }
 
     actual fun pause() {
-        mediaPlayer?.also { mediaPlayer ->
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
-            }
-        }
+        if (player.isPlaying)
+            player.pause()
     }
 
     actual fun stop() {
-        mediaPlayer?.stop()
+        player.stop()
     }
 
     actual fun release() {
-        isMediaPlayerReady = false
-        mediaPlayer?.release()
-        mediaPlayer = null
+        player.release()
     }
 
     actual fun isPlaying(): Boolean {
-        return mediaPlayer?.isPlaying ?: false
+        return player.isPlaying
     }
 }
 

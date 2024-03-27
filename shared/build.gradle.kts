@@ -36,21 +36,6 @@ kotlin {
 
     applyDefaultHierarchyTemplate()
 
-    macosX64 {
-        binaries {
-            executable {
-                entryPoint = "main"
-            }
-        }
-    }
-    macosArm64 {
-        binaries {
-            executable {
-                entryPoint = "main"
-            }
-        }
-    }
-
     cocoapods {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
@@ -79,6 +64,12 @@ kotlin {
             api("com.arkivanov.decompose:decompose:2.2.2")
             api("com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental")
             implementation("com.arkivanov.essenty:lifecycle:1.3.0")
+        }
+
+        androidMain {
+            dependencies {
+                implementation("androidx.media3:media3-exoplayer:1.3.0")
+            }
         }
 
         desktopMain.dependencies {

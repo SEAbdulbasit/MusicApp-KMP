@@ -15,6 +15,7 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.example.musicapp_kmp.decompose.MusicRootImpl
 import com.example.musicapp_kmp.network.SpotifyApiImpl
 import com.example.musicapp_kmp.player.MediaPlayerController
+import com.example.musicapp_kmp.player.PlatformContext
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
@@ -31,7 +32,7 @@ fun MainiOS(
     val rootComponent = MusicRootImpl(
         componentContext = DefaultComponentContext(lifecycle = lifecycle),
         api = api,
-        mediaPlayerController = MediaPlayerController()
+        mediaPlayerController = MediaPlayerController(PlatformContext())
     )
 
     Column(Modifier.background(color = Color(0xFF1A1E1F))) {

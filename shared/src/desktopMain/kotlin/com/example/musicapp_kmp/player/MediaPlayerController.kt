@@ -5,9 +5,9 @@ import uk.co.caprica.vlcj.player.base.MediaPlayer
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent
-import java.util.*
+import java.util.Locale
 
-actual class MediaPlayerController {
+actual class MediaPlayerController actual constructor(val platformContext: PlatformContext) {
     private var mediaPlayer: MediaPlayer? = null
     private var listener: MediaPlayerListener? = null
 

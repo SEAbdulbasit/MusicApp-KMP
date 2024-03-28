@@ -5,18 +5,22 @@ import com.arkivanov.decompose.router.overlay.ChildOverlay
 import com.arkivanov.decompose.router.overlay.OverlayNavigation
 import com.arkivanov.decompose.router.overlay.activate
 import com.arkivanov.decompose.router.overlay.childOverlay
-import com.arkivanov.decompose.router.stack.*
+import com.arkivanov.decompose.router.stack.ChildStack
+import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
-import com.example.musicapp_kmp.network.SpotifyApi
-import com.example.musicapp_kmp.network.models.topfiftycharts.Item
-import com.example.musicapp_kmp.player.MediaPlayerController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import musicapp_kmp.network.SpotifyApi
+import musicapp_kmp.network.models.topfiftycharts.Item
+import musicapp_kmp.player.MediaPlayerController
 
 /**
  * Created by abdulbasit on 19/03/2023.
@@ -36,7 +40,9 @@ class MusicRootImpl(
     private val chatDetailsInput = MutableSharedFlow<ChartDetailsComponent.Input>()
 
     constructor(
-        componentContext: ComponentContext, api: SpotifyApi, mediaPlayerController: MediaPlayerController
+        componentContext: ComponentContext,
+        api: SpotifyApi,
+        mediaPlayerController: MediaPlayerController
     ) : this(componentContext = componentContext,
         mediaPlayerController = mediaPlayerController,
         dashboardMain = { childContext, output ->

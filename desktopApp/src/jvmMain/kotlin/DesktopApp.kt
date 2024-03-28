@@ -2,68 +2,69 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowPosition
-import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
-import com.arkivanov.decompose.DefaultComponentContext
-import com.arkivanov.decompose.ExperimentalDecomposeApi
-import com.arkivanov.decompose.extensions.compose.jetbrains.lifecycle.LifecycleController
-import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.parcelable.ParcelableContainer
-import com.arkivanov.essenty.statekeeper.StateKeeperDispatcher
-import com.example.musicapp_kmp.decompose.MusicRootImpl
-import com.example.musicapp_kmp.network.SpotifyApiImpl
-import com.example.musicapp_kmp.player.MediaPlayerController
-import com.example.travelapp_kmp.CommonMainDesktop
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.awt.Dimension
 import java.awt.Toolkit
 import java.io.File
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
-@OptIn(ExperimentalDecomposeApi::class)
-fun main() {
-    val lifecycle = LifecycleRegistry()
-    val stateKeeper = StateKeeperDispatcher(tryRestoreStateFromFile())
+//@OptIn(ExperimentalDecomposeApi::class)
+//fun main() {
+//    val lifecycle = LifecycleRegistry()
+//    val stateKeeper = StateKeeperDispatcher(tryRestoreStateFromFile())
+//
+//    val rootComponent = runOnUiThread {
+//        MusicRootImpl(
+//            componentContext = DefaultComponentContext(
+//                lifecycle = lifecycle,
+//                stateKeeper = stateKeeper,
+//            ), api = SpotifyApiImpl(), mediaPlayerController = MediaPlayerController()
+//        )
+//    }
+//
+//    application {
+//        val windowState = rememberWindowState(
+//            position = WindowPosition.Aligned(Alignment.Center), size = getPreferredWindowSize(800, 800)
+//        )
+//
+//        LifecycleController(lifecycle, windowState)
+//
+//        var isCloseRequested by remember { mutableStateOf(false) }
+//
+//        Window(
+//            onCloseRequest = { isCloseRequested = true },
+//            title = "MusicApp-KMP",
+//            state = windowState,
+//        ) {
+//            CommonMainDesktop(rootComponent)
+//            if (isCloseRequested) {
+//                SaveStateDialog(
+//                    onSaveState = { saveStateToFile(stateKeeper.save()) },
+//                    onExitApplication = ::exitApplication,
+//                    onDismiss = { isCloseRequested = false },
+//                )
+//            }
+//        }
+//    }
+//}
 
-    val rootComponent = runOnUiThread {
-        MusicRootImpl(
-            componentContext = DefaultComponentContext(
-                lifecycle = lifecycle,
-                stateKeeper = stateKeeper,
-            ), api = SpotifyApiImpl(), mediaPlayerController = MediaPlayerController()
-        )
-    }
-
-    application {
-        val windowState = rememberWindowState(
-            position = WindowPosition.Aligned(Alignment.Center), size = getPreferredWindowSize(800, 800)
-        )
-
-        LifecycleController(lifecycle, windowState)
-
-        var isCloseRequested by remember { mutableStateOf(false) }
-
-        Window(
-            onCloseRequest = { isCloseRequested = true },
-            title = "MusicApp-KMP",
-            state = windowState,
-        ) {
-            CommonMainDesktop(rootComponent)
-            if (isCloseRequested) {
-                SaveStateDialog(
-                    onSaveState = { saveStateToFile(stateKeeper.save()) },
-                    onExitApplication = ::exitApplication,
-                    onDismiss = { isCloseRequested = false },
-                )
-            }
+fun main(){
+    println("start")
+    runBlocking {
+        launch {
+            delay(1000)
+            println("Hello")
         }
+        println("World")
+        delay(2000)
     }
 }
 

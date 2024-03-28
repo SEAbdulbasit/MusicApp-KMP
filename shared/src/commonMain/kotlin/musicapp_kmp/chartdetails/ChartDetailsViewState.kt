@@ -1,6 +1,6 @@
 package musicapp_kmp.chartdetails
 
-import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
+import musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 
 
 /**

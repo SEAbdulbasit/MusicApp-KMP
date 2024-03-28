@@ -2,8 +2,8 @@ package musicapp_kmp.decompose
 
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
-import com.example.musicapp_kmp.chartdetails.ChartDetailsViewModel
-import com.example.musicapp_kmp.network.models.topfiftycharts.Item
+import musicapp_kmp.chartdetails.ChartDetailsViewModel
+import musicapp_kmp.network.models.topfiftycharts.Item
 
 
 /**

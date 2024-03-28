@@ -5,12 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.example.musicapp_kmp.MainCommon
-import com.example.musicapp_kmp.decompose.MusicRoot
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
 import com.seiko.imageloader.component.setupDefaultComponents
+import musicapp_kmp.MainCommon
+import musicapp_kmp.decompose.MusicRoot
 
 
 @Composable

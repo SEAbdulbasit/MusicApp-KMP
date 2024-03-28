@@ -1,8 +1,6 @@
 package musicapp_kmp.chartdetails
 
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
-import com.example.musicapp_kmp.decompose.ChartDetailsComponent
-import com.example.musicapp_kmp.network.SpotifyApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -10,6 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import musicapp_kmp.decompose.ChartDetailsComponent
+import musicapp_kmp.network.SpotifyApi
 
 
 /**
@@ -23,7 +23,8 @@ class ChartDetailsViewModel(
 ) : InstanceKeeper.Instance {
 
     private val viewModelScope = CoroutineScope(Dispatchers.Unconfined)
-    val chartDetailsViewState = MutableStateFlow<ChartDetailsViewState>(ChartDetailsViewState.Loading)
+    val chartDetailsViewState =
+        MutableStateFlow<ChartDetailsViewState>(ChartDetailsViewState.Loading)
 
     init {
         viewModelScope.launch {
@@ -36,7 +37,8 @@ class ChartDetailsViewModel(
                     )
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    chartDetailsViewState.value = ChartDetailsViewState.Failure(e.message.toString())
+                    chartDetailsViewState.value =
+                        ChartDetailsViewState.Failure(e.message.toString())
                 }
             }
             launch {

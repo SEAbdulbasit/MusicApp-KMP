@@ -1,7 +1,7 @@
 package musicapp_kmp.decompose
 
-import com.example.musicapp_kmp.network.models.topfiftycharts.Item
-import com.example.musicapp_kmp.playerview.PlayerViewModel
+import musicapp_kmp.network.models.topfiftycharts.Item
+import musicapp_kmp.playerview.PlayerViewModel
 
 
 /**

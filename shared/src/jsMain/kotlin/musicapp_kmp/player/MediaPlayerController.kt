@@ -1,4 +1,4 @@
-package com.example.musicapp_kmp.player
+package musicapp_kmp.player
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLAudioElement

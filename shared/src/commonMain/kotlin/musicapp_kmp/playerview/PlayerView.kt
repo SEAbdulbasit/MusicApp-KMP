@@ -20,11 +20,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.example.musicapp_kmp.decompose.PlayerComponent
-import com.example.musicapp_kmp.network.models.topfiftycharts.Item
-import com.example.musicapp_kmp.player.MediaPlayerController
-import com.example.musicapp_kmp.player.MediaPlayerListener
 import com.seiko.imageloader.rememberAsyncImagePainter
+import musicapp_kmp.decompose.PlayerComponent
+import musicapp_kmp.network.models.topfiftycharts.Item
+import musicapp_kmp.player.MediaPlayerController
+import musicapp_kmp.player.MediaPlayerListener
 
 
 @Composable
@@ -80,14 +80,16 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
             }
             Column(Modifier.weight(1f).padding(start = 8.dp).align(Alignment.Top)) {
                 Text(
-                    text = selectedTrack.track?.name.orEmpty(), style = MaterialTheme.typography.caption.copy(
+                    text = selectedTrack.track?.name.orEmpty(),
+                    style = MaterialTheme.typography.caption.copy(
                         color = Color(
                             0XFFEFEEE0
                         )
                     )
                 )
                 Text(
-                    text = selectedTrack.track?.artists?.map { it.name }?.joinToString(",").orEmpty(),
+                    text = selectedTrack.track?.artists?.map { it.name }?.joinToString(",")
+                        .orEmpty(),
                     style = MaterialTheme.typography.caption.copy(
                         color = Color(
                             0XFFEFEEE0
@@ -101,7 +103,8 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                     imageVector = Icons.Default.ArrowBack,
                     tint = Color(0xFFFACD66),
                     contentDescription = "Back",
-                    modifier = Modifier.padding(end = 8.dp).size(32.dp).align(Alignment.CenterVertically)
+                    modifier = Modifier.padding(end = 8.dp).size(32.dp)
+                        .align(Alignment.CenterVertically)
                         .clickable(onClick = {
                             if (selectedIndex.value - 1 >= 0) {
                                 selectedIndex.value -= 1
@@ -112,7 +115,8 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                     imageVector = Icons.Filled.PlayArrow,
                     tint = Color(0xFFFACD66),
                     contentDescription = "Play",
-                    modifier = Modifier.padding(end = 8.dp).size(32.dp).align(Alignment.CenterVertically)
+                    modifier = Modifier.padding(end = 8.dp).size(32.dp)
+                        .align(Alignment.CenterVertically)
                         .clickable(onClick = {
                             if (mediaPlayerController.isPlaying()) {
                                 mediaPlayerController.pause()
@@ -125,7 +129,8 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                     imageVector = Icons.Default.ArrowForward,
                     tint = Color(0xFFFACD66),
                     contentDescription = "Forward",
-                    modifier = Modifier.padding(end = 8.dp).size(32.dp).align(Alignment.CenterVertically)
+                    modifier = Modifier.padding(end = 8.dp).size(32.dp)
+                        .align(Alignment.CenterVertically)
                         .clickable(onClick = {
                             if (selectedIndex.value < trackList.size - 1) {
                                 selectedIndex.value += 1

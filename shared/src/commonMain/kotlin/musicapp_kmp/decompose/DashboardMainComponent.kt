@@ -1,6 +1,6 @@
 package musicapp_kmp.decompose
 
-import com.example.musicapp_kmp.dashboard.DashboardViewModel
+import musicapp_kmp.dashboard.DashboardViewModel
 
 
 /**

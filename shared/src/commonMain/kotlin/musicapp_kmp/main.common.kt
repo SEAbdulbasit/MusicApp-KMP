@@ -8,12 +8,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import com.example.musicapp_kmp.chartdetails.ChartDetailsScreen
-import com.example.musicapp_kmp.chartdetails.ChartDetailsScreenLarge
-import com.example.musicapp_kmp.dashboard.DashboardScreen
-import com.example.musicapp_kmp.dashboard.DashboardScreenLarge
-import com.example.musicapp_kmp.decompose.MusicRoot
-import com.example.musicapp_kmp.playerview.PlayerView
+import musicapp_kmp.chartdetails.ChartDetailsScreen
+import musicapp_kmp.chartdetails.ChartDetailsScreenLarge
+import musicapp_kmp.dashboard.DashboardScreen
+import musicapp_kmp.dashboard.DashboardScreenLarge
+import musicapp_kmp.decompose.MusicRoot
+import musicapp_kmp.playerview.PlayerView
 
 @Composable
 internal fun MainCommon(

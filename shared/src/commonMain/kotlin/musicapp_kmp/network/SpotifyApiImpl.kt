@@ -1,19 +1,23 @@
 package musicapp_kmp.network
 
-import com.example.musicapp_kmp.TOKEN
-import com.example.musicapp_kmp.dummydata.topFiftyChartsResponse
-import com.example.musicapp_kmp.network.models.featuredplaylist.FeaturedPlayList
-import com.example.musicapp_kmp.network.models.newreleases.NewReleasedAlbums
-import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import featurePlaylistResponse
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.http.HttpHeaders
+import io.ktor.http.encodedPath
+import io.ktor.http.takeFrom
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import musicapp_kmp.TOKEN
+import musicapp_kmp.dummydata.topFiftyChartsResponse
+import musicapp_kmp.network.models.featuredplaylist.FeaturedPlayList
+import musicapp_kmp.network.models.newreleases.NewReleasedAlbums
+import musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import newReleases
 
 

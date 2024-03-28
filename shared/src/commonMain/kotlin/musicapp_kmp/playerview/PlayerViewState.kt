@@ -1,7 +1,7 @@
 package musicapp_kmp.playerview
 
-import com.example.musicapp_kmp.network.models.topfiftycharts.Item
-import com.example.musicapp_kmp.player.MediaPlayerController
+import musicapp_kmp.network.models.topfiftycharts.Item
+import musicapp_kmp.player.MediaPlayerController
 
 
 /**

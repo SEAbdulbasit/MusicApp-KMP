@@ -1,4 +1,4 @@
-package com.example.musicapp_kmp.player
+package musicapp_kmp.player
 
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.player.base.MediaPlayer

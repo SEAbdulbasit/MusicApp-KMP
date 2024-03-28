@@ -1,4 +1,4 @@
-package com.example.musicapp_kmp.player
+package musicapp_kmp.player
 
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException

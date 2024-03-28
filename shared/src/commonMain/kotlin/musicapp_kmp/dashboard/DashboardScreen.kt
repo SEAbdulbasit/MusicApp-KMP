@@ -23,11 +23,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.musicapp_kmp.decompose.DashboardMainComponent
-import com.example.musicapp_kmp.network.models.featuredplaylist.FeaturedPlayList
-import com.example.musicapp_kmp.network.models.newreleases.NewReleasedAlbums
-import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
+import musicapp_kmp.decompose.DashboardMainComponent
+import musicapp_kmp.network.models.featuredplaylist.FeaturedPlayList
+import musicapp_kmp.network.models.newreleases.NewReleasedAlbums
+import musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 
 
 /**
@@ -167,13 +167,11 @@ internal fun FeaturedPlayLists(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         val painter = rememberAsyncImagePainter(
-                            playList.images?.first()?.url
-                                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
+                            playList.images?.first()?.url.orEmpty()
                         )
                         Image(
                             painter,
-                            playList.images?.first()?.url
-                                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
+                            playList.images?.first()?.url.orEmpty(),
                             modifier = Modifier.clip(RoundedCornerShape(20.dp)).width(100.dp)
                                 .height(100.dp),
                             contentScale = ContentScale.Crop
@@ -241,13 +239,11 @@ internal fun NewReleases(
                 Box(Modifier.width(153.dp)) {
                     Column {
                         val painter = rememberAsyncImagePainter(
-                            album.images?.first()?.url
-                                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
+                            album.images?.first()?.url.orEmpty()
                         )
                         Image(
                             painter,
-                            album.images?.first()?.url
-                                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
+                            album.images?.first()?.url.orEmpty(),
                             modifier = Modifier.width(153.dp).height(153.dp)
                                 .clip(RoundedCornerShape(20.dp))
                                 .clickable(onClick = { navigateToDetails(album.id.orEmpty()) }),

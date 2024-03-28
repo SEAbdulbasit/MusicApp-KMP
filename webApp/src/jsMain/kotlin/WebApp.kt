@@ -5,7 +5,7 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
 import com.example.musicapp_kmp.decompose.MusicRootImpl
 import com.example.musicapp_kmp.network.SpotifyApiImpl
-import com.example.musicapp_kmp.player.MediaPlayerController
+import musicapp_kmp.player.MediaPlayerController
 import org.jetbrains.skiko.wasm.onWasmReady
 
 @OptIn(ExperimentalComposeUiApi::class)

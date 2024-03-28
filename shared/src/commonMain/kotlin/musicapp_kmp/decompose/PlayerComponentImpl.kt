@@ -2,10 +2,10 @@ package musicapp_kmp.decompose
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.instancekeeper.getOrCreate
-import com.example.musicapp_kmp.network.models.topfiftycharts.Item
-import com.example.musicapp_kmp.player.MediaPlayerController
-import com.example.musicapp_kmp.playerview.PlayerViewModel
 import kotlinx.coroutines.flow.SharedFlow
+import musicapp_kmp.network.models.topfiftycharts.Item
+import musicapp_kmp.player.MediaPlayerController
+import musicapp_kmp.playerview.PlayerViewModel
 
 class PlayerComponentImpl(
     componentContext: ComponentContext,

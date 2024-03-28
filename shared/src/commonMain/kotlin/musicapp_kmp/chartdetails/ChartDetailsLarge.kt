@@ -22,10 +22,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.example.musicapp_kmp.decompose.ChartDetailsComponent
-import com.example.musicapp_kmp.network.models.topfiftycharts.Item
-import com.example.musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
+import musicapp_kmp.decompose.ChartDetailsComponent
+import musicapp_kmp.network.models.topfiftycharts.Item
+import musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
 
 
 /**
@@ -43,8 +43,20 @@ internal fun ChartDetailsScreenLarge(
         is ChartDetailsViewState.Success -> ChartDetailsViewLarge(
             chartDetails = resultedState.chartDetails,
             playingTrackId = resultedState.playingTrackId,
-            onPlayAllClicked = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnPlayAllSelected(it)) },
-            onPlayTrack = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnTrackSelected(it)) }
+            onPlayAllClicked = {
+                chartDetailsComponent.onOutPut(
+                    ChartDetailsComponent.Output.OnPlayAllSelected(
+                        it
+                    )
+                )
+            },
+            onPlayTrack = {
+                chartDetailsComponent.onOutPut(
+                    ChartDetailsComponent.Output.OnTrackSelected(
+                        it
+                    )
+                )
+            }
         )
     }
     IconButton(onClick = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack) }) {
@@ -110,7 +122,8 @@ internal fun ChartDetailsViewLarge(
                     Image(
                         painter = painter,
                         contentDescription = chartDetails.images?.first()?.url.orEmpty(),
-                        modifier = Modifier.padding(top = 24.dp, bottom = 20.dp).height(284.dp).width(284.dp)
+                        modifier = Modifier.padding(top = 24.dp, bottom = 20.dp).height(284.dp)
+                            .width(284.dp)
                             .aspectRatio(1f).clip(RoundedCornerShape(25.dp)),
                         contentScale = ContentScale.Crop,
                     )
@@ -148,7 +161,8 @@ internal fun ChartDetailsViewLarge(
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     val active by remember { mutableStateOf(false) }
-                    val painter = rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
+                    val painter =
+                        rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
                     Box(modifier = Modifier
                         .clickable {
                             onPlayTrack(track.track?.id.orEmpty())
@@ -156,7 +170,8 @@ internal fun ChartDetailsViewLarge(
                         Image(
                             painter,
                             track.track?.album?.images?.first()?.url.orEmpty(),
-                            modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp).height(40.dp),
+                            modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp)
+                                .height(40.dp),
                             contentScale = ContentScale.Crop
                         )
                         if (active) {
@@ -172,14 +187,16 @@ internal fun ChartDetailsViewLarge(
                     }
                     Column(Modifier.weight(1f).padding(start = 8.dp).align(Alignment.Top)) {
                         Text(
-                            text = track.track?.name.orEmpty(), style = MaterialTheme.typography.caption.copy(
+                            text = track.track?.name.orEmpty(),
+                            style = MaterialTheme.typography.caption.copy(
                                 color = Color(
                                     0XFFEFEEE0
                                 )
                             )
                         )
                         Text(
-                            text = track.track?.artists?.map { it.name }?.joinToString(",").orEmpty(),
+                            text = track.track?.artists?.map { it.name }?.joinToString(",")
+                                .orEmpty(),
                             style = MaterialTheme.typography.caption.copy(
                                 color = Color(
                                     0XFFEFEEE0

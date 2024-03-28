@@ -2,8 +2,8 @@ package musicapp_kmp.decompose
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.instancekeeper.getOrCreate
-import com.example.musicapp_kmp.dashboard.DashboardViewModel
-import com.example.musicapp_kmp.network.SpotifyApi
+import musicapp_kmp.dashboard.DashboardViewModel
+import musicapp_kmp.network.SpotifyApi
 
 
 /**

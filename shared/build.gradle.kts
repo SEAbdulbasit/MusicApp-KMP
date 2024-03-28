@@ -64,6 +64,9 @@ kotlin {
             api("com.arkivanov.decompose:decompose:2.2.2")
             api("com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental")
             implementation("com.arkivanov.essenty:lifecycle:1.3.0")
+
+            implementation("io.insert-koin:koin-core:3.5.3")
+            implementation("io.insert-koin:koin-compose:1.1.2")
         }
 
         androidMain {

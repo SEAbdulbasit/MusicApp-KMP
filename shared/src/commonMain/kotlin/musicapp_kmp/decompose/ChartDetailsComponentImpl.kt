@@ -2,9 +2,9 @@ package musicapp_kmp.decompose
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.instancekeeper.getOrCreate
-import com.example.musicapp_kmp.chartdetails.ChartDetailsViewModel
-import com.example.musicapp_kmp.network.SpotifyApi
 import kotlinx.coroutines.flow.SharedFlow
+import musicapp_kmp.chartdetails.ChartDetailsViewModel
+import musicapp_kmp.network.SpotifyApi
 
 
 /**

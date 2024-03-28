@@ -1,4 +1,4 @@
-package com.example.musicapp_kmp.player
+package musicapp_kmp.player
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.cValue
@@ -17,7 +17,7 @@ import platform.darwin.NSObjectProtocol
 import kotlin.experimental.ExperimentalNativeApi
 import kotlin.native.ref.WeakReference
 
-@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi ::class)
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 actual class MediaPlayerController actual constructor(val platformContext: PlatformContext) {
 
     private var player: AVPlayer? = null

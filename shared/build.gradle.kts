@@ -72,6 +72,7 @@ kotlin {
         androidMain {
             dependencies {
                 implementation("androidx.media3:media3-exoplayer:1.3.0")
+                implementation("io.insert-koin:koin-android:3.5.3")
             }
         }
 

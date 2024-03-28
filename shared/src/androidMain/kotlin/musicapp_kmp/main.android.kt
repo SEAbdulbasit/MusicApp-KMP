@@ -17,7 +17,7 @@ import musicapp_kmp.decompose.MusicRootImpl
 
 
 @Composable
-fun MainAndroid(root: MusicRootImpl) {
+fun MainAndroid(/*root: MusicRootImpl*/) {
     Column(Modifier.background(color = Color(0xFF1A1E1F))) {
         val context = LocalContext.current
         CompositionLocalProvider(
@@ -33,7 +33,7 @@ fun MainAndroid(root: MusicRootImpl) {
                 }
             },
         ) {
-            MainCommon(root, false)
+            MainCommon(/*root,*/ false)
         }
     }
 }

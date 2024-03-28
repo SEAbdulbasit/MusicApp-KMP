@@ -5,7 +5,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import musicapp_kmp.decompose.ChartDetailsComponent
@@ -16,10 +15,10 @@ import musicapp_kmp.network.SpotifyApi
  * Created by abdulbasit on 26/02/2023.
  */
 class ChartDetailsViewModel(
+    private val chartDetailsInputUsecase: ChartDetailsInputUsecase,
     api: SpotifyApi,
     playlistId: String,
     playingTrackId: String,
-    chatDetailsInput: SharedFlow<ChartDetailsComponent.Input>
 ) : InstanceKeeper.Instance {
 
     private val viewModelScope = CoroutineScope(Dispatchers.Unconfined)
@@ -42,7 +41,7 @@ class ChartDetailsViewModel(
                 }
             }
             launch {
-                chatDetailsInput.collectLatest {
+                chartDetailsInputUsecase.chatDetailsInput.collectLatest {
                     when (it) {
                         is ChartDetailsComponent.Input.TrackUpdated ->
                             when (val state = chartDetailsViewState.value) {

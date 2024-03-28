@@ -31,7 +31,7 @@ fun CommonMainDesktop() {
                 }
             },
         ) {
-//            MainCommon(rootComponent, true)
+            MainCommon(true)
         }
     }
 }

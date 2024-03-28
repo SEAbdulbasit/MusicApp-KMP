@@ -1,14 +1,23 @@
 package com.example.musicapp_kmp.player
 
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.cValue
-import platform.AVFoundation.*
+import platform.AVFoundation.AVPlayer
+import platform.AVFoundation.AVPlayerItemDidPlayToEndTimeNotification
+import platform.AVFoundation.AVPlayerTimeControlStatusPlaying
+import platform.AVFoundation.pause
+import platform.AVFoundation.play
+import platform.AVFoundation.seekToTime
+import platform.AVFoundation.timeControlStatus
 import platform.AVKit.AVPlayerViewController
 import platform.Foundation.NSNotificationCenter
 import platform.Foundation.NSOperationQueue
 import platform.Foundation.NSURL
 import platform.darwin.NSObjectProtocol
+import kotlin.experimental.ExperimentalNativeApi
 import kotlin.native.ref.WeakReference
 
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi ::class)
 actual class MediaPlayerController actual constructor(val platformContext: PlatformContext) {
 
     private var player: AVPlayer? = null

@@ -21,3 +21,5 @@ iosApp/iosApp.xcodeproj/*
 shared/shared.podspec
 /webApp/.gradle/
 /webApp/build/
+/.fleet/settings.json
+/kotlin-js-store/yarn.lock

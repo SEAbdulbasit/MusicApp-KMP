@@ -7,6 +7,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.arkivanov.decompose.DefaultComponentContext
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
@@ -14,10 +15,16 @@ import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.util.DebugLogger
 import com.seiko.imageloader.util.LogPriority
 import musicapp_kmp.decompose.MusicRootImpl
+import org.koin.compose.koinInject
 
 
 @Composable
-fun MainAndroid(/*root: MusicRootImpl*/) {
+fun MainAndroid(defaultComponentContext: DefaultComponentContext) {
+    val rootImpl = MusicRootImpl(
+        componentContext = defaultComponentContext,
+        api = koinInject(),
+        mediaPlayerController = koinInject()
+    )
     Column(Modifier.background(color = Color(0xFF1A1E1F))) {
         val context = LocalContext.current
         CompositionLocalProvider(
@@ -33,8 +40,7 @@ fun MainAndroid(/*root: MusicRootImpl*/) {
                 }
             },
         ) {
-            MainCommon(/*root,*/ false)
+            MainCommon(rootComponent = rootImpl, isLargeScreen = false)
         }
     }
 }
-

@@ -39,45 +39,45 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberAsyncImagePainter
+import musicapp_kmp.decompose.DashboardMainComponent
 import musicapp_kmp.network.models.featuredplaylist.FeaturedPlayList
 import musicapp_kmp.network.models.newreleases.NewReleasedAlbums
 import musicapp_kmp.network.models.topfiftycharts.TopFiftyCharts
-import org.koin.compose.koinInject
 
 
 /**
  * Created by abdulbasit on 26/02/2023.
  */
 
-//@Composable
-//internal fun DashboardScreen(dashboardMainComponent: DashboardMainComponent) {
-//    val state = dashboardMainComponent.viewModel.dashboardState.collectAsState()
-//
-//    when (val resultedState = state.value) {
-//        is DashboardViewState.Failure -> Failure(resultedState.error)
-//        DashboardViewState.Loading -> Loading()
-//        is DashboardViewState.Success -> {
-//            DashboardView(resultedState) {
-//                dashboardMainComponent.onOutPut(DashboardMainComponent.Output.PlaylistSelected(it))
-//            }
-//        }
-//    }
-//}
-
 @Composable
-fun DashboardScreen(viewModel: DashboardViewModel = koinInject()) {
-    val state = viewModel.dashboardState.collectAsState()
+internal fun DashboardScreen(dashboardMainComponent: DashboardMainComponent) {
+    val state = dashboardMainComponent.viewModel.dashboardState.collectAsState()
 
     when (val resultedState = state.value) {
         is DashboardViewState.Failure -> Failure(resultedState.error)
         DashboardViewState.Loading -> Loading()
         is DashboardViewState.Success -> {
             DashboardView(resultedState) {
-//                dashboardMainComponent.onOutPut(DashboardMainComponent.Output.PlaylistSelected(it))
+                dashboardMainComponent.onOutPut(DashboardMainComponent.Output.PlaylistSelected(it))
             }
         }
     }
 }
+
+//@Composable
+//fun DashboardScreen(viewModel: DashboardViewModel = koinInject()) {
+//    val state = viewModel.dashboardState.collectAsState()
+//
+//    when (val resultedState = state.value) {
+//        is DashboardViewState.Failure -> Failure(resultedState.error)
+//        DashboardViewState.Loading -> Loading()
+//        is DashboardViewState.Success -> {
+//            DashboardView(resultedState) {
+////                dashboardMainComponent.onOutPut(DashboardMainComponent.Output.PlaylistSelected(it))
+//            }
+//        }
+//    }
+//}
 
 @Composable
 internal fun Loading() {

@@ -5,6 +5,8 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
 import com.example.musicapp_kmp.decompose.MusicRootImpl
 import com.example.musicapp_kmp.network.SpotifyApiImpl
+import musicapp_kmp.decompose.MusicRootImpl
+import musicapp_kmp.di.initKoin
 import musicapp_kmp.player.MediaPlayerController
 import org.jetbrains.skiko.wasm.onWasmReady
 
@@ -16,7 +18,7 @@ fun main() {
             MusicRootImpl(
                 componentContext = DefaultComponentContext(
                     lifecycle = lifecycle,
-                ), api = SpotifyApiImpl(), mediaPlayerController = MediaPlayerController()
+                ), api = inj(), mediaPlayerController = MediaPlayerController()
             )
 
         lifecycle.resume()

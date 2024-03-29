@@ -28,7 +28,7 @@ fun CommonMainWeb(root: MusicRoot) {
         },
     ) {
         Box(Modifier.background(color = Color(0xFF1A1E1F)).fillMaxSize()) {
-//            MainCommon(root, true)
+            MainCommon(root, true)
         }
     }
 }

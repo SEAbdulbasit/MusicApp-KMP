@@ -1,6 +1,7 @@
 package musicapp_kmp.decompose
 
 import com.arkivanov.decompose.router.overlay.ChildOverlay
+import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 

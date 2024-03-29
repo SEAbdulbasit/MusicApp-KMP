@@ -1,7 +1,6 @@
 package musicapp_kmp.decompose
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.essenty.instancekeeper.getOrCreate
 import kotlinx.coroutines.flow.SharedFlow
 import musicapp_kmp.chartdetails.ChartDetailsViewModel
 import musicapp_kmp.network.SpotifyApi
@@ -19,7 +18,12 @@ class ChartDetailsComponentImpl(
     val output: (ChartDetailsComponent.Output) -> Unit,
 ) : ChartDetailsComponent, ComponentContext by componentContext {
     override val viewModel: ChartDetailsViewModel
-        get() = throw IllegalStateException("sf")
+        get() = ChartDetailsViewModel(
+            chartDetailsFlow = chatDetailsInput,
+            api = spotifyApi,
+            playlistId = playlistId,
+            playingTrackId = playingTrackId
+        )
 
     override fun onOutPut(output: ChartDetailsComponent.Output) {
         output(output)

@@ -18,6 +18,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.serializer
 import musicapp_kmp.network.SpotifyApi
 import musicapp_kmp.network.models.topfiftycharts.Item
 import musicapp_kmp.player.MediaPlayerController
@@ -26,7 +28,7 @@ import musicapp_kmp.player.MediaPlayerController
  * Created by abdulbasit on 19/03/2023.
  */
 class MusicRootImpl(
-    componentContext: ComponentContext,
+    private val componentContext: ComponentContext,
     private val mediaPlayerController: MediaPlayerController,
     private val dashboardMain: (ComponentContext, (DashboardMainComponent.Output) -> Unit) -> DashboardMainComponent,
     private val chartDetails: (
@@ -67,6 +69,7 @@ class MusicRootImpl(
     private val stack = childStack(
         source = navigation,
         initialConfiguration = Configuration.Dashboard,
+        serializer = serializer(),
         handleBackButton = true,
         childFactory = ::createChild
     )
@@ -148,18 +151,21 @@ class MusicRootImpl(
 
     private fun value() = stack
 
-    private sealed class Configuration : Parcelable {
-        @Parcelize
+
+    @Serializable
+    private sealed class Configuration {
+        @Serializable
         data object Dashboard : Configuration()
 
-        @Parcelize
+        @Serializable
         data class Details(
             val playlistId: String,
             val playingTrackId: String,
-        ) : Configuration(), Parcelable
+        ) : Configuration()
     }
 
     @Parcelize
+    @Serializable
     private data class DialogConfig(
         val playlist: List<Item>
     ) : Parcelable

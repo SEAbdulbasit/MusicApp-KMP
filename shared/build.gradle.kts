@@ -1,6 +1,6 @@
 plugins {
     kotlin("multiplatform")
-    kotlin("native.cocoapods")
+//    kotlin("native.cocoapods")
     kotlin("plugin.serialization")
     id("com.android.library")
     id("kotlin-parcelize")
@@ -18,14 +18,24 @@ kotlin {
         }
     }
 
+//    cocoapods {
+//        summary = "Some description for the Shared Module"
+//        homepage = "Link to the Shared Module homepage"
+//        version = "1.0"
+//        ios.deploymentTarget = "14.1"
+//        podfile = project.file("../iosApp/Podfile")
+//    }
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "shared"
             isStatic = true
+            export("com.arkivanov.decompose:decompose:2.2.2")
+            export("com.arkivanov.essenty:lifecycle:1.3.0")
         }
     }
 
@@ -35,14 +45,6 @@ kotlin {
     }
 
     applyDefaultHierarchyTemplate()
-
-    cocoapods {
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
-        version = "1.0"
-        ios.deploymentTarget = "14.1"
-        podfile = project.file("../iosApp/Podfile")
-    }
 
     sourceSets {
         val desktopMain by getting
@@ -67,6 +69,19 @@ kotlin {
 
             implementation("io.insert-koin:koin-core:3.5.3")
             implementation("io.insert-koin:koin-compose:1.1.2")
+        }
+
+        iosMain {
+            dependencies {
+                implementation(compose.ui)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.runtime)
+//                api("com.arkivanov.decompose:decompose:2.2.2")
+//                api("com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental")
+//                implementation("com.arkivanov.essenty:lifecycle:1.3.0")
+
+            }
         }
 
         androidMain {

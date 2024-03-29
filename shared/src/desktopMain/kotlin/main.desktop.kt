@@ -7,15 +7,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.arkivanov.decompose.DefaultComponentContext
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
 import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.util.DebugLogger
 import com.seiko.imageloader.util.LogPriority
+import musicapp_kmp.decompose.MusicRootImpl
 
 @Composable
-fun CommonMainDesktop() {
+fun CommonMainDesktop(componentContext: MusicRootImpl) {
     Box(Modifier.background(color = Color(0xFF1A1E1F)).fillMaxSize()) {
 
         CompositionLocalProvider(
@@ -31,7 +33,7 @@ fun CommonMainDesktop() {
                 }
             },
         ) {
-            MainCommon(true)
+            MainCommon(isLargeScreen = true, rootComponent = componentContext)
         }
     }
 }

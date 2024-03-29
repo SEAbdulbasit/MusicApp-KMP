@@ -16,14 +16,13 @@ class PlayerComponentImpl(
 ) : PlayerComponent, ComponentContext by componentContext {
 
     override val viewModel: PlayerViewModel
-        get() = throw Exception("sfdf")
-//    instanceKeeper.getOrCreate {
-//            PlayerViewModel(
-//                mediaPlayerController = mediaPlayerController,
-//                trackList = trackList,
-//                playerInputs = playerInputs
-//            )
-//        }
+        get() = instanceKeeper.getOrCreate {
+            PlayerViewModel(
+                mediaPlayerController = mediaPlayerController,
+                trackList = trackList,
+                playerInputs = playerInputs
+            )
+        }
 
     override fun onOutPut(output: PlayerComponent.Output) {
         output(output)

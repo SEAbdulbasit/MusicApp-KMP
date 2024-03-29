@@ -42,8 +42,9 @@ import musicapp_kmp.player.MediaPlayerListener
 @Composable
 internal fun PlayerView(
     viewModel: PlayerViewModel,
+/*
     onTrackUpdated: (String) -> Unit,
-
+*/
     ) {
     val state = viewModel.chartDetailsViewState.collectAsState()
     val mediaPlayerController = state.value.mediaPlayerController
@@ -65,7 +66,7 @@ internal fun PlayerView(
 
 
     LaunchedEffect(selectedTrack) {
-        onTrackUpdated(selectedTrack.track?.id.orEmpty())
+//        onTrackUpdated(selectedTrack.track?.id.orEmpty())
 //        playerComponent.onOutPut(PlayerComponent.Output.OnTrackUpdated(selectedTrack.track?.id.orEmpty()))
     }
 

@@ -41,27 +41,26 @@ class PlayerViewModel(
         }
     }
 
-//    override fun onDestroy() {
+    //    override fun onDestroy() {
 //        viewModelScope.cancel()
 //    }
+    object PlayerViewModelSingletonProvider {
+        private var INSTANCE: PlayerViewModel? = null
 
-    companion object {
-
-        var viewModel: PlayerViewModel? = null
-
-        fun getViewModel(
+        fun getInstance(
             mediaPlayerController: MediaPlayerController,
             trackList: List<Item>,
             playerInputs: SharedFlow<PlayerComponent.Input>
         ): PlayerViewModel {
-            if (viewModel == null) {
-                viewModel = PlayerViewModel(
+            if (INSTANCE == null) {
+                INSTANCE = PlayerViewModel(
                     mediaPlayerController = mediaPlayerController,
                     trackList = trackList,
                     playerInputs = playerInputs
                 )
             }
-            return viewModel as PlayerViewModel
+            return INSTANCE!!
         }
     }
+
 }

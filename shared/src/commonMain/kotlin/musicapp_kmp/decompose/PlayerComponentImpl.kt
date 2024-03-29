@@ -16,16 +16,20 @@ class PlayerComponentImpl(
 ) : PlayerComponent, ComponentContext by componentContext {
 
     override val viewModel: PlayerViewModel
-        get() = instanceKeeper.getOrCreate {
+        get() = throw Exception("Abc")/*instanceKeeper.getOrCreate {
             PlayerViewModel(
                 mediaPlayerController = mediaPlayerController,
                 trackList = trackList,
                 playerInputs = playerInputs
-            )
-        }
+            )*/
 
     override fun onOutPut(output: PlayerComponent.Output) {
-        output(output)
+        TODO("Not yet implemented")
     }
 }
+//
+//    override fun onOutPut(output: PlayerComponent.Output) {
+//        output(output)
+//    }
+
 

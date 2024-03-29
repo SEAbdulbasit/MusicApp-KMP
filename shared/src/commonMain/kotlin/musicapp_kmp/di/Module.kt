@@ -2,10 +2,12 @@ package musicapp_kmp.di
 
 import musicapp_kmp.chartdetails.ChartDetailsInputUsecase
 import musicapp_kmp.chartdetails.PlayerInputUsecase
+import musicapp_kmp.dashboard.DashboardView
 import musicapp_kmp.network.SpotifyApi
 import musicapp_kmp.network.SpotifyApiImpl
 import musicapp_kmp.player.MediaPlayerController
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 
@@ -19,6 +21,7 @@ fun commonModule() = module {
     single<MediaPlayerController> { MediaPlayerController(get()) }
 
 //    singleOf(::DashboardViewModel)
+
 //    singleOf(::ChartDetailsViewModel)
 //    singleOf(::PlayerViewModel)
 }

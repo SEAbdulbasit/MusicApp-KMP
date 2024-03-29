@@ -1,7 +1,6 @@
 package musicapp_kmp.decompose
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.essenty.instancekeeper.getOrCreate
 import musicapp_kmp.dashboard.DashboardViewModel
 import musicapp_kmp.network.SpotifyApi
 
@@ -15,7 +14,7 @@ class DashboardMainComponentImpl(
     val spotifyApi: SpotifyApi
 ) : DashboardMainComponent, ComponentContext by componentContext {
     override val viewModel: DashboardViewModel
-        get() = instanceKeeper.getOrCreate { DashboardViewModel(spotifyApi) }
+        get() = throw Exception("Somethign went wrong")/*instanceKeeper.getOrCreate { DashboardViewModel(spotifyApi) }*/
 
     override fun onOutPut(output: DashboardMainComponent.Output) {
         output(output)

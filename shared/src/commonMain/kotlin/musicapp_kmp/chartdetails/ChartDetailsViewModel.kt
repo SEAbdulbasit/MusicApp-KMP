@@ -49,7 +49,6 @@ class ChartDetailsViewModel(
                                 is ChartDetailsViewState.Success -> {
                                     chartDetailsViewState.emit(state.copy(playingTrackId = it.trackId))
                                 }
-
                                 else -> {}
                             }
                     }

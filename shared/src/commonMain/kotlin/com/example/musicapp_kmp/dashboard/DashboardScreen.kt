@@ -1,11 +1,26 @@
 package com.example.musicapp_kmp.dashboard
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -167,13 +182,11 @@ internal fun FeaturedPlayLists(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         val painter = rememberAsyncImagePainter(
-                            playList.images?.first()?.url
-                                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
+                            playList.images?.first()?.url.orEmpty()
                         )
                         Image(
                             painter,
-                            playList.images?.first()?.url
-                                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
+                            playList.images?.first()?.url.orEmpty(),
                             modifier = Modifier.clip(RoundedCornerShape(20.dp)).width(100.dp)
                                 .height(100.dp),
                             contentScale = ContentScale.Crop
@@ -241,13 +254,11 @@ internal fun NewReleases(
                 Box(Modifier.width(153.dp)) {
                     Column {
                         val painter = rememberAsyncImagePainter(
-                            album.images?.first()?.url
-                                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg"
+                            album.images?.first()?.url.orEmpty()
                         )
                         Image(
                             painter,
-                            album.images?.first()?.url
-                                ?: "https://www.linkpicture.com/q/vladimir-haltakov-PMfuunAfF2w-unsplash.jpg",
+                            album.images?.first()?.url.orEmpty(),
                             modifier = Modifier.width(153.dp).height(153.dp)
                                 .clip(RoundedCornerShape(20.dp))
                                 .clickable(onClick = { navigateToDetails(album.id.orEmpty()) }),

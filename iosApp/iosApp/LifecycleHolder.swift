@@ -2,8 +2,7 @@
 //  LifecycleHolder.swift
 //  iosApp
 //
-//  Created by Abdul Basit on 01/04/2023.
-//  Copyright © 2023 orgName. All rights reserved.
+//  Created by Abdul Basit on 29/03/2024.
 //
 
 import shared
@@ -13,7 +12,7 @@ class LifecycleHolder : ObservableObject {
     
     init() {
         lifecycle = LifecycleRegistryKt.LifecycleRegistry()
-        
+    
         lifecycle.onCreate()
     }
     

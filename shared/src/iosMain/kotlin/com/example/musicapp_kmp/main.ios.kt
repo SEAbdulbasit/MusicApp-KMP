@@ -9,7 +9,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Application
+import androidx.compose.ui.window.ComposeUIViewController
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.example.musicapp_kmp.decompose.MusicRootImpl
@@ -26,12 +26,10 @@ import platform.UIKit.UIViewController
 
 fun MainiOS(
     lifecycle: LifecycleRegistry,
-): UIViewController = Application("Music-App") {
-    val api = SpotifyApiImpl()
-
+): UIViewController = ComposeUIViewController {
     val rootComponent = MusicRootImpl(
         componentContext = DefaultComponentContext(lifecycle = lifecycle),
-        api = api,
+        api = SpotifyApiImpl(),
         mediaPlayerController = MediaPlayerController(PlatformContext())
     )
 

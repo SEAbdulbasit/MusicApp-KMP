@@ -3,8 +3,10 @@ package com.example.musicapp_kmp.chartdetails
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.example.musicapp_kmp.decompose.ChartDetailsComponent
 import com.example.musicapp_kmp.network.SpotifyApi
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -22,8 +24,15 @@ class ChartDetailsViewModel(
     chatDetailsInput: SharedFlow<ChartDetailsComponent.Input>
 ) : InstanceKeeper.Instance {
 
-    private val viewModelScope = CoroutineScope(Dispatchers.Unconfined)
-    val chartDetailsViewState = MutableStateFlow<ChartDetailsViewState>(ChartDetailsViewState.Loading)
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        exception.printStackTrace()
+    }
+
+    private val job = SupervisorJob()
+    private val viewModelScope = CoroutineScope(Dispatchers.Main + coroutineExceptionHandler + job)
+
+    val chartDetailsViewState =
+        MutableStateFlow<ChartDetailsViewState>(ChartDetailsViewState.Loading)
 
     init {
         viewModelScope.launch {
@@ -36,7 +45,8 @@ class ChartDetailsViewModel(
                     )
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    chartDetailsViewState.value = ChartDetailsViewState.Failure(e.message.toString())
+                    chartDetailsViewState.value =
+                        ChartDetailsViewState.Failure(e.message.toString())
                 }
             }
             launch {

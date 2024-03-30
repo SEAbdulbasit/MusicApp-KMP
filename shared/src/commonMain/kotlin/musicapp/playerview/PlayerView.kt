@@ -18,7 +18,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.PlayArrow
@@ -67,6 +66,8 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
     }
 
     playTrack(selectedTrack, mediaPlayerController, isLoading, selectedIndex, trackList)
+
+    val isPlaying = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier.fillMaxWidth().background(Color(0xCC101010))
@@ -126,7 +127,7 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                         })
                 )
                 Icon(
-                    imageVector = if (mediaPlayerController.isPlaying()) Icons.Filled.AddCircle else Icons.Filled.PlayArrow,
+                    imageVector = Icons.Filled.PlayArrow,
                     tint = Color(0xFFFACD66),
                     contentDescription = "Play",
                     modifier = Modifier.padding(end = 8.dp).size(32.dp)

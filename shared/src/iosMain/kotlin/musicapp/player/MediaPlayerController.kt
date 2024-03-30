@@ -42,6 +42,7 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
     }
 
     actual fun prepare(pathSource: String, listener: MediaPlayerListener) {
+        println("Prepare")
         this.listener = listener
         val url = NSURL(string = pathSource)
         stop1()
@@ -82,10 +83,12 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
     }
 
     actual fun start() {
+        println("On Play")
         player.play()
     }
 
     actual fun pause() {
+        println("On pause")
         player.pause()
     }
 

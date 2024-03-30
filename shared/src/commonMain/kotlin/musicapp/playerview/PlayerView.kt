@@ -18,6 +18,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.PlayArrow
@@ -33,11 +34,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.seiko.imageloader.rememberAsyncImagePainter
 import musicapp.decompose.PlayerComponent
 import musicapp.network.models.topfiftycharts.Item
 import musicapp.player.MediaPlayerController
 import musicapp.player.MediaPlayerListener
-import com.seiko.imageloader.rememberAsyncImagePainter
 
 
 @Composable
@@ -125,7 +126,7 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                         })
                 )
                 Icon(
-                    imageVector = Icons.Filled.PlayArrow,
+                    imageVector = if (mediaPlayerController.isPlaying()) Icons.Filled.AddCircle else Icons.Filled.PlayArrow,
                     tint = Color(0xFFFACD66),
                     contentDescription = "Play",
                     modifier = Modifier.padding(end = 8.dp).size(32.dp)
@@ -165,7 +166,6 @@ private fun playTrack(
     selectedTrack.track?.previewUrl?.let {
         mediaPlayerController.prepare(it, listener = object : MediaPlayerListener {
             override fun onReady() {
-                mediaPlayerController.start()
                 isLoading.value = false
             }
 

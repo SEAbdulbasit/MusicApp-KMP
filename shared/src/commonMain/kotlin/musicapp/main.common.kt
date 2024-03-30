@@ -8,12 +8,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import musicapp.chartdetails.ChartDetailsScreen
 import musicapp.chartdetails.ChartDetailsScreenLarge
 import musicapp.dashboard.DashboardScreen
 import musicapp.dashboard.DashboardScreenLarge
 import musicapp.decompose.MusicRoot
 import musicapp.playerview.PlayerView
-import musicapp.chartdetails.ChartDetailsScreen
 
 @Composable
 internal fun MainCommon(
@@ -22,7 +22,7 @@ internal fun MainCommon(
 ) {
     val dialogOverlay by rootComponent.dialogOverlay.subscribeAsState()
 
-    MyApplicationTheme {
+    MusicAppTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             Box(modifier = Modifier.fillMaxSize()) {
                 Children(

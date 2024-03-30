@@ -13,9 +13,9 @@ import io.ktor.http.encodedPath
 import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import musicapp.dummydata.featurePlaylistResponse
-import musicapp.dummydata.newReleases
-import musicapp.dummydata.topFiftyChartsResponse
+import musicapp.sampledata.featurePlaylistResponse
+import musicapp.sampledata.newReleases
+import musicapp.sampledata.topFiftyChartsResponse
 import musicapp.network.models.featuredplaylist.FeaturedPlayList
 import musicapp.network.models.newreleases.NewReleasedAlbums
 import musicapp.network.models.topfiftycharts.TopFiftyCharts

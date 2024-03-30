@@ -1,4 +1,4 @@
-package musicapp.dummydata
+package musicapp.sampledata
 
 val topFiftyChartsResponse = """
     {

@@ -11,8 +11,6 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.parcelable.Parcelable
-import com.arkivanov.essenty.parcelable.Parcelize
 import com.example.musicapp_kmp.network.SpotifyApi
 import com.example.musicapp_kmp.network.models.topfiftycharts.Item
 import com.example.musicapp_kmp.player.MediaPlayerController
@@ -120,11 +118,14 @@ class MusicRootImpl(
         }
     }
 
-    private val player = childSlot<DialogConfig, PlayerComponent>(source = dialogNavigation,
-        persistent = false,
+    private val player = childSlot(source = dialogNavigation,
+        serializer = serializer(),
+        initialConfiguration = { null },
+        key = "PlayerView",
         handleBackButton = true,
         childFactory = { config, _ ->
-            PlayerComponentImpl(componentContext = componentContext,
+            PlayerComponentImpl(
+                componentContext = componentContext,
                 mediaPlayerController = mediaPlayerController,
                 trackList = config.playlist,
                 playerInputs = musicPlayerInput,
@@ -163,8 +164,8 @@ class MusicRootImpl(
         ) : Configuration()
     }
 
-    @Parcelize
+    @Serializable
     private data class DialogConfig(
         val playlist: List<Item>
-    ) : Parcelable
+    )
 }

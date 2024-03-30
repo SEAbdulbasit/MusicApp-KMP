@@ -25,11 +25,11 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.lifecycle.LifecycleC
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.parcelable.ParcelableContainer
 import com.arkivanov.essenty.statekeeper.StateKeeperDispatcher
-import musicapp_kmp.CommonMainDesktop
-import musicapp_kmp.decompose.MusicRootImpl
-import musicapp_kmp.network.SpotifyApiImpl
-import musicapp_kmp.player.MediaPlayerController
-import musicapp_kmp.player.PlatformContext
+import musicapp.CommonMainDesktop
+import musicapp.decompose.MusicRootImpl
+import musicapp.network.SpotifyApiImpl
+import musicapp.player.MediaPlayerController
+import musicapp.player.PlatformContext
 import java.awt.Dimension
 import java.awt.Toolkit
 import java.io.File

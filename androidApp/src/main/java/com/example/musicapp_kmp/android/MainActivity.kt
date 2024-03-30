@@ -5,11 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
 import com.arkivanov.decompose.defaultComponentContext
-import musicapp_kmp.MainAndroid
-import musicapp_kmp.decompose.MusicRootImpl
-import musicapp_kmp.network.SpotifyApiImpl
-import musicapp_kmp.player.MediaPlayerController
-import musicapp_kmp.player.PlatformContext
+import musicapp.MainAndroid
+import musicapp.decompose.MusicRootImpl
+import musicapp.network.SpotifyApiImpl
+import musicapp.player.MediaPlayerController
+import musicapp.player.PlatformContext
 
 class MainActivity : ComponentActivity() {
 

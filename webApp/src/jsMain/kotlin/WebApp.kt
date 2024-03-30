@@ -3,10 +3,10 @@ import androidx.compose.ui.window.CanvasBasedWindow
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
-import musicapp_kmp.decompose.MusicRootImpl
-import musicapp_kmp.network.SpotifyApiImpl
-import musicapp_kmp.player.MediaPlayerController
-import musicapp_kmp.player.PlatformContext
+import musicapp.decompose.MusicRootImpl
+import musicapp.network.SpotifyApiImpl
+import musicapp.player.MediaPlayerController
+import musicapp.player.PlatformContext
 import org.jetbrains.skiko.wasm.onWasmReady
 
 @OptIn(ExperimentalComposeUiApi::class)

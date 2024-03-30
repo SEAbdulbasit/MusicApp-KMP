@@ -17,7 +17,7 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         })
 
         audioElement.onended = {
-            listener.onVideoCompleted()
+            listener.onAudioCompleted()
         }
         audioElement.addEventListener("error", {
             listener.onError()

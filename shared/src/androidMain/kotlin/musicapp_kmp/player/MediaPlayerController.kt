@@ -22,7 +22,7 @@ actual class MediaPlayerController actual constructor(platformContext: PlatformC
                 super.onPlaybackStateChanged(playbackState)
                 when (playbackState) {
                     STATE_READY -> listener.onReady()
-                    STATE_ENDED -> listener.onVideoCompleted()
+                    STATE_ENDED -> listener.onAudioCompleted()
                 }
             }
 

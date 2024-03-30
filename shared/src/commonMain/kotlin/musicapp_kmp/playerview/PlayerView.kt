@@ -169,7 +169,7 @@ private fun playTrack(
                 isLoading.value = false
             }
 
-            override fun onVideoCompleted() {
+            override fun onAudioCompleted() {
                 if (selectedIndex.value < trackList.size - 1) {
                     selectedIndex.value += 1
                 }

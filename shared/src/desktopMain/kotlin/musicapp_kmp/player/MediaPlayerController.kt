@@ -30,7 +30,7 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
 
             override fun finished(mediaPlayer: MediaPlayer?) {
                 super.finished(mediaPlayer)
-                listener?.onVideoCompleted()
+                listener?.onAudioCompleted()
             }
 
             override fun error(mediaPlayer: MediaPlayer?) {

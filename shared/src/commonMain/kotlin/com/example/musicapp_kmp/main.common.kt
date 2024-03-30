@@ -46,7 +46,7 @@ internal fun MainCommon(
                 }
             }
             Box(modifier = Modifier.align(Alignment.BottomEnd)) {
-                dialogOverlay.overlay?.instance?.also {
+                dialogOverlay.child?.instance?.also {
                     PlayerView(it)
                 }
             }

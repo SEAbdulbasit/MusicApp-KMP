@@ -1,11 +1,15 @@
 package com.example.musicapp_kmp.decompose
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.router.overlay.ChildOverlay
-import com.arkivanov.decompose.router.overlay.OverlayNavigation
-import com.arkivanov.decompose.router.overlay.activate
-import com.arkivanov.decompose.router.overlay.childOverlay
-import com.arkivanov.decompose.router.stack.*
+import com.arkivanov.decompose.router.slot.ChildSlot
+import com.arkivanov.decompose.router.slot.SlotNavigation
+import com.arkivanov.decompose.router.slot.activate
+import com.arkivanov.decompose.router.slot.childSlot
+import com.arkivanov.decompose.router.stack.ChildStack
+import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
@@ -17,6 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.serializer
 
 /**
  * Created by abdulbasit on 19/03/2023.
@@ -36,7 +42,9 @@ class MusicRootImpl(
     private val chatDetailsInput = MutableSharedFlow<ChartDetailsComponent.Input>()
 
     constructor(
-        componentContext: ComponentContext, api: SpotifyApi, mediaPlayerController: MediaPlayerController
+        componentContext: ComponentContext,
+        api: SpotifyApi,
+        mediaPlayerController: MediaPlayerController
     ) : this(componentContext = componentContext,
         mediaPlayerController = mediaPlayerController,
         dashboardMain = { childContext, output ->
@@ -56,10 +64,11 @@ class MusicRootImpl(
         })
 
     private val navigation = StackNavigation<Configuration>()
-    private val dialogNavigation = OverlayNavigation<DialogConfig>()
+    private val dialogNavigation = SlotNavigation<DialogConfig>()
 
     private val stack = childStack(
         source = navigation,
+        serializer = serializer(),
         initialConfiguration = Configuration.Dashboard,
         handleBackButton = true,
         childFactory = ::createChild
@@ -111,9 +120,9 @@ class MusicRootImpl(
         }
     }
 
-    private val player = childOverlay<DialogConfig, PlayerComponent>(source = dialogNavigation,
+    private val player = childSlot<DialogConfig, PlayerComponent>(source = dialogNavigation,
         persistent = false,
-        handleBackButton = false,
+        handleBackButton = true,
         childFactory = { config, _ ->
             PlayerComponentImpl(componentContext = componentContext,
                 mediaPlayerController = mediaPlayerController,
@@ -137,20 +146,21 @@ class MusicRootImpl(
     override val childStack: Value<ChildStack<*, MusicRoot.Child>>
         get() = value()
 
-    override val dialogOverlay: Value<ChildOverlay<*, PlayerComponent>>
+    override val dialogOverlay: Value<ChildSlot<*, PlayerComponent>>
         get() = player
 
     private fun value() = stack
 
-    private sealed class Configuration : Parcelable {
-        @Parcelize
+    @Serializable
+    private sealed class Configuration {
+        @Serializable
         data object Dashboard : Configuration()
 
-        @Parcelize
+        @Serializable
         data class Details(
             val playlistId: String,
             val playingTrackId: String,
-        ) : Configuration(), Parcelable
+        ) : Configuration()
     }
 
     @Parcelize

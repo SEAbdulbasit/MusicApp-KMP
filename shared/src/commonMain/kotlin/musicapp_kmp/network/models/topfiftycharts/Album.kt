@@ -1,11 +1,8 @@
-package com.example.musicapp_kmp.network.models.topfiftycharts
+package musicapp_kmp.network.models.topfiftycharts
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import musicapp_kmp.network.models.topfiftycharts.ArtistX
-import musicapp_kmp.network.models.topfiftycharts.ExternalUrls
-import musicapp_kmp.network.models.topfiftycharts.ImageX
 
 @Serializable
 data class Album(

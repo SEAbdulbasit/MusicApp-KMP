@@ -12,17 +12,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ComposeUIViewController
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
-import musicapp_kmp.decompose.MusicRootImpl
-import musicapp_kmp.network.SpotifyApiImpl
-import musicapp_kmp.player.MediaPlayerController
-import musicapp_kmp.player.PlatformContext
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
 import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.util.DebugLogger
 import com.seiko.imageloader.util.LogPriority
-import musicapp_kmp.MainCommon
+import musicapp_kmp.decompose.MusicRootImpl
+import musicapp_kmp.network.SpotifyApiImpl
+import musicapp_kmp.player.MediaPlayerController
+import musicapp_kmp.player.PlatformContext
 import platform.UIKit.UIViewController
 
 fun MainiOS(

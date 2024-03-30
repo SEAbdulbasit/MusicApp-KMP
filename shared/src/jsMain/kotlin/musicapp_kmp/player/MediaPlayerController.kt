@@ -1,8 +1,6 @@
 package musicapp_kmp.player
 
 import kotlinx.browser.document
-import musicapp_kmp.player.MediaPlayerListener
-import musicapp_kmp.player.PlatformContext
 import org.w3c.dom.HTMLAudioElement
 
 actual class MediaPlayerController actual constructor(val platformContext: PlatformContext) {

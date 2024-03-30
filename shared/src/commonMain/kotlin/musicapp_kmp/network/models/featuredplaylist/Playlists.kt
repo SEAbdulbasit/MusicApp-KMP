@@ -3,7 +3,6 @@ package musicapp_kmp.network.models.featuredplaylist
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import musicapp_kmp.network.models.featuredplaylist.Item
 
 @Serializable
 data class Playlists(

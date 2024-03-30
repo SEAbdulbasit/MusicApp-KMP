@@ -1,8 +1,9 @@
-package musicapp.decompose
+package com.example.musicapp_kmp.decompose
 
+import com.arkivanov.essenty.parcelable.Parcelable
+import com.arkivanov.essenty.parcelable.Parcelize
 import musicapp.chartdetails.ChartDetailsViewModel
 import musicapp.network.models.topfiftycharts.Item
-import kotlinx.serialization.Serializable
 
 
 /**
@@ -18,10 +19,10 @@ interface ChartDetailsComponent {
         data class OnTrackSelected(val trackId: String, val playlist: List<Item>) : Output()
     }
 
-    @Serializable
-    sealed interface Input {
+    @Parcelize
+    sealed interface Input : Parcelable {
 
-        @Serializable
-        data class TrackUpdated(val trackId: String) : Input
+        @Parcelize
+        data class TrackUpdated(val trackId: String) : Input, Parcelable
     }
 }

@@ -111,8 +111,9 @@ class MusicRootImpl(
             }
 
             is ChartDetailsComponent.Output.OnTrackSelected -> {
+                dialogNavigation.activate(DialogConfig(output.playlist))
                 CoroutineScope(Dispatchers.Default).launch {
-                    musicPlayerInput.emit(PlayerComponent.Input.PlayTrack(output.trackId))
+                    musicPlayerInput.emit(PlayerComponent.Input.PlayTrack(output.trackId, output.playlist))
                 }
             }
         }

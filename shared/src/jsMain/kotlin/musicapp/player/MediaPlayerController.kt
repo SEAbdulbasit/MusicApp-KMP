@@ -14,6 +14,7 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         audioElement.addEventListener("canplaythrough", {
             // Audio is ready to play without interruption
             listener.onReady()
+            audioElement.play()
         })
 
         audioElement.onended = {

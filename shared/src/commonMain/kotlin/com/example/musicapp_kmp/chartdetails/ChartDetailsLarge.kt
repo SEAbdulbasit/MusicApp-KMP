@@ -3,6 +3,7 @@ package com.example.musicapp_kmp.chartdetails
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -44,7 +45,9 @@ internal fun ChartDetailsScreenLarge(
             chartDetails = resultedState.chartDetails,
             playingTrackId = resultedState.playingTrackId,
             onPlayAllClicked = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnPlayAllSelected(it)) },
-            onPlayTrack = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnTrackSelected(it)) }
+            onPlayTrack = { id, list ->
+                chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnTrackSelected(id, list))
+            }
         )
     }
     IconButton(onClick = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack) }) {
@@ -70,7 +73,7 @@ internal fun ChartDetailsScreenLarge(
 internal fun ChartDetailsViewLarge(
     chartDetails: TopFiftyCharts,
     onPlayAllClicked: (List<Item>) -> Unit,
-    onPlayTrack: (String) -> Unit,
+    onPlayTrack: (String, List<Item>) -> Unit,
     playingTrackId: String
 ) {
     val painter = rememberAsyncImagePainter(chartDetails.images?.first()?.url.orEmpty())
@@ -141,17 +144,22 @@ internal fun ChartDetailsViewLarge(
         }
         items(chartDetails.tracks?.items ?: emptyList()) { track ->
             Box(
-                modifier = Modifier.clip(RoundedCornerShape(20.dp)).fillMaxWidth().background(
-                    if (track.track?.id.orEmpty() == selectedTrack.value) Color(0xCCFACD66)
-                    else Color(0xFF33373B)
-                ).padding(16.dp)
+                modifier = Modifier
+                    .clip(RoundedCornerShape(20.dp))
+                    .fillMaxWidth()
+                    .background(if (track.track?.id.orEmpty() == selectedTrack.value) Color(0xCCFACD66) else Color(0xFF33373B))
+                    .padding(16.dp)
+                    .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() })
+                { onPlayTrack(track.track?.id.orEmpty(), chartDetails.tracks?.items ?: mutableListOf()) }
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     val active by remember { mutableStateOf(false) }
                     val painter = rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
                     Box(modifier = Modifier
                         .clickable {
-                            onPlayTrack(track.track?.id.orEmpty())
+                            onPlayTrack(track.track?.id.orEmpty(), chartDetails.tracks?.items ?: mutableListOf())
                         }) {
                         Image(
                             painter,

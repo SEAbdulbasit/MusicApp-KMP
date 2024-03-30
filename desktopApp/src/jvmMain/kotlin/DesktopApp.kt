@@ -1,8 +1,16 @@
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
@@ -17,10 +25,11 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.lifecycle.LifecycleC
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.parcelable.ParcelableContainer
 import com.arkivanov.essenty.statekeeper.StateKeeperDispatcher
-import com.example.musicapp_kmp.decompose.MusicRootImpl
-import com.example.musicapp_kmp.network.SpotifyApiImpl
-import com.example.musicapp_kmp.player.MediaPlayerController
-import com.example.travelapp_kmp.CommonMainDesktop
+import musicapp_kmp.CommonMainDesktop
+import musicapp_kmp.decompose.MusicRootImpl
+import musicapp_kmp.network.SpotifyApiImpl
+import musicapp_kmp.player.MediaPlayerController
+import musicapp_kmp.player.PlatformContext
 import java.awt.Dimension
 import java.awt.Toolkit
 import java.io.File
@@ -37,13 +46,16 @@ fun main() {
             componentContext = DefaultComponentContext(
                 lifecycle = lifecycle,
                 stateKeeper = stateKeeper,
-            ), api = SpotifyApiImpl(), mediaPlayerController = MediaPlayerController()
+            ),
+            api = SpotifyApiImpl(),
+            mediaPlayerController = MediaPlayerController(PlatformContext())
         )
     }
 
     application {
         val windowState = rememberWindowState(
-            position = WindowPosition.Aligned(Alignment.Center), size = getPreferredWindowSize(800, 800)
+            position = WindowPosition.Aligned(Alignment.Center),
+            size = getPreferredWindowSize(800, 800)
         )
 
         LifecycleController(lifecycle, windowState)

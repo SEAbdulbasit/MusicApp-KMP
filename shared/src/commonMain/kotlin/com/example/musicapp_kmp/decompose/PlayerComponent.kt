@@ -20,7 +20,7 @@ interface PlayerComponent {
     }
 
     sealed interface Input {
-        data class PlayTrack(val trackId: String) : Input
+        data class PlayTrack(val trackId: String, val tracksList: List<Item>) : Input
         data class UpdateTracks(val tracksList: List<Item>) : Input
     }
 

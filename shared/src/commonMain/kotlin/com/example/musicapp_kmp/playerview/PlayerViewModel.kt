@@ -44,7 +44,7 @@ class PlayerViewModel(
                 when (it) {
                     is PlayerComponent.Input.PlayTrack ->
                         chartDetailsViewState.value =
-                            chartDetailsViewState.value.copy(playingTrackId = it.trackId)
+                            chartDetailsViewState.value.copy(playingTrackId = it.trackId, trackList = it.tracksList)
 
                     is PlayerComponent.Input.UpdateTracks ->
                         chartDetailsViewState.value =

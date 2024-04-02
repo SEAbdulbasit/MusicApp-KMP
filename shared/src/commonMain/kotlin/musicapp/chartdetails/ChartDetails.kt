@@ -53,7 +53,6 @@ import com.seiko.imageloader.rememberAsyncImagePainter
 internal fun ChartDetailsScreen(
     chartDetailsComponent: ChartDetailsComponent,
 ) {
-
     val state = chartDetailsComponent.viewModel.chartDetailsViewState.collectAsState()
     when (val resultedState = state.value) {
         is ChartDetailsViewState.Failure -> Failure(resultedState.error)

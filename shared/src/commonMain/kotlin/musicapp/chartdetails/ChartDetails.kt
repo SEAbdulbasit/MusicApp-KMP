@@ -186,7 +186,7 @@ internal fun ChartDetailsView(
                 ) {
                     val active by remember { mutableStateOf(false) }
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        val painter =
+                        val albumImageUrl =
                             rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
                         Box(modifier = Modifier
                             .clickable {
@@ -196,7 +196,7 @@ internal fun ChartDetailsView(
                                 )
                             }) {
                             Image(
-                                painter,
+                                albumImageUrl,
                                 track.track?.album?.images?.first()?.url.orEmpty(),
                                 modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp)
                                     .height(40.dp),

@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -175,14 +174,13 @@ internal fun ChartDetailsViewLarge(
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     val active by remember { mutableStateOf(false) }
-                    val painter =
-                        rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
+                    val albumImageUrl = rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
                     Box(modifier = Modifier
                         .clickable {
                             onPlayTrack(track.track?.id.orEmpty(), chartDetails.tracks?.items ?: mutableListOf())
                         }) {
                         Image(
-                            painter,
+                            albumImageUrl,
                             track.track?.album?.images?.first()?.url.orEmpty(),
                             modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(40.dp)
                                 .height(40.dp),

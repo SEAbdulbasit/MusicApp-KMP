@@ -3,6 +3,7 @@ package musicapp.playerview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -68,12 +68,10 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
 
     playTrack(selectedTrack, mediaPlayerController, isLoading, selectedIndex, trackList)
 
-    val isPlaying = remember { mutableStateOf(false) }
-
     Box(
         modifier = Modifier.fillMaxWidth().background(Color(0xCC101010))
             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp)
-            .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {  }
+            .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) { }
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             val painter = rememberAsyncImagePainter(

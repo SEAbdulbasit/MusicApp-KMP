@@ -43,7 +43,7 @@ import musicapp.player.MediaPlayerListener
 
 @Composable
 internal fun PlayerView(playerComponent: PlayerComponent) {
-    val state = playerComponent.viewModel.chartDetailsViewState.collectAsState()
+    val state = playerComponent.viewModel.playerViewState.collectAsState()
     val mediaPlayerController = state.value.mediaPlayerController
     val selectedTrackPlaying = state.value.playingTrackId
     val trackList = state.value.trackList

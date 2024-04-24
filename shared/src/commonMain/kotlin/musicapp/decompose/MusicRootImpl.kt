@@ -11,9 +11,6 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import musicapp.network.SpotifyApi
-import musicapp.network.models.topfiftycharts.Item
-import musicapp.player.MediaPlayerController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,6 +18,9 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.serializer
+import musicapp.network.SpotifyApi
+import musicapp.network.models.topfiftycharts.Item
+import musicapp.player.MediaPlayerController
 
 /**
  * Created by abdulbasit on 19/03/2023.
@@ -111,7 +111,7 @@ class MusicRootImpl(
             }
 
             is ChartDetailsComponent.Output.OnTrackSelected -> {
-                dialogNavigation.activate(DialogConfig(output.playlist))
+                dialogNavigation.activate(DialogConfig(output.playlist, output.trackId))
                 CoroutineScope(Dispatchers.Default).launch {
                     musicPlayerInput.emit(PlayerComponent.Input.PlayTrack(output.trackId, output.playlist))
                 }
@@ -129,6 +129,7 @@ class MusicRootImpl(
                 componentContext = componentContext,
                 mediaPlayerController = mediaPlayerController,
                 trackList = config.playlist,
+                selectedTrack = config.selectedTrack,
                 playerInputs = musicPlayerInput,
                 output = {
                     when (it) {
@@ -167,6 +168,7 @@ class MusicRootImpl(
 
     @Serializable
     private data class DialogConfig(
-        val playlist: List<Item>
+        val playlist: List<Item>,
+        val selectedTrack: String = ""
     )
 }

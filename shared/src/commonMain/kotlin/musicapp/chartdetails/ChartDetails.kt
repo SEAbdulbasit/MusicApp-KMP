@@ -3,6 +3,7 @@ package musicapp.chartdetails
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -52,7 +53,6 @@ import com.seiko.imageloader.rememberAsyncImagePainter
 internal fun ChartDetailsScreen(
     chartDetailsComponent: ChartDetailsComponent,
 ) {
-
     val state = chartDetailsComponent.viewModel.chartDetailsViewState.collectAsState()
     when (val resultedState = state.value) {
         is ChartDetailsViewState.Failure -> Failure(resultedState.error)
@@ -68,12 +68,9 @@ internal fun ChartDetailsScreen(
                         )
                     )
                 },
-                onPlayTrack = {
+                onPlayTrack = { id, list ->
                     chartDetailsComponent.onOutPut(
-                        ChartDetailsComponent.Output.OnTrackSelected(
-                            it
-                        )
-                    )
+                        ChartDetailsComponent.Output.OnTrackSelected(id, list))
                 }
             )
     }
@@ -111,7 +108,7 @@ internal fun Failure(message: String) {
 internal fun ChartDetailsView(
     chartDetails: TopFiftyCharts,
     onPlayAllClicked: (List<Item>) -> Unit,
-    onPlayTrack: (String) -> Unit,
+    onPlayTrack: (String, List<Item>) -> Unit,
     playingTrackId: Any
 ) {
 
@@ -147,8 +144,7 @@ internal fun ChartDetailsView(
                 Image(
                     painter = painter,
                     contentDescription = chartDetails.images?.first()?.url.orEmpty(),
-                    modifier = Modifier.padding(top = 24.dp, bottom = 24.dp).fillMaxWidth()
-                        .aspectRatio(1f)
+                    modifier = Modifier.padding(top = 100.dp, bottom = 24.dp).fillMaxWidth().aspectRatio(1f)
                         .clip(RoundedCornerShape(25.dp)),
                     contentScale = ContentScale.Crop,
                 )
@@ -169,12 +165,24 @@ internal fun ChartDetailsView(
                 Spacer(Modifier.height(32.dp).fillMaxWidth())
                 OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
             }
-            items(chartDetails.tracks?.items ?: emptyList()) { track ->
+            itemsIndexed(chartDetails.tracks?.items ?: emptyList()) { index, track ->
                 Box(
-                    modifier = Modifier.clip(RoundedCornerShape(20.dp)).fillMaxWidth().background(
-                        if (track.track?.id.orEmpty() == selectedTrack.value) Color(0xCCFACD66)
-                        else Color(0xFF33373B)
-                    ).padding(16.dp)
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(20.dp))
+                        .fillMaxWidth().background(
+                            if (track.track?.id.orEmpty() == selectedTrack.value) Color(0xCCFACD66)
+                            else Color(0xFF33373B)
+                        )
+                        .padding(16.dp)
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() })
+                        {
+                            onPlayTrack(
+                                track.track?.id.orEmpty(),
+                                chartDetails.tracks?.items ?: mutableListOf()
+                            )
+                        }
                 ) {
                     val active by remember { mutableStateOf(false) }
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -182,7 +190,10 @@ internal fun ChartDetailsView(
                             rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
                         Box(modifier = Modifier
                             .clickable {
-                                onPlayTrack(track.track?.id.orEmpty())
+                                onPlayTrack(
+                                    track.track?.id.orEmpty(),
+                                    chartDetails.tracks?.items ?: mutableListOf()
+                                )
                             }) {
                             Image(
                                 painter,
@@ -230,6 +241,9 @@ internal fun ChartDetailsView(
                             )
                         )
                     }
+                }
+                if (index == chartDetails.tracks?.items?.lastIndex) {
+                    Column(modifier = Modifier.fillMaxWidth().height(100.dp)) { }
                 }
             }
         }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -71,7 +72,8 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
 
     Box(
         modifier = Modifier.fillMaxWidth().background(Color(0xCC101010))
-            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 56.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp)
+            .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {  }
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             val painter = rememberAsyncImagePainter(

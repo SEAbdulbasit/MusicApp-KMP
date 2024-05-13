@@ -43,6 +43,10 @@ import musicapp.network.models.featuredplaylist.FeaturedPlayList
 import musicapp.network.models.newreleases.NewReleasedAlbums
 import musicapp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
+import musicapp_kmp.shared.generated.resources.Res
+import musicapp_kmp.shared.generated.resources.featured_playlist
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 
 /**
@@ -150,6 +154,7 @@ internal fun TopChartView(topFiftyCharts: TopFiftyCharts, navigateToDetails: (St
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun FeaturedPlayLists(
     featuredPlayList: FeaturedPlayList,
@@ -157,7 +162,7 @@ internal fun FeaturedPlayLists(
 ) {
     Column(modifier = Modifier.padding(top = 46.dp)) {
         Text(
-            "Featured Playlist",
+            stringResource(Res.string.featured_playlist),
             style = MaterialTheme.typography.h6.copy(
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFFEFEEE0)

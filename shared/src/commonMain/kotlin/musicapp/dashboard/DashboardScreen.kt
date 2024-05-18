@@ -44,7 +44,12 @@ import musicapp.network.models.newreleases.NewReleasedAlbums
 import musicapp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
 import musicapp_kmp.shared.generated.resources.Res
+import musicapp_kmp.shared.generated.resources.explore_details
+import musicapp_kmp.shared.generated.resources.favorite
 import musicapp_kmp.shared.generated.resources.featured_playlist
+import musicapp_kmp.shared.generated.resources.likes
+import musicapp_kmp.shared.generated.resources.new_releases
+import musicapp_kmp.shared.generated.resources.tracks
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
@@ -106,6 +111,7 @@ internal fun DashboardView(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun TopChartView(topFiftyCharts: TopFiftyCharts, navigateToDetails: (String) -> Unit) {
     Box(
@@ -140,11 +146,11 @@ internal fun TopChartView(topFiftyCharts: TopFiftyCharts, navigateToDetails: (St
                 Icon(
                     imageVector = Icons.Filled.FavoriteBorder,
                     tint = Color(0xFFFACD66),
-                    contentDescription = "Explore details",
+                    contentDescription = stringResource(Res.string.explore_details),
                     modifier = Modifier.size(30.dp).align(Alignment.Top)
                 )
                 Text(
-                    text = "${topFiftyCharts.followers?.total ?: 0} Likes",
+                    text = "${topFiftyCharts.followers?.total ?: 0} ${stringResource(Res.string.likes)}",
                     style = MaterialTheme.typography.h5,
                     color = Color.White,
                     modifier = Modifier.padding(start = 16.dp)
@@ -215,7 +221,7 @@ internal fun FeaturedPlayLists(
                             maxLines = 1
                         )
                         Text(
-                            text = "${(playList.tracks?.total ?: 0)} tracks",
+                            text = "${(playList.tracks?.total ?: 0)} ${stringResource(Res.string.tracks)}",
                             style = MaterialTheme.typography.body2.copy(color = Color.White),
                             modifier = Modifier.padding(top = 24.dp)
                         )
@@ -223,7 +229,7 @@ internal fun FeaturedPlayLists(
                     Icon(
                         imageVector = Icons.Default.Favorite,
                         tint = Color(0xFFFACD66),
-                        contentDescription = "Favorite",
+                        contentDescription = stringResource(Res.string.favorite),
                         modifier = Modifier.padding(top = 16.dp, end = 16.dp).size(30.dp)
                             .align(Alignment.TopEnd)
                     )
@@ -233,6 +239,7 @@ internal fun FeaturedPlayLists(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun NewReleases(
     newReleasedAlbums: NewReleasedAlbums,
@@ -240,7 +247,7 @@ internal fun NewReleases(
 ) {
     Column(modifier = Modifier.padding(top = 46.dp).fillMaxWidth()) {
         Text(
-            "New releases",
+            stringResource(Res.string.new_releases),
             style = MaterialTheme.typography.h6.copy(
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFFEFEEE0)
@@ -277,7 +284,7 @@ internal fun NewReleases(
                             maxLines = 1
                         )
                         Text(
-                            text = "${(album.totalTracks ?: 0)} tracks",
+                            text = "${(album.totalTracks ?: 0)} ${stringResource(Res.string.tracks)}",
                             style = MaterialTheme.typography.caption.copy(
                                 color = Color.White.copy(
                                     alpha = 0.5f

@@ -39,8 +39,15 @@ import musicapp.decompose.PlayerComponent
 import musicapp.network.models.topfiftycharts.Item
 import musicapp.player.MediaPlayerController
 import musicapp.player.MediaPlayerListener
+import musicapp_kmp.shared.generated.resources.Res
+import musicapp_kmp.shared.generated.resources.back
+import musicapp_kmp.shared.generated.resources.forward
+import musicapp_kmp.shared.generated.resources.play
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun PlayerView(playerComponent: PlayerComponent) {
     val state = playerComponent.viewModel.playerViewState.collectAsState()
@@ -117,7 +124,7 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     tint = Color(0xFFFACD66),
-                    contentDescription = "Back",
+                    contentDescription = stringResource(Res.string.back),
                     modifier = Modifier.padding(end = 8.dp).size(32.dp)
                         .align(Alignment.CenterVertically)
                         .clickable(onClick = {
@@ -129,7 +136,7 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                 Icon(
                     imageVector = Icons.Filled.PlayArrow,
                     tint = Color(0xFFFACD66),
-                    contentDescription = "Play",
+                    contentDescription = stringResource(Res.string.play),
                     modifier = Modifier.padding(end = 8.dp).size(32.dp)
                         .align(Alignment.CenterVertically)
                         .clickable(onClick = {
@@ -143,7 +150,7 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                 Icon(
                     imageVector = Icons.Default.ArrowForward,
                     tint = Color(0xFFFACD66),
-                    contentDescription = "Forward",
+                    contentDescription = stringResource(Res.string.forward),
                     modifier = Modifier.padding(end = 8.dp).size(32.dp)
                         .align(Alignment.CenterVertically)
                         .clickable(onClick = {

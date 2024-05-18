@@ -1,3 +1,14 @@
 <resources>
     <string name="featured_playlist">Featured Playlist</string>
+    <string name="explore_details">Explore details</string>
+    <string name="likes">Likes</string>
+    <string name="tracks">tracks</string>
+    <string name="favorite">Favorite</string>
+    <string name="new_releases">New releases</string>
+    <string name="go_back">Go back</string>
+    <string name="songs">songs</string>
+    <string name="play_all">Play All</string>
+    <string name="forward">Forward</string>
+    <string name="back">Back</string>
+    <string name="play">Play</string>
 </resources>

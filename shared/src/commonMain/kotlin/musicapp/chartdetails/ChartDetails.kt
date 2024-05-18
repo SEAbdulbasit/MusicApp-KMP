@@ -44,11 +44,18 @@ import musicapp.decompose.ChartDetailsComponent
 import musicapp.network.models.topfiftycharts.Item
 import musicapp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
+import musicapp_kmp.shared.generated.resources.Res
+import musicapp_kmp.shared.generated.resources.go_back
+import musicapp_kmp.shared.generated.resources.play_all
+import musicapp_kmp.shared.generated.resources.songs
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 
 /**
  * Created by abdulbasit on 28/02/2023.
  */
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun ChartDetailsScreen(
     chartDetailsComponent: ChartDetailsComponent,
@@ -80,7 +87,7 @@ internal fun ChartDetailsScreen(
     ) {
         Icon(
             Icons.Filled.ArrowBack,
-            contentDescription = "Go back",
+            contentDescription = stringResource(Res.string.go_back),
             tint = Color(0xFFFACD66),
         )
     }
@@ -104,6 +111,7 @@ internal fun Failure(message: String) {
 }
 
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun ChartDetailsView(
     chartDetails: TopFiftyCharts,
@@ -158,7 +166,7 @@ internal fun ChartDetailsView(
                     modifier = Modifier.padding(top = 8.dp)
                 )
                 Text(
-                    text = "${chartDetails.tracks?.items?.size ?: 0} songs",
+                    text = "${chartDetails.tracks?.items?.size ?: 0} ${stringResource(Res.string.songs)}",
                     style = MaterialTheme.typography.body2.copy(color = Color(0XFFEFEEE0)),
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -206,7 +214,7 @@ internal fun ChartDetailsView(
                                 Icon(
                                     imageVector = Icons.Default.PlayArrow,
                                     tint = Color(0xFFFACD66),
-                                    contentDescription = "Play All",
+                                    contentDescription = stringResource(Res.string.play_all),
                                     modifier = Modifier.size(40.dp)
                                         .clip(RoundedCornerShape(5.dp))
                                         .background(Color.Black.copy(alpha = 0.7f))
@@ -250,6 +258,7 @@ internal fun ChartDetailsView(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun OptionChips(onPlayAllClicked: (List<Item>) -> Unit, items: List<Item>) {
     Box(
@@ -262,12 +271,12 @@ internal fun OptionChips(onPlayAllClicked: (List<Item>) -> Unit, items: List<Ite
             Icon(
                 imageVector = Icons.Default.PlayArrow,
                 tint = Color(0xFFFACD66),
-                contentDescription = "Play All",
+                contentDescription = stringResource(Res.string.play_all),
                 modifier = Modifier.padding(end = 8.dp).size(16.dp)
                     .align(Alignment.CenterVertically)
             )
             Text(
-                text = "Play All",
+                text = stringResource(Res.string.play_all),
                 style = MaterialTheme.typography.caption.copy(color = Color(0XFFEFEEE0))
             )
         }

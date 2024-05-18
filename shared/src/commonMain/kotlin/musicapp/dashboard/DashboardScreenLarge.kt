@@ -32,6 +32,11 @@ import androidx.compose.ui.unit.dp
 import musicapp.decompose.DashboardMainComponent
 import musicapp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
+import musicapp_kmp.shared.generated.resources.Res
+import musicapp_kmp.shared.generated.resources.explore_details
+import musicapp_kmp.shared.generated.resources.likes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 
 /**
@@ -71,6 +76,7 @@ internal fun DashboardViewLarge(
 }
 
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun TopChartViewLarge(
     topFiftyCharts: TopFiftyCharts, navigateToDetails: (String) -> Unit
@@ -104,11 +110,11 @@ internal fun TopChartViewLarge(
                 Icon(
                     imageVector = Icons.Filled.FavoriteBorder,
                     tint = Color(0xFFFACD66),
-                    contentDescription = "Explore details",
+                    contentDescription = stringResource(Res.string.explore_details),
                     modifier = Modifier.size(30.dp).align(Alignment.Top)
                 )
                 Text(
-                    text = "${topFiftyCharts.followers?.total ?: 0} Likes",
+                    text = "${topFiftyCharts.followers?.total ?: 0} ${stringResource(Res.string.likes)}",
                     style = MaterialTheme.typography.h5,
                     color = Color.White,
                     modifier = Modifier.padding(start = 16.dp)

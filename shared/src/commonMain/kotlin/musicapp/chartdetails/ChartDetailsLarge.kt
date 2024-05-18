@@ -44,11 +44,18 @@ import musicapp.decompose.ChartDetailsComponent
 import musicapp.network.models.topfiftycharts.Item
 import musicapp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
+import musicapp_kmp.shared.generated.resources.Res
+import musicapp_kmp.shared.generated.resources.forward
+import musicapp_kmp.shared.generated.resources.play_all
+import musicapp_kmp.shared.generated.resources.songs
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 
 /**
  * Created by abdulbasit on 28/02/2023.
  */
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun ChartDetailsScreenLarge(
     chartDetailsComponent: ChartDetailsComponent,
@@ -70,7 +77,7 @@ internal fun ChartDetailsScreenLarge(
     IconButton(onClick = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack) }) {
         Icon(
             Icons.Filled.ArrowBack,
-            contentDescription = "Forward",
+            contentDescription = stringResource(Res.string.forward),
             tint = Color(0xFFFACD66),
             modifier = Modifier.padding(all = 16.dp).size(32.dp)
         )
@@ -86,6 +93,7 @@ internal fun ChartDetailsScreenLarge(
     )*/
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun ChartDetailsViewLarge(
     chartDetails: TopFiftyCharts,
@@ -149,7 +157,7 @@ internal fun ChartDetailsViewLarge(
                             modifier = Modifier.padding(top = 8.dp)
                         )
                         Text(
-                            text = "${chartDetails.tracks?.items?.size ?: 0} songs",
+                            text = "${chartDetails.tracks?.items?.size ?: 0} ${stringResource(Res.string.songs)}}",
                             style = MaterialTheme.typography.body2.copy(color = Color(0XFFEFEEE0)),
                             modifier = Modifier.padding(top = 10.dp)
                         )
@@ -190,7 +198,7 @@ internal fun ChartDetailsViewLarge(
                             Icon(
                                 imageVector = Icons.Default.PlayArrow,
                                 tint = Color(0xFFFACD66),
-                                contentDescription = "Play All",
+                                contentDescription = stringResource(Res.string.play_all),
                                 modifier = Modifier.size(40.dp)
                                     .clip(RoundedCornerShape(5.dp))
                                     .background(Color.Black.copy(alpha = 0.7f))

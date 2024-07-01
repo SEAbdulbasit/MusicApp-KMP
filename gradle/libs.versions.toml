@@ -1,0 +1,94 @@
+[versions]
+
+kotlin="1.9.22"
+compose="1.5.11"
+compose-plugin="1.6.2"
+ktor="2.2.1"
+ktor-js="2.3.8"
+decompose="2.2.3"
+essenty="1.3.0"
+media3="1.3.0"
+kotlinx-serialization ="1.6.3"
+vlcj = "4.8.2"
+image-loader="1.2.10"
+
+# Android
+androidx-activity-compose="1.8.2"
+agp = "7.4.0"
+
+
+
+[libraries]
+# AndroidX
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
+
+# Media3
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+
+#essenty
+essenty-lifecycle={ module = "com.arkivanov.essenty:lifecycle", version.ref = "essenty"}
+
+#decompose
+decompose={ module = "com.arkivanov.decompose:decompose", version.ref = "decompose"}
+#decompose-compose={ module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose"}
+decompose-compose="com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental"
+
+#ktor
+# Ktor
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
+ktor-client-json-js = { module = "io.ktor:ktor-client-json-js", version.ref = "ktor-js" }
+ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-json = { module = "io.ktor:ktor-client-json", version.ref = "ktor" }
+ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
+ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor" }
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-network = { module = "io.ktor:ktor-network", version.ref = "ktor" }
+ktor-network-tls = { module = "io.ktor:ktor-network-tls", version.ref = "ktor" }
+
+# KotlinX
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+
+#image loader
+image-loader= { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }
+
+# Vlcj
+vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcj" }
+
+[plugins]
+# Multiplatform
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-parcelize={id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+
+
+# Android
+android-library = { id = "com.android.library", version.ref = "agp" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+
+
+
+[bundles]
+
+ktor = [
+    "ktor-client-core",
+    "ktor-json",
+    "ktor-logging",
+    "ktor-serialization",
+    "ktor-client-serialization",
+    "ktor-content-negotiation",
+]
+
+decompose = [
+    "decompose",
+    "decompose-compose"
+]
+

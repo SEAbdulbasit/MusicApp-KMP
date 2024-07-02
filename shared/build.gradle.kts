@@ -1,12 +1,12 @@
 import org.jetbrains.kotlin.konan.target.Family
 
 plugins {
-    kotlin("multiplatform")
-//    kotlin("native.cocoapods")
-    kotlin("plugin.serialization")
-    id("com.android.library")
-    id("kotlin-parcelize")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.android.library)
+//    id("kotlin-parcelize")
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.jetbrains.compose)
 }
 
 val ktorVersion = extra["ktor.version"]
@@ -44,9 +44,10 @@ kotlin {
             iosTarget.binaries.framework {
                 baseName = "shared"
                 isStatic = true
-                export("com.arkivanov.decompose:decompose:2.2.2")
-                export("com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental")
-                export("com.arkivanov.essenty:lifecycle:1.3.0")
+                with(libs) {
+                    export(bundles.decompose)
+                    export(essenty.lifecycle)
+                }
             }
         }
 
@@ -69,40 +70,43 @@ kotlin {
         val desktopMain by getting
 
         commonMain.dependencies {
-            implementation(compose.ui)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.runtime)
-            implementation(compose.components.resources)
+            with(compose) {
+                implementation(ui)
+                implementation(foundation)
+                implementation(material)
+                implementation(runtime)
+                implementation(components.resources)
+            }
 
-            implementation("io.ktor:ktor-client-core:$ktorVersion")
-            implementation("io.ktor:ktor-client-json:$ktorVersion")
-            implementation("io.ktor:ktor-client-logging:$ktorVersion")
-            implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-            implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-            implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
-            implementation("io.github.qdsfdhvh:image-loader:1.2.10")
-            api("com.arkivanov.decompose:decompose:2.2.2")
-            api("com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental")
-            implementation("com.arkivanov.essenty:lifecycle:1.3.0")
+
+            with(libs) {
+                implementation(kotlinx.serialization.json)
+                implementation(bundles.ktor)
+                api(bundles.decompose)
+                implementation(image.loader)
+                implementation(essenty.lifecycle)
+            }
+
+
         }
 
         androidMain {
             dependencies {
-                implementation("androidx.media3:media3-exoplayer:1.3.0")
+                implementation(libs.androidx.media3.exoplayer)
             }
         }
 
         desktopMain.dependencies {
             implementation(compose.desktop.common)
-            implementation("uk.co.caprica:vlcj:4.8.2")
+            implementation(libs.vlcj)
         }
 
         jsMain.dependencies {
             implementation(compose.html.core)
-            implementation("io.ktor:ktor-client-js:2.3.8")
-            implementation("io.ktor:ktor-client-json-js:2.2.1")
+            with(libs) {
+                implementation(ktor.client.js)
+                implementation(ktor.client.json.js)
+            }
         }
     }
 }

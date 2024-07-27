@@ -5,6 +5,9 @@ platforms. It uses the spotify api for fetching the top 50 charts and getting th
 and for now, you need to add the spotify token manually. You can easily hit the endpoint [here](https://developer.spotify.com/documentation/web-api/reference/get-an-album) to get the album
 and then get the token and set in the app.
 
+## Find it on official website of JetBrains
+This repository has been listed as [KMP sample](https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-samples.html#:~:text=Android%20and%20iOS-,Music%20App%20KMP,-An%20application%20showcasing) on official website of Jetbrains.
+
 ## Live
 You can find it live [here](https://seabdulbasit.github.io/MusicApp-KMP/)
 

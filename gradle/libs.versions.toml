@@ -1,6 +1,6 @@
 [versions]
 
-kotlin="1.9.24"
+kotlin="2.0.20"
 compose-plugin="1.6.11"
 ktor="2.3.11"
 ktor-js="2.3.8"
@@ -32,7 +32,6 @@ decompose={ module = "com.arkivanov.decompose:decompose", version.ref = "decompo
 #decompose-compose={ module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose"}
 decompose-compose="com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental"
 
-#ktor
 # Ktor
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
@@ -60,14 +59,11 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 kotlin-parcelize={id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-
-
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 # Android
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-application = { id = "com.android.application", version.ref = "agp" }
-
-
 
 [bundles]
 

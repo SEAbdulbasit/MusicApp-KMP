@@ -21,3 +21,4 @@ iosApp/iosApp.xcodeproj/*
 shared/shared.podspec
 /webApp/.gradle/
 /webApp/build/
+/.kotlin

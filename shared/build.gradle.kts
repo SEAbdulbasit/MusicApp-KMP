@@ -4,12 +4,9 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.android.library)
-//    id("kotlin-parcelize")
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.jetbrains.compose)
 }
-
-val ktorVersion = extra["ktor.version"]
 
 kotlin {
     androidTarget {
@@ -78,7 +75,6 @@ kotlin {
                 implementation(components.resources)
             }
 
-
             with(libs) {
                 implementation(kotlinx.serialization.json)
                 implementation(bundles.ktor)
@@ -86,8 +82,6 @@ kotlin {
                 implementation(image.loader)
                 implementation(essenty.lifecycle)
             }
-
-
         }
 
         androidMain {

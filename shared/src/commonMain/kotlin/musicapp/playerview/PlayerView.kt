@@ -28,6 +28,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,13 +42,14 @@ import musicapp.player.MediaPlayerController
 import musicapp.player.MediaPlayerListener
 import musicapp_kmp.shared.generated.resources.Res
 import musicapp_kmp.shared.generated.resources.back
+import musicapp_kmp.shared.generated.resources.baseline_pause_24
 import musicapp_kmp.shared.generated.resources.forward
+import musicapp_kmp.shared.generated.resources.pause
 import musicapp_kmp.shared.generated.resources.play
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun PlayerView(playerComponent: PlayerComponent) {
     val state = playerComponent.viewModel.playerViewState.collectAsState()
@@ -78,7 +80,9 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
     Box(
         modifier = Modifier.fillMaxWidth().background(Color(0xCC101010))
             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp)
-            .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) { }
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }) { }
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             val painter = rememberAsyncImagePainter(
@@ -133,19 +137,9 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                             }
                         })
                 )
-                Icon(
-                    imageVector = Icons.Filled.PlayArrow,
-                    tint = Color(0xFFFACD66),
-                    contentDescription = stringResource(Res.string.play),
+                PlayPauseButton(
                     modifier = Modifier.padding(end = 8.dp).size(32.dp)
-                        .align(Alignment.CenterVertically)
-                        .clickable(onClick = {
-                            if (mediaPlayerController.isPlaying()) {
-                                mediaPlayerController.pause()
-                            } else {
-                                mediaPlayerController.start()
-                            }
-                        })
+                        .align(Alignment.CenterVertically), mediaPlayerController
                 )
                 Icon(
                     imageVector = Icons.Default.ArrowForward,
@@ -162,6 +156,36 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
             }
         }
     }
+}
+
+@Composable
+fun PlayPauseButton(modifier: Modifier, mediaPlayerController: MediaPlayerController) {
+    val isPlaying = rememberSaveable { mutableStateOf(true) }
+    if (isPlaying.value)
+        Icon(
+            painter = painterResource(Res.drawable.baseline_pause_24),
+            tint = Color(0xFFFACD66),
+            contentDescription = stringResource(Res.string.pause),
+            modifier = modifier
+                .clickable(onClick = {
+                    if (mediaPlayerController.isPlaying()) {
+                        mediaPlayerController.pause()
+                        isPlaying.value = false
+                    }
+                })
+        ) else
+        Icon(
+            imageVector = Icons.Filled.PlayArrow,
+            tint = Color(0xFFFACD66),
+            contentDescription = stringResource(Res.string.play),
+            modifier = modifier
+                .clickable(onClick = {
+                    if (mediaPlayerController.isPlaying().not()) {
+                        mediaPlayerController.start()
+                        isPlaying.value = true
+                    }
+                })
+        )
 }
 
 private fun playTrack(

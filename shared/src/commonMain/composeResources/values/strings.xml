@@ -12,4 +12,6 @@
     <string name="back">Back</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
+    <string name="rewind_5_sec">Rewind by 5 seconds</string>
+    <string name="forward_5_sec">Forward by 5 seconds</string>
 </resources>

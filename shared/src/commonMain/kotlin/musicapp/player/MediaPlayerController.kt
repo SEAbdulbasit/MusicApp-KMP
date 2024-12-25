@@ -9,6 +9,12 @@ expect class MediaPlayerController(platformContext: PlatformContext) {
 
     fun stop()
 
+    fun getCurrentPosition(): Long?
+
+    fun getDuration(): Long?
+
+    fun seekTo(seconds: Long)
+
     fun isPlaying(): Boolean
 
     fun release()

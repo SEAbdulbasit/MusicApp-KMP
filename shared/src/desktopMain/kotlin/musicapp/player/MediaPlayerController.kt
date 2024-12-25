@@ -66,6 +66,18 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         mediaPlayer?.controls()?.pause()
     }
 
+    actual fun seekTo(seconds: Long) {
+        mediaPlayer?.controls()?.setTime(seconds)
+    }
+
+    actual fun getCurrentPosition(): Long? {
+        return mediaPlayer?.status()?.time()
+    }
+
+    actual fun getDuration(): Long? {
+        return mediaPlayer?.media()?.info()?.duration()
+    }
+
     actual fun stop() {
         mediaPlayer?.controls()?.stop()
     }

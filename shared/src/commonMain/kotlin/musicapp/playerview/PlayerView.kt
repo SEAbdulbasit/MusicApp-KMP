@@ -112,10 +112,34 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                             }
                         })
                 )
+                Icon(
+                    painter = painterResource(Res.drawable.rewind),
+                    tint = Color(0xFFFACD66),
+                    contentDescription = stringResource(Res.string.rewind_5_sec),
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .size(32.dp)
+                        .align(Alignment.CenterVertically)
+                        .clickable(onClick = {
+                            playerComponent.viewModel.rewind5Seconds()
+                        })
+                )
                 PlayPauseButton(
                     modifier = Modifier.padding(end = 8.dp).size(32.dp).align(Alignment.CenterVertically),
                     mediaPlayerController = mediaPlayerController,
                     selectedIndex = selectedIndex.value
+                )
+                Icon(
+                    painter = painterResource(Res.drawable.forward),
+                    tint = Color(0xFFFACD66),
+                    contentDescription = stringResource(Res.string.forward_5_sec),
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .size(32.dp)
+                        .align(Alignment.CenterVertically)
+                        .clickable(onClick = {
+                            playerComponent.viewModel.forward5Seconds()
+                        })
                 )
                 Icon(
                     imageVector = Icons.Default.ArrowForward,

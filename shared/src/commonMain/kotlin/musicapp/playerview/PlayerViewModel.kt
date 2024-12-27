@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import musicapp.SEEK_TO_SECONDS
 import musicapp.decompose.PlayerComponent
 import musicapp.network.models.topfiftycharts.Item
 import musicapp.player.MediaPlayerController
@@ -19,7 +20,7 @@ import musicapp.player.MediaPlayerController
  * Created by abdulbasit on 26/02/2023.
  */
 class PlayerViewModel(
-    mediaPlayerController: MediaPlayerController,
+    private val mediaPlayerController: MediaPlayerController,
     trackList: List<Item>,
     selectedTrack: String,
     playerInputs: SharedFlow<PlayerComponent.Input>
@@ -52,6 +53,21 @@ class PlayerViewModel(
                     is PlayerComponent.Input.UpdateTracks ->
                         playerViewState.value = playerViewState.value.copy(trackList = it.tracksList)
                 }
+            }
+        }
+    }
+
+    fun rewind5Seconds() {
+        mediaPlayerController.getCurrentPosition()?.let {
+            (it - SEEK_TO_SECONDS).coerceAtLeast(0).let(mediaPlayerController::seekTo)
+        }
+    }
+
+    fun forward5Seconds() {
+        mediaPlayerController.getCurrentPosition()?.let { currentPosition ->
+            mediaPlayerController.getDuration()?.let { duration ->
+                (currentPosition + SEEK_TO_SECONDS).coerceAtMost(duration)
+                    .let(mediaPlayerController::seekTo)
             }
         }
     }

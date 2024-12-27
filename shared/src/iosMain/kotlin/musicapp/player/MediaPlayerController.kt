@@ -12,6 +12,8 @@ import platform.AVFoundation.AVPlayerItemDidPlayToEndTimeNotification
 import platform.AVFoundation.AVPlayerTimeControlStatusPlaying
 import platform.AVFoundation.addPeriodicTimeObserverForInterval
 import platform.AVFoundation.currentItem
+import platform.AVFoundation.currentTime
+import platform.AVFoundation.duration
 import platform.AVFoundation.isPlaybackLikelyToKeepUp
 import platform.AVFoundation.pause
 import platform.AVFoundation.play
@@ -20,6 +22,8 @@ import platform.AVFoundation.replaceCurrentItemWithPlayerItem
 import platform.AVFoundation.seekToTime
 import platform.AVFoundation.timeControlStatus
 import platform.CoreMedia.CMTime
+import platform.CoreMedia.CMTimeGetSeconds
+import platform.CoreMedia.CMTimeMake
 import platform.CoreMedia.CMTimeMakeWithSeconds
 import platform.Foundation.NSNotificationCenter
 import platform.Foundation.NSOperationQueue
@@ -90,6 +94,25 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
     actual fun pause() {
         println("On pause")
         player.pause()
+    }
+
+    actual fun seekTo(seconds: Long) {
+        val time = CMTimeMake(value = seconds, timescale = 1000)
+        player.seekToTime(time)
+    }
+
+    actual fun getCurrentPosition(): Long? {
+        val currentTime = player.currentTime()
+        return CMTimeGetSeconds(currentTime).toLong() * 1000
+    }
+
+    actual fun getDuration(): Long? {
+        val currentTime = player.currentItem
+        currentTime?.let {
+            val duration = it.duration
+            return CMTimeGetSeconds(duration).toLong() * 1000
+        }
+        return null
     }
 
     @OptIn(ExperimentalForeignApi::class)

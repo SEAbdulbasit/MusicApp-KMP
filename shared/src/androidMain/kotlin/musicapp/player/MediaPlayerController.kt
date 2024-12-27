@@ -45,6 +45,19 @@ actual class MediaPlayerController actual constructor(platformContext: PlatformC
             player.pause()
     }
 
+    actual fun seekTo(seconds: Long) {
+        if (player.isPlaying)
+            player.seekTo(seconds)
+    }
+
+    actual fun getCurrentPosition(): Long? {
+        return player.currentPosition
+    }
+
+    actual fun getDuration(): Long? {
+        return player.duration
+    }
+
     actual fun stop() {
         player.stop()
     }

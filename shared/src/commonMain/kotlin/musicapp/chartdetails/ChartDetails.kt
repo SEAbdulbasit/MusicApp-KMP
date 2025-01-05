@@ -33,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,9 +47,13 @@ import musicapp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
 import musicapp_kmp.shared.generated.resources.Res
 import musicapp_kmp.shared.generated.resources.go_back
+import musicapp_kmp.shared.generated.resources.moon_fill
+import musicapp_kmp.shared.generated.resources.moon_outline
 import musicapp_kmp.shared.generated.resources.play_all
+import musicapp_kmp.shared.generated.resources.sleep_timer
 import musicapp_kmp.shared.generated.resources.songs
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -61,13 +66,21 @@ internal fun ChartDetailsScreen(
     chartDetailsComponent: ChartDetailsComponent,
 ) {
     val state = chartDetailsComponent.viewModel.chartDetailsViewState.collectAsState()
+    var sleepTimerModalBottomSheetState by remember { mutableStateOf(false) }
+    var isAnySleepTimerSelected by remember { mutableStateOf(false) }
+
+
     when (val resultedState = state.value) {
         is ChartDetailsViewState.Failure -> Failure(resultedState.error)
         ChartDetailsViewState.Loading -> Loading()
         is ChartDetailsViewState.Success ->
             ChartDetailsView(
+                isAnyTimeIntervalSelected = isAnySleepTimerSelected,
                 chartDetails = resultedState.chartDetails,
                 playingTrackId = resultedState.playingTrackId,
+                onSleepTimerClicked = {
+                    sleepTimerModalBottomSheetState = true
+                },
                 onPlayAllClicked = {
                     chartDetailsComponent.onOutPut(
                         ChartDetailsComponent.Output.OnPlayAllSelected(
@@ -77,7 +90,8 @@ internal fun ChartDetailsScreen(
                 },
                 onPlayTrack = { id, list ->
                     chartDetailsComponent.onOutPut(
-                        ChartDetailsComponent.Output.OnTrackSelected(id, list))
+                        ChartDetailsComponent.Output.OnTrackSelected(id, list)
+                    )
                 }
             )
     }
@@ -91,6 +105,17 @@ internal fun ChartDetailsScreen(
             tint = Color(0xFFFACD66),
         )
     }
+
+
+    if (sleepTimerModalBottomSheetState)
+        SleepTimerModalBottomSheet(
+            mediaPlayerController = chartDetailsComponent.mediaPlayerController,
+            onDismiss = {
+                sleepTimerModalBottomSheetState = false
+            },
+            isAnyTimeIntervalSelected = { anyTimeIntervalSelected ->
+                isAnySleepTimerSelected = anyTimeIntervalSelected
+            })
 }
 
 @Composable
@@ -115,13 +140,20 @@ internal fun Failure(message: String) {
 @Composable
 internal fun ChartDetailsView(
     chartDetails: TopFiftyCharts,
+    isAnyTimeIntervalSelected: Boolean,
     onPlayAllClicked: (List<Item>) -> Unit,
     onPlayTrack: (String, List<Item>) -> Unit,
+    onSleepTimerClicked: () -> Unit,
     playingTrackId: Any
 ) {
 
     val selectedTrack = remember { mutableStateOf(playingTrackId) }
     val painter = rememberAsyncImagePainter(chartDetails.images?.first()?.url.orEmpty())
+
+    val sleepTimerIcon = if (isAnyTimeIntervalSelected)
+        painterResource(Res.drawable.moon_fill)
+    else
+        painterResource(Res.drawable.moon_outline)
 
     LaunchedEffect(playingTrackId) {
         selectedTrack.value = playingTrackId
@@ -152,7 +184,8 @@ internal fun ChartDetailsView(
                 Image(
                     painter = painter,
                     contentDescription = chartDetails.images?.first()?.url.orEmpty(),
-                    modifier = Modifier.padding(top = 100.dp, bottom = 24.dp).fillMaxWidth().aspectRatio(1f)
+                    modifier = Modifier.padding(top = 100.dp, bottom = 24.dp).fillMaxWidth()
+                        .aspectRatio(1f)
                         .clip(RoundedCornerShape(25.dp)),
                     contentScale = ContentScale.Crop,
                 )
@@ -171,7 +204,18 @@ internal fun ChartDetailsView(
                     modifier = Modifier.padding(top = 8.dp)
                 )
                 Spacer(Modifier.height(32.dp).fillMaxWidth())
-                OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
+                    Icon(
+                        painter = sleepTimerIcon,
+                        tint = Color(0xFFFACD66),
+                        contentDescription = stringResource(Res.string.sleep_timer),
+                        modifier = Modifier.size(40.dp).padding(start = 16.dp)
+                            .clickable(onClick = {
+                                onSleepTimerClicked()
+                            })
+                    )
+                }
             }
             itemsIndexed(chartDetails.tracks?.items ?: emptyList()) { index, track ->
                 Box(

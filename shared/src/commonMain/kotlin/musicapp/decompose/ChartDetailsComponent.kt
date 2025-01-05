@@ -3,6 +3,7 @@ package musicapp.decompose
 import musicapp.chartdetails.ChartDetailsViewModel
 import musicapp.network.models.topfiftycharts.Item
 import kotlinx.serialization.Serializable
+import musicapp.player.MediaPlayerController
 
 
 /**
@@ -11,6 +12,7 @@ import kotlinx.serialization.Serializable
 
 interface ChartDetailsComponent {
     val viewModel: ChartDetailsViewModel
+    val mediaPlayerController:MediaPlayerController
     fun onOutPut(output: Output)
     sealed class Output {
         data object GoBack : Output()

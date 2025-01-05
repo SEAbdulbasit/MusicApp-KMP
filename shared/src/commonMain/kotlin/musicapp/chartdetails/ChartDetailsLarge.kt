@@ -33,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,9 +47,13 @@ import musicapp.network.models.topfiftycharts.TopFiftyCharts
 import com.seiko.imageloader.rememberAsyncImagePainter
 import musicapp_kmp.shared.generated.resources.Res
 import musicapp_kmp.shared.generated.resources.forward
+import musicapp_kmp.shared.generated.resources.moon_fill
+import musicapp_kmp.shared.generated.resources.moon_outline
 import musicapp_kmp.shared.generated.resources.play_all
+import musicapp_kmp.shared.generated.resources.sleep_timer
 import musicapp_kmp.shared.generated.resources.songs
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -61,16 +66,33 @@ internal fun ChartDetailsScreenLarge(
     chartDetailsComponent: ChartDetailsComponent,
 ) {
     val state = chartDetailsComponent.viewModel.chartDetailsViewState.collectAsState()
+    var sleepTimerModalBottomSheetState by remember { mutableStateOf(false) }
+    var isAnySleepTimerSelected by remember { mutableStateOf(false) }
 
     when (val resultedState = state.value) {
         is ChartDetailsViewState.Failure -> Failure(resultedState.error)
         ChartDetailsViewState.Loading -> Loading()
         is ChartDetailsViewState.Success -> ChartDetailsViewLarge(
+            isAnyTimeIntervalSelected = isAnySleepTimerSelected,
             chartDetails = resultedState.chartDetails,
             playingTrackId = resultedState.playingTrackId,
-            onPlayAllClicked = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnPlayAllSelected(it)) },
+            onSleepTimerClicked = {
+                sleepTimerModalBottomSheetState = true
+            },
+            onPlayAllClicked = {
+                chartDetailsComponent.onOutPut(
+                    ChartDetailsComponent.Output.OnPlayAllSelected(
+                        it
+                    )
+                )
+            },
             onPlayTrack = { id, list ->
-                chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.OnTrackSelected(id, list))
+                chartDetailsComponent.onOutPut(
+                    ChartDetailsComponent.Output.OnTrackSelected(
+                        id,
+                        list
+                    )
+                )
             }
         )
     }
@@ -82,6 +104,16 @@ internal fun ChartDetailsScreenLarge(
             modifier = Modifier.padding(all = 16.dp).size(32.dp)
         )
     }
+
+    if (sleepTimerModalBottomSheetState)
+        SleepTimerModalBottomSheet(
+            mediaPlayerController = chartDetailsComponent.mediaPlayerController,
+            onDismiss = {
+                sleepTimerModalBottomSheetState = false
+            },
+            isAnyTimeIntervalSelected = { anyTimeIntervalSelected ->
+                isAnySleepTimerSelected = anyTimeIntervalSelected
+            })
 
     /*Icon(
         imageVector = Icons.Filled.ArrowBack,
@@ -97,12 +129,19 @@ internal fun ChartDetailsScreenLarge(
 @Composable
 internal fun ChartDetailsViewLarge(
     chartDetails: TopFiftyCharts,
+    isAnyTimeIntervalSelected: Boolean,
     onPlayAllClicked: (List<Item>) -> Unit,
     onPlayTrack: (String, List<Item>) -> Unit,
+    onSleepTimerClicked: () -> Unit,
     playingTrackId: String
 ) {
     val painter = rememberAsyncImagePainter(chartDetails.images?.first()?.url.orEmpty())
     val selectedTrack = remember { mutableStateOf(playingTrackId) }
+
+    val sleepTimerIcon = if (isAnyTimeIntervalSelected)
+        painterResource(Res.drawable.moon_fill)
+    else
+        painterResource(Res.drawable.moon_outline)
 
     LaunchedEffect(playingTrackId) {
         selectedTrack.value = playingTrackId
@@ -162,7 +201,18 @@ internal fun ChartDetailsViewLarge(
                             modifier = Modifier.padding(top = 10.dp)
                         )
                         Spacer(Modifier.height(40.dp).fillMaxWidth())
-                        OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
+                            Icon(
+                                painter = sleepTimerIcon,
+                                tint = Color(0xFFFACD66),
+                                contentDescription = stringResource(Res.string.sleep_timer),
+                                modifier = Modifier.size(40.dp).padding(start = 16.dp)
+                                    .clickable(onClick = {
+                                        onSleepTimerClicked()
+                                    })
+                            )
+                        }
                     }
 
                 }
@@ -173,19 +223,32 @@ internal fun ChartDetailsViewLarge(
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
                     .fillMaxWidth()
-                    .background(if (track.track?.id.orEmpty() == selectedTrack.value) Color(0xCCFACD66) else Color(0xFF33373B))
+                    .background(
+                        if (track.track?.id.orEmpty() == selectedTrack.value) Color(
+                            0xCCFACD66
+                        ) else Color(0xFF33373B)
+                    )
                     .padding(16.dp)
                     .clickable(
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() })
-                { onPlayTrack(track.track?.id.orEmpty(), chartDetails.tracks?.items ?: mutableListOf()) }
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() })
+                    {
+                        onPlayTrack(
+                            track.track?.id.orEmpty(),
+                            chartDetails.tracks?.items ?: mutableListOf()
+                        )
+                    }
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     val active by remember { mutableStateOf(false) }
-                    val albumImageUrl = rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
+                    val albumImageUrl =
+                        rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
                     Box(modifier = Modifier
                         .clickable {
-                            onPlayTrack(track.track?.id.orEmpty(), chartDetails.tracks?.items ?: mutableListOf())
+                            onPlayTrack(
+                                track.track?.id.orEmpty(),
+                                chartDetails.tracks?.items ?: mutableListOf()
+                            )
                         }) {
                         Image(
                             albumImageUrl,

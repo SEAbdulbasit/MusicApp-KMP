@@ -57,7 +57,7 @@ fun SleepTimerModalBottomSheet(
     )
 
     val listOfTimeIntervalsToStopAudio =
-        listOf(6000, THIRTY_MIN, FORTY_FIVE_MIN, ONE_HOUR, TWO_HOUR, THREE_HOUR)
+        listOf(FIFTEEN_MIN, THIRTY_MIN, FORTY_FIVE_MIN, ONE_HOUR, TWO_HOUR, THREE_HOUR)
 
     LaunchedEffect(true) {
         modalBottomSheetState.show()

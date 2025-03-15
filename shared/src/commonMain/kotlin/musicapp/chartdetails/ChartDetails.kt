@@ -25,7 +25,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -86,7 +86,7 @@ internal fun ChartDetailsScreen(
         modifier = Modifier.padding(top = 40.dp, start = 16.dp, end = 16.dp).size(32.dp)
     ) {
         Icon(
-            Icons.Filled.ArrowBack,
+            Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(Res.string.go_back),
             tint = Color(0xFFFACD66),
         )

@@ -25,7 +25,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -76,7 +76,7 @@ internal fun ChartDetailsScreenLarge(
     }
     IconButton(onClick = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack) }) {
         Icon(
-            Icons.Filled.ArrowBack,
+            Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(Res.string.forward),
             tint = Color(0xFFFACD66),
             modifier = Modifier.padding(all = 16.dp).size(32.dp)
@@ -84,7 +84,7 @@ internal fun ChartDetailsScreenLarge(
     }
 
     /*Icon(
-        imageVector = Icons.Filled.ArrowBack,
+        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
         tint = Color(0xFFFACD66),
         contentDescription = "Forward",
         modifier = Modifier.padding(all = 8.dp).size(32.dp).clickable(onClick = {

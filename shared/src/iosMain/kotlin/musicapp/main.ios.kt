@@ -29,7 +29,7 @@ import platform.UIKit.UIViewController
 
 fun MainiOS(
     lifecycle: LifecycleRegistry,
-): UIViewController = ComposeUIViewController {
+): UIViewController = ComposeUIViewController(configure = { enforceStrictPlistSanityCheck = false }) {
     val rootComponent = MusicRootImpl(
         componentContext = DefaultComponentContext(lifecycle = lifecycle),
         api = SpotifyApiImpl(),

@@ -94,6 +94,10 @@ kotlin {
             }
         }
 
+        iosMain.dependencies {
+            implementation("io.ktor:ktor-client-darwin:${libs.versions.ktor.get()}")
+        }
+
         desktopMain.dependencies {
             implementation(compose.desktop.common)
             implementation(libs.vlcj)

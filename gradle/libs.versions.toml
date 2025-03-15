@@ -1,19 +1,19 @@
 [versions]
 
-kotlin="2.0.20"
-compose-plugin="1.6.11"
-ktor="2.3.11"
-ktor-js="2.3.11"
-decompose="2.2.3"
-essenty="1.3.0"
-media3="1.4.1"
-kotlinx-serialization ="1.6.3"
+kotlin="2.1.10"
+compose-plugin="1.7.1"
+ktor="3.1.1"
+ktor-js="3.1.1"
+decompose="3.3.0"
+essenty="2.5.0"
+media3="1.5.1"
+kotlinx-serialization ="1.8.0"
 vlcj = "4.8.2"
 image-loader="1.2.10"
 
 # Android
-androidx-activity-compose="1.9.3"
-agp = "8.7.0"
+androidx-activity-compose="1.10.1"
+agp = "8.7.3"
 
 
 
@@ -25,12 +25,12 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 
 #essenty
-essenty-lifecycle={ module = "com.arkivanov.essenty:lifecycle", version.ref = "essenty"}
+essenty-lifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = "essenty" }
 
 #decompose
 decompose={ module = "com.arkivanov.decompose:decompose", version.ref = "decompose"}
 #decompose-compose={ module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose"}
-decompose-compose="com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental"
+decompose-compose="com.arkivanov.decompose:extensions-compose-experimental:3.2.0-alpha04"
 
 # Ktor
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -45,8 +45,8 @@ ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", vers
 # KotlinX
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
-#image loader
-image-loader= { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }
+#image loaderxx
+image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }
 
 # Vlcj
 vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcj" }
@@ -56,7 +56,7 @@ vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcj" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlin-parcelize={id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -80,4 +80,3 @@ decompose = [
     "decompose",
     "decompose-compose"
 ]
-

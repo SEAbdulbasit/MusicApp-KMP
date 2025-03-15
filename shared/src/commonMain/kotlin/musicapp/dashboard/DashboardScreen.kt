@@ -42,7 +42,7 @@ import musicapp.decompose.DashboardMainComponent
 import musicapp.network.models.featuredplaylist.FeaturedPlayList
 import musicapp.network.models.newreleases.NewReleasedAlbums
 import musicapp.network.models.topfiftycharts.TopFiftyCharts
-import com.seiko.imageloader.rememberAsyncImagePainter
+import com.seiko.imageloader.rememberImagePainter
 import musicapp_kmp.shared.generated.resources.Res
 import musicapp_kmp.shared.generated.resources.explore_details
 import musicapp_kmp.shared.generated.resources.favorite
@@ -119,7 +119,7 @@ internal fun TopChartView(topFiftyCharts: TopFiftyCharts, navigateToDetails: (St
             .clip(RoundedCornerShape(20.dp))
             .padding(24.dp).clickable(onClick = { navigateToDetails(topFiftyCharts.id.orEmpty()) })
     ) {
-        val painter = rememberAsyncImagePainter(
+        val painter = rememberImagePainter(
             topFiftyCharts.images?.first()?.url.orEmpty()
         )
         Image(
@@ -192,7 +192,7 @@ internal fun FeaturedPlayLists(
                     Column(
                         modifier = Modifier.padding(16.dp)
                     ) {
-                        val painter = rememberAsyncImagePainter(
+                        val painter = rememberImagePainter(
                             playList.images?.first()?.url.orEmpty()
                         )
                         Image(
@@ -265,7 +265,7 @@ internal fun NewReleases(
             items(items = newReleasedAlbums.albums?.items ?: emptyList()) { album ->
                 Box(Modifier.width(153.dp)) {
                     Column {
-                        val painter = rememberAsyncImagePainter(
+                        val painter = rememberImagePainter(
                             album.images?.first()?.url.orEmpty()
                         )
                         Image(

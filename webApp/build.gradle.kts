@@ -24,6 +24,8 @@ kotlin {
                 implementation(compose.ui)
                 implementation(compose.foundation)
                 implementation(compose.material)
+                implementation(libs.ktor.client.js)
+                implementation(libs.bundles.ktor)
             }
         }
     }

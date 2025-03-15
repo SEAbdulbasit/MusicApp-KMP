@@ -78,7 +78,10 @@ kotlin {
 
             with(libs) {
                 implementation(kotlinx.serialization.json)
-                implementation(bundles.ktor)
+                implementation(ktor.client.core)
+                implementation(ktor.logging)
+                implementation(ktor.serialization)
+                implementation(ktor.content.negotiation)
                 api(bundles.decompose)
                 implementation(image.loader)
                 implementation(essenty.lifecycle)
@@ -100,7 +103,6 @@ kotlin {
             implementation(compose.html.core)
             with(libs) {
                 implementation(ktor.client.js)
-                implementation(ktor.client.json.js)
             }
         }
     }

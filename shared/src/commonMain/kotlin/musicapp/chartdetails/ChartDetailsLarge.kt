@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import musicapp.decompose.ChartDetailsComponent
 import musicapp.network.models.topfiftycharts.Item
 import musicapp.network.models.topfiftycharts.TopFiftyCharts
-import com.seiko.imageloader.rememberAsyncImagePainter
+import com.seiko.imageloader.rememberImagePainter
 import musicapp_kmp.shared.generated.resources.Res
 import musicapp_kmp.shared.generated.resources.forward
 import musicapp_kmp.shared.generated.resources.play_all
@@ -101,7 +101,7 @@ internal fun ChartDetailsViewLarge(
     onPlayTrack: (String, List<Item>) -> Unit,
     playingTrackId: String
 ) {
-    val painter = rememberAsyncImagePainter(chartDetails.images?.first()?.url.orEmpty())
+    val painter = rememberImagePainter(chartDetails.images?.first()?.url.orEmpty())
     val selectedTrack = remember { mutableStateOf(playingTrackId) }
 
     LaunchedEffect(playingTrackId) {
@@ -182,7 +182,7 @@ internal fun ChartDetailsViewLarge(
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     val active by remember { mutableStateOf(false) }
-                    val albumImageUrl = rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
+                    val albumImageUrl = rememberImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
                     Box(modifier = Modifier
                         .clickable {
                             onPlayTrack(track.track?.id.orEmpty(), chartDetails.tracks?.items ?: mutableListOf())
@@ -237,5 +237,3 @@ internal fun ChartDetailsViewLarge(
         }
     }
 }
-
-

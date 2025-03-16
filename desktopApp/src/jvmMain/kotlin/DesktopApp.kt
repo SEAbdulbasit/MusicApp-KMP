@@ -1,16 +1,8 @@
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
@@ -20,10 +12,9 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.arkivanov.decompose.DefaultComponentContext
-import com.arkivanov.decompose.ExperimentalDecomposeApi
-import com.arkivanov.decompose.extensions.compose.jetbrains.lifecycle.LifecycleController
+import com.arkivanov.decompose.extensions.compose.lifecycle.LifecycleController
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
-import com.arkivanov.essenty.parcelable.ParcelableContainer
+import com.arkivanov.essenty.statekeeper.SerializableContainer
 import com.arkivanov.essenty.statekeeper.StateKeeperDispatcher
 import musicapp.CommonMainDesktop
 import musicapp.decompose.MusicRootImpl
@@ -36,7 +27,6 @@ import java.io.File
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
-@OptIn(ExperimentalDecomposeApi::class)
 fun main() {
     val lifecycle = LifecycleRegistry()
     val stateKeeper = StateKeeperDispatcher(tryRestoreStateFromFile())
@@ -125,16 +115,16 @@ private fun SaveStateDialog(
 
 private const val SAVED_STATE_FILE_NAME = "saved_state.dat"
 
-private fun saveStateToFile(state: ParcelableContainer) {
+private fun saveStateToFile(state: SerializableContainer) {
     ObjectOutputStream(File(SAVED_STATE_FILE_NAME).outputStream()).use { output ->
         output.writeObject(state)
     }
 }
 
-private fun tryRestoreStateFromFile(): ParcelableContainer? =
+private fun tryRestoreStateFromFile(): SerializableContainer? =
     File(SAVED_STATE_FILE_NAME).takeIf(File::exists)?.let { file ->
         try {
-            ObjectInputStream(file.inputStream()).use(ObjectInputStream::readObject) as ParcelableContainer
+            ObjectInputStream(file.inputStream()).use(ObjectInputStream::readObject) as SerializableContainer
         } catch (e: Exception) {
             null
         } finally {

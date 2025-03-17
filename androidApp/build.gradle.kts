@@ -6,11 +6,11 @@ plugins {
 
 android {
     namespace = "com.example.musicapp_kmp.android"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.example.musicapp_kmp.android"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
     }

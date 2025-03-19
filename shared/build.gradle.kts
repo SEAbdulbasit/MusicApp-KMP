@@ -77,6 +77,7 @@ kotlin {
             }
 
             with(libs) {
+                implementation(kotlinx.datetime)
                 implementation(kotlinx.serialization.json)
                 implementation(bundles.ktor)
                 api(bundles.decompose)

@@ -2,6 +2,7 @@
 
 kotlin="2.0.20"
 compose-plugin="1.6.11"
+kotlinx-datetime="0.6.2"
 ktor="2.3.11"
 ktor-js="2.3.11"
 decompose="2.2.3"
@@ -44,6 +45,7 @@ ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", vers
 
 # KotlinX
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 #image loader
 image-loader= { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }

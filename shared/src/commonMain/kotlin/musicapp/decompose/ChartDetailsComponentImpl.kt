@@ -6,6 +6,7 @@ import musicapp.chartdetails.ChartDetailsViewModel
 import musicapp.network.SpotifyApi
 import kotlinx.coroutines.flow.SharedFlow
 import musicapp.player.MediaPlayerController
+import musicapp.playerview.CountdownViewModel
 
 
 /**
@@ -29,6 +30,9 @@ class ChartDetailsComponentImpl(
                 chatDetailsInput
             )
         }
+
+    override val countdownViewModel: CountdownViewModel
+        get() = CountdownViewModel()
 
     override fun onOutPut(output: ChartDetailsComponent.Output) {
         output(output)

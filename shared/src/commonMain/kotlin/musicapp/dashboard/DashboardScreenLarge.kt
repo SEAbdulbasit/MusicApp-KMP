@@ -31,7 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import musicapp.decompose.DashboardMainComponent
 import musicapp.network.models.topfiftycharts.TopFiftyCharts
-import com.seiko.imageloader.rememberAsyncImagePainter
+import com.seiko.imageloader.rememberImagePainter
 import musicapp_kmp.shared.generated.resources.Res
 import musicapp_kmp.shared.generated.resources.explore_details
 import musicapp_kmp.shared.generated.resources.likes
@@ -85,7 +85,7 @@ internal fun TopChartViewLarge(
         modifier = Modifier.clip(RoundedCornerShape(20.dp)).width(686.dp).height(450.dp)
             .padding(24.dp).clickable(onClick = { navigateToDetails(topFiftyCharts.id.orEmpty()) })
     ) {
-        val painter = rememberAsyncImagePainter(topFiftyCharts.images?.first()?.url.orEmpty())
+        val painter = rememberImagePainter(topFiftyCharts.images?.first()?.url.orEmpty())
         Image(
             painter,
             topFiftyCharts.images?.first()?.url.orEmpty(),
@@ -123,5 +123,3 @@ internal fun TopChartViewLarge(
         }
     }
 }
-
-

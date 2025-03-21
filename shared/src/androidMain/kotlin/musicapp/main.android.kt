@@ -7,13 +7,16 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import musicapp.decompose.MusicRootImpl
+import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
+import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
+import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.cache.memory.maxSizePercent
 import com.seiko.imageloader.component.setupDefaultComponents
-import com.seiko.imageloader.util.DebugLogger
-import com.seiko.imageloader.util.LogPriority
+import com.seiko.imageloader.intercept.bitmapMemoryCacheConfig
+import com.seiko.imageloader.util.identityHashCode
+import musicapp.decompose.MusicRootImpl
 
 
 @Composable
@@ -22,14 +25,17 @@ fun MainAndroid(root: MusicRootImpl) {
         val context = LocalContext.current
         CompositionLocalProvider(
             LocalImageLoader provides ImageLoader {
-                logger = DebugLogger(LogPriority.VERBOSE)
                 components {
-                    setupDefaultComponents(context)
+                    setupDefaultComponents()
                 }
                 interceptor {
-                    memoryCacheConfig {
-                        maxSizePercent(context)
-                    }
+                    bitmapMemoryCacheConfig(
+                        valueHashProvider = { identityHashCode(it) },
+                        valueSizeProvider = { 500 },
+                        block = fun MemoryCacheBuilder<MemoryKey, Bitmap>.() {
+                            maxSizePercent(context.applicationContext)
+                        }
+                    )
                 }
             },
         ) {

@@ -12,9 +12,6 @@ plugins {
 kotlin {
     androidTarget {
         compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
         }
     }
 
@@ -79,7 +76,10 @@ kotlin {
             with(libs) {
                 implementation(kotlinx.datetime)
                 implementation(kotlinx.serialization.json)
-                implementation(bundles.ktor)
+                implementation(ktor.client.core)
+                implementation(ktor.logging)
+                implementation(ktor.serialization)
+                implementation(ktor.content.negotiation)
                 api(bundles.decompose)
                 implementation(image.loader)
                 implementation(essenty.lifecycle)
@@ -92,6 +92,10 @@ kotlin {
             }
         }
 
+        iosMain.dependencies {
+            implementation("io.ktor:ktor-client-darwin:${libs.versions.ktor.get()}")
+        }
+
         desktopMain.dependencies {
             implementation(compose.desktop.common)
             implementation(libs.vlcj)
@@ -101,7 +105,6 @@ kotlin {
             implementation(compose.html.core)
             with(libs) {
                 implementation(ktor.client.js)
-                implementation(ktor.client.json.js)
             }
         }
     }
@@ -109,7 +112,7 @@ kotlin {
 
 android {
     namespace = "com.example.musicapp_kmp"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         minSdk = 24
     }

@@ -22,7 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.seiko.imageloader.rememberAsyncImagePainter
+import com.seiko.imageloader.rememberImagePainter
 import musicapp.decompose.PlayerComponent
 import musicapp.network.models.topfiftycharts.Item
 import musicapp.player.MediaPlayerController
@@ -63,7 +63,7 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp).clickable(
                 indication = null, interactionSource = remember { MutableInteractionSource() }) { }) {
         Row(modifier = Modifier.fillMaxWidth()) {
-            val painter = rememberAsyncImagePainter(
+            val painter = rememberImagePainter(
                 selectedTrack.track?.album?.images?.first()?.url.orEmpty()
             )
             Box(modifier = Modifier.clip(RoundedCornerShape(5.dp)).width(49.dp).height(49.dp)) {

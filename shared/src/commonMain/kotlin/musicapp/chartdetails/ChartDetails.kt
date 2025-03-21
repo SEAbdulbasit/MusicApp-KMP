@@ -25,7 +25,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import musicapp.decompose.ChartDetailsComponent
 import musicapp.network.models.topfiftycharts.Item
 import musicapp.network.models.topfiftycharts.TopFiftyCharts
-import com.seiko.imageloader.rememberAsyncImagePainter
+import com.seiko.imageloader.rememberImagePainter
 import musicapp_kmp.shared.generated.resources.Res
 import musicapp_kmp.shared.generated.resources.go_back
 import musicapp_kmp.shared.generated.resources.moon_fill
@@ -100,7 +100,7 @@ internal fun ChartDetailsScreen(
         modifier = Modifier.padding(top = 40.dp, start = 16.dp, end = 16.dp).size(32.dp)
     ) {
         Icon(
-            Icons.Filled.ArrowBack,
+            Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(Res.string.go_back),
             tint = Color(0xFFFACD66),
         )
@@ -149,7 +149,7 @@ internal fun ChartDetailsView(
 ) {
 
     val selectedTrack = remember { mutableStateOf(playingTrackId) }
-    val painter = rememberAsyncImagePainter(chartDetails.images?.first()?.url.orEmpty())
+    val painter = rememberImagePainter(chartDetails.images?.first()?.url.orEmpty())
 
     val sleepTimerIcon = if (isAnyTimeIntervalSelected)
         painterResource(Res.drawable.moon_fill)
@@ -240,7 +240,7 @@ internal fun ChartDetailsView(
                     val active by remember { mutableStateOf(false) }
                     Row(modifier = Modifier.fillMaxWidth()) {
                         val albumImageUrl =
-                            rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
+                            rememberImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
                         Box(modifier = Modifier
                             .clickable {
                                 onPlayTrack(

@@ -25,7 +25,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import musicapp.decompose.ChartDetailsComponent
 import musicapp.network.models.topfiftycharts.Item
 import musicapp.network.models.topfiftycharts.TopFiftyCharts
-import com.seiko.imageloader.rememberAsyncImagePainter
+import com.seiko.imageloader.rememberImagePainter
 import musicapp_kmp.shared.generated.resources.Res
 import musicapp_kmp.shared.generated.resources.forward
 import musicapp_kmp.shared.generated.resources.moon_fill
@@ -98,7 +98,7 @@ internal fun ChartDetailsScreenLarge(
     }
     IconButton(onClick = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack) }) {
         Icon(
-            Icons.Filled.ArrowBack,
+            Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(Res.string.forward),
             tint = Color(0xFFFACD66),
             modifier = Modifier.padding(all = 16.dp).size(32.dp)
@@ -117,7 +117,7 @@ internal fun ChartDetailsScreenLarge(
             })
 
     /*Icon(
-        imageVector = Icons.Filled.ArrowBack,
+        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
         tint = Color(0xFFFACD66),
         contentDescription = "Forward",
         modifier = Modifier.padding(all = 8.dp).size(32.dp).clickable(onClick = {
@@ -136,7 +136,7 @@ internal fun ChartDetailsViewLarge(
     onSleepTimerClicked: () -> Unit,
     playingTrackId: String
 ) {
-    val painter = rememberAsyncImagePainter(chartDetails.images?.first()?.url.orEmpty())
+    val painter = rememberImagePainter(chartDetails.images?.first()?.url.orEmpty())
     val selectedTrack = remember { mutableStateOf(playingTrackId) }
 
     val sleepTimerIcon = if (isAnyTimeIntervalSelected)
@@ -242,8 +242,7 @@ internal fun ChartDetailsViewLarge(
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     val active by remember { mutableStateOf(false) }
-                    val albumImageUrl =
-                        rememberAsyncImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
+                    val albumImageUrl = rememberImagePainter(track.track?.album?.images?.first()?.url.orEmpty())
                     Box(modifier = Modifier
                         .clickable {
                             onPlayTrack(
@@ -301,5 +300,3 @@ internal fun ChartDetailsViewLarge(
         }
     }
 }
-
-

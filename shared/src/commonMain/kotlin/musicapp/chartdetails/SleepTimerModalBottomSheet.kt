@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import musicapp.player.CountDownTimer
 import musicapp.player.MediaPlayerController
+import musicapp.playerview.CountdownViewModel
 import musicapp_kmp.shared.generated.resources.Res
 import musicapp_kmp.shared.generated.resources._15_M
 import musicapp_kmp.shared.generated.resources._1_H
@@ -40,6 +41,7 @@ const val INTERVAL = 1000L
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SleepTimerModalBottomSheet(
+    countdownViewModel: CountdownViewModel,
     mediaPlayerController: MediaPlayerController,
     onDismiss: () -> Unit,
     isAnyTimeIntervalSelected:(Boolean)->Unit

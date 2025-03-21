@@ -107,6 +107,7 @@ internal fun ChartDetailsScreenLarge(
 
     if (sleepTimerModalBottomSheetState)
         SleepTimerModalBottomSheet(
+            countdownViewModel = chartDetailsComponent.countdownViewModel,
             mediaPlayerController = chartDetailsComponent.mediaPlayerController,
             onDismiss = {
                 sleepTimerModalBottomSheetState = false

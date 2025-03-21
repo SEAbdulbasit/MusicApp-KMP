@@ -4,6 +4,7 @@ import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -17,7 +18,7 @@ class CountdownViewModel : InstanceKeeper.Instance {
         exception.printStackTrace()
     }
 
-    private var job = SupervisorJob()
+    private var job  = SupervisorJob()
     private val viewModelScope = CoroutineScope(Dispatchers.Main + coroutineExceptionHandler + job)
 
     fun startCountdown(initialMillis: Long, intervalMillis: Long, onCountDownFinish: () -> Unit) {
@@ -38,7 +39,8 @@ class CountdownViewModel : InstanceKeeper.Instance {
         }
     }
 
-    fun cancelCountdown() {
+    override fun onDestroy() {
+        super.onDestroy()
         viewModelScope.cancel()
     }
 }

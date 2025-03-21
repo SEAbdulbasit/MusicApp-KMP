@@ -15,7 +15,6 @@ androidx-activity-compose="1.10.1"
 agp = "8.7.3"
 
 
-
 [libraries]
 # AndroidX
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
@@ -41,6 +40,7 @@ ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", versi
 
 # KotlinX
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 #image loaderxx
 image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }

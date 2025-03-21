@@ -3,6 +3,8 @@ package musicapp.decompose
 import musicapp.chartdetails.ChartDetailsViewModel
 import musicapp.network.models.topfiftycharts.Item
 import kotlinx.serialization.Serializable
+import musicapp.player.MediaPlayerController
+import musicapp.playerview.CountdownViewModel
 
 
 /**
@@ -11,6 +13,8 @@ import kotlinx.serialization.Serializable
 
 interface ChartDetailsComponent {
     val viewModel: ChartDetailsViewModel
+    val countdownViewModel: CountdownViewModel
+    val mediaPlayerController:MediaPlayerController
     fun onOutPut(output: Output)
     sealed class Output {
         data object GoBack : Output()

@@ -1,7 +1,9 @@
 [versions]
 
+assertk="0.28.1"
 kotlin="2.1.10"
 compose-plugin="1.7.1"
+kotlinx-coroutines-test="1.10.1"
 ktor="3.1.1"
 decompose="3.3.0"
 essenty="2.5.0"
@@ -32,6 +34,7 @@ decompose={ module = "com.arkivanov.decompose:decompose", version.ref = "decompo
 decompose-compose="com.arkivanov.decompose:extensions-compose-experimental:3.2.0-alpha04"
 
 # Ktor
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
@@ -47,6 +50,12 @@ image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "imag
 
 # Vlcj
 vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcj" }
+
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
+# or if you need platform-specific test dependencies (see below)
+# kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
+# kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
 
 [plugins]
 # Multiplatform

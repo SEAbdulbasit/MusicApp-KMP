@@ -106,6 +106,13 @@ kotlin {
                 implementation(ktor.client.js)
             }
         }
+
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation("io.ktor:ktor-client-mock:${libs.versions.ktor.get()}")
+            implementation(libs.assertk)
+        }
     }
 }
 

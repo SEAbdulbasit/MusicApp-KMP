@@ -53,6 +53,7 @@ class MusicRootImpl(
         chartDetails = { childContext, playlistId, playingTrackId, chartDetailsInput, output ->
             ChartDetailsComponentImpl(
                 componentContext = childContext,
+                mediaPlayerController = mediaPlayerController,
                 spotifyApi = api,
                 playlistId = playlistId,
                 output = output,

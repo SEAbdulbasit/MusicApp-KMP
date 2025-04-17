@@ -74,6 +74,7 @@ kotlin {
             }
 
             with(libs) {
+                implementation(kotlinx.datetime)
                 implementation(kotlinx.serialization.json)
                 implementation(ktor.client.core)
                 implementation(ktor.logging)

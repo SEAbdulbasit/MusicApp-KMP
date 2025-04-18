@@ -40,6 +40,14 @@ git clone https://github.com/SEAbdulbasit/MusicApp-KMP.git
   generate a new token from the [Spotify Developer Dashboard](https://developer.spotify.com/console/get-album-tracks/).
 - Run the app on your desired platform.
   There are a few known issues with the Music Player app using Compose Multiplatform UI:
+- Run on Desktop
+  ```
+  ./gradlew desktopApp:run
+  ```
+  - Run on Web
+  ```
+  ./gradlew jsBrowserDevelopmentRun
+  ```
 
 ## Known Issues
 

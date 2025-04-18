@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.konan.target.Family
 
 plugins {
@@ -12,6 +13,9 @@ plugins {
 kotlin {
     androidTarget {
         compilations.all {
+        }
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
         }
     }
 

@@ -16,7 +16,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import musicapp.player.MediaPlayerController
 import musicapp.playerview.CountdownViewModel
 import musicapp_kmp.shared.generated.resources.Res
 import musicapp_kmp.shared.generated.resources._15_M
@@ -41,7 +40,7 @@ const val INTERVAL = 1000L
 @Composable
 fun SleepTimerModalBottomSheet(
     countdownViewModel: CountdownViewModel,
-    mediaPlayerController: MediaPlayerController,
+    onSleepTimerExpired:()-> Unit,
     onDismiss: () -> Unit,
     isAnyTimeIntervalSelected: (Boolean) -> Unit
 ) {
@@ -85,7 +84,7 @@ fun SleepTimerModalBottomSheet(
                             initialMillis = listOfTimeIntervalsToStopAudio[index],
                             intervalMillis = INTERVAL,
                             onCountDownFinish = {
-                                mediaPlayerController.pause()
+                                onSleepTimerExpired
                                 isAnyTimeIntervalSelected(false)
                             })
                         onDismiss()

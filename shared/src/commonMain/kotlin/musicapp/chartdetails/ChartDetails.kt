@@ -110,7 +110,9 @@ internal fun ChartDetailsScreen(
     if (sleepTimerModalBottomSheetState)
         SleepTimerModalBottomSheet(
             countdownViewModel = chartDetailsComponent.countdownViewModel,
-            mediaPlayerController = chartDetailsComponent.mediaPlayerController,
+            onSleepTimerExpired = {
+                chartDetailsComponent.onSleepTimerExpired()
+            },
             onDismiss = {
                 sleepTimerModalBottomSheetState = false
             },

@@ -53,12 +53,14 @@ class MusicRootImpl(
         chartDetails = { childContext, playlistId, playingTrackId, chartDetailsInput, output ->
             ChartDetailsComponentImpl(
                 componentContext = childContext,
-                mediaPlayerController = mediaPlayerController,
                 spotifyApi = api,
                 playlistId = playlistId,
                 output = output,
                 playingTrackId = playingTrackId,
-                chatDetailsInput = chartDetailsInput
+                chatDetailsInput = chartDetailsInput,
+                sleepTimerExpired = {
+                    mediaPlayerController.pause()
+                }
             )
         })
 

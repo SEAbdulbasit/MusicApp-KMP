@@ -5,7 +5,6 @@ import com.arkivanov.essenty.instancekeeper.getOrCreate
 import musicapp.chartdetails.ChartDetailsViewModel
 import musicapp.network.SpotifyApi
 import kotlinx.coroutines.flow.SharedFlow
-import musicapp.player.MediaPlayerController
 import musicapp.playerview.CountdownViewModel
 
 
@@ -14,11 +13,11 @@ import musicapp.playerview.CountdownViewModel
  */
 class ChartDetailsComponentImpl(
     componentContext: ComponentContext,
-    override val mediaPlayerController: MediaPlayerController,
     val spotifyApi: SpotifyApi,
     val playlistId: String,
     val playingTrackId: String,
     val chatDetailsInput: SharedFlow<ChartDetailsComponent.Input>,
+    val sleepTimerExpired:()-> Unit,
     val output: (ChartDetailsComponent.Output) -> Unit,
 ) : ChartDetailsComponent, ComponentContext by componentContext {
     override val viewModel: ChartDetailsViewModel
@@ -36,5 +35,9 @@ class ChartDetailsComponentImpl(
 
     override fun onOutPut(output: ChartDetailsComponent.Output) {
         output(output)
+    }
+
+    override fun onSleepTimerExpired(){
+       sleepTimerExpired()
     }
 }

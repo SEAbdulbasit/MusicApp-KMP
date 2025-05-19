@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.konan.target.Family
 
 plugins {
@@ -12,6 +13,9 @@ plugins {
 kotlin {
     androidTarget {
         compilations.all {
+        }
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
         }
     }
 
@@ -106,6 +110,13 @@ kotlin {
             with(libs) {
                 implementation(ktor.client.js)
             }
+        }
+
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation("io.ktor:ktor-client-mock:${libs.versions.ktor.get()}")
+            implementation(libs.assertk)
         }
     }
 }

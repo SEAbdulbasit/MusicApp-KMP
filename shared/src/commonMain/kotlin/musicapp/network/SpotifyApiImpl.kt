@@ -3,6 +3,7 @@ package musicapp.network
 import musicapp.TOKEN
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.HttpRequestBuilder
@@ -24,7 +25,7 @@ import musicapp.network.models.topfiftycharts.TopFiftyCharts
 /**
  * Created by abdulbasit on 26/02/2023.
  */
-class SpotifyApiImpl : SpotifyApi {
+class SpotifyApiImpl(httpClientEngine: HttpClientEngine? = null) : SpotifyApi {
     override suspend fun getTopFiftyChart(): TopFiftyCharts {
         if (TOKEN.isEmpty()) {
             return Json.decodeFromString<TopFiftyCharts>(topFiftyChartsResponse)
@@ -69,16 +70,24 @@ class SpotifyApiImpl : SpotifyApi {
         }.body()
     }
 
-    private val client = HttpClient {
-        expectSuccess = true
-        install(HttpTimeout) {
-            val timeout = 30000L
-            connectTimeoutMillis = timeout
-            requestTimeoutMillis = timeout
-            socketTimeoutMillis = timeout
+    private val client = if (httpClientEngine == null) {
+        HttpClient {
+            expectSuccess = true
+            install(HttpTimeout) {
+                val timeout = 30000L
+                connectTimeoutMillis = timeout
+                requestTimeoutMillis = timeout
+                socketTimeoutMillis = timeout
+            }
+            install(ContentNegotiation) {
+                json(Json { isLenient = true; ignoreUnknownKeys = true })
+            }
         }
-        install(ContentNegotiation) {
-            json(Json { isLenient = true; ignoreUnknownKeys = true })
+    } else {
+        HttpClient(engine = httpClientEngine) {
+            install(ContentNegotiation) {
+                json(Json { isLenient = true; ignoreUnknownKeys = true })
+            }
         }
     }
 

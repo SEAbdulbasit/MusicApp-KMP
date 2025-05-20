@@ -6,12 +6,15 @@ import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.Player.STATE_READY
 import androidx.media3.exoplayer.ExoPlayer
+import musicapp.player.mapper.toMediaItem
 
 actual class MediaPlayerController actual constructor(platformContext: PlatformContext) {
     val player = ExoPlayer.Builder(platformContext.applicationContext).build()
 
-    actual fun prepare(pathSource: String, listener: MediaPlayerListener) {
-        val mediaItem = MediaItem.fromUri(pathSource)
+    actual fun prepare(
+        mediaItem: musicapp.player.MediaItem,
+        listener: MediaPlayerListener
+    ) {
         player.addListener(object : Player.Listener {
             override fun onPlayerError(error: PlaybackException) {
                 super.onPlayerError(error)
@@ -31,7 +34,7 @@ actual class MediaPlayerController actual constructor(platformContext: PlatformC
                 listener.onError()
             }
         })
-        player.setMediaItem(mediaItem)
+        player.setMediaItem(mediaItem.toMediaItem())
         player.prepare()
         player.play()
     }

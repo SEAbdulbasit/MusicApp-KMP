@@ -1,7 +1,7 @@
 package musicapp.player
 
 expect class MediaPlayerController(platformContext: PlatformContext) {
-    fun prepare(pathSource: String, listener: MediaPlayerListener)
+    fun prepare(mediaItem: MediaItem, listener: MediaPlayerListener)
 
     fun start()
 

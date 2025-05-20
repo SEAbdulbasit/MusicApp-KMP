@@ -7,10 +7,10 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
     private val audioElement = document.createElement("audio") as HTMLAudioElement
 
     actual fun prepare(
-        pathSource: String,
+        mediaItem: MediaItem,
         listener: MediaPlayerListener
     ) {
-        audioElement.src = pathSource
+        audioElement.src = mediaItem.pathSource
         audioElement.addEventListener("canplaythrough", {
             // Audio is ready to play without interruption
             listener.onReady()

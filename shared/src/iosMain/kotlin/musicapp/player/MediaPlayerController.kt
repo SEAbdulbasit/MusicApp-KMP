@@ -45,10 +45,10 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         setUpAudioSession()
     }
 
-    actual fun prepare(pathSource: String, listener: MediaPlayerListener) {
+    actual fun prepare(mediaItem: MediaItem, listener: MediaPlayerListener) {
         println("Prepare")
         this.listener = listener
-        val url = NSURL(string = pathSource)
+        val url = NSURL(string = mediaItem.pathSource)
         stop1()
         startTimeObserver()
         player.replaceCurrentItemWithPlayerItem(AVPlayerItem(url))

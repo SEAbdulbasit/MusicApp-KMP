@@ -1,5 +1,7 @@
 package musicapp.player
 
+import android.content.Intent
+import androidx.core.content.ContextCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -7,9 +9,25 @@ import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.Player.STATE_READY
 import androidx.media3.exoplayer.ExoPlayer
 import musicapp.player.mapper.toMediaItem
+import musicapp.player.service.MediaService
 
-actual class MediaPlayerController actual constructor(platformContext: PlatformContext) {
-    val player = ExoPlayer.Builder(platformContext.applicationContext).build()
+actual class MediaPlayerController actual constructor(private val platformContext: PlatformContext) {
+    private val player = PlayerServiceLocator.exoPlayer
+
+    init {
+        player.addListener(object : Player.Listener {
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                if (isPlaying)
+                    startMediaServiceIfNeeded()
+            }
+        })
+    }
+
+    private fun startMediaServiceIfNeeded() {
+        if (MediaService.isRunning) return
+        val intent = Intent(platformContext.applicationContext, MediaService::class.java)
+        ContextCompat.startForegroundService(platformContext.applicationContext, intent)
+    }
 
     actual fun prepare(
         mediaItem: musicapp.player.MediaItem,

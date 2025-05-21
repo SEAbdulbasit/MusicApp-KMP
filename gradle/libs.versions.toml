@@ -11,6 +11,7 @@ media3="1.5.1"
 kotlinx-serialization ="1.8.0"
 vlcj = "4.8.2"
 image-loader="1.10.0"
+kotlinx-datetime = "0.6.0"
 
 # Android
 androidx-activity-compose="1.10.1"
@@ -46,6 +47,7 @@ ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", versi
 
 # KotlinX
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 #image loaderxx
 image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }

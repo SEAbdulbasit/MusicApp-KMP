@@ -14,4 +14,11 @@
     <string name="pause">Pause</string>
     <string name="rewind_5_sec">Rewind by 5 seconds</string>
     <string name="forward_5_sec">Forward by 5 seconds</string>
+    <string name="sleep_timer">Stop audio in</string>
+    <string name="15_M">15 minute</string>
+    <string name="30_M">30 minute</string>
+    <string name="45_M">45 minute</string>
+    <string name="1_H">1 hour</string>
+    <string name="2_H">2 hour</string>
+    <string name="3_H">3 hour</string>
 </resources>

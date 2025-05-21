@@ -42,9 +42,9 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
     }
 
     actual fun prepare(
-        pathSource: String, listener: MediaPlayerListener
+        mediaItem: MediaItem,
+        listener: MediaPlayerListener
     ) {
-
         if (mediaPlayer == null) {
             initMediaPlayer()
             this.listener = listener
@@ -55,7 +55,7 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         }
 
 
-        mediaPlayer?.media()?.play(pathSource)
+        mediaPlayer?.media()?.play(mediaItem.pathSource)
     }
 
     actual fun start() {

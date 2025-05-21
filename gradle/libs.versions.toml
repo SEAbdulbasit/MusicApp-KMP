@@ -16,7 +16,7 @@ kotlinx-datetime = "0.6.0"
 # Android
 androidx-activity-compose="1.10.1"
 agp = "8.7.3"
-
+androidx-core = "1.16.0"
 
 [libraries]
 # AndroidX
@@ -24,6 +24,8 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 
 # Media3
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+androidx-media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
+androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 
 #essenty
 essenty-lifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = "essenty" }
@@ -55,6 +57,7 @@ vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcj" }
 
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
+androidx-core = { group = "androidx.core", name = "core", version.ref = "androidx-core" }
 # or if you need platform-specific test dependencies (see below)
 # kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
 # kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }

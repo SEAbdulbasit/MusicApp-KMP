@@ -27,6 +27,7 @@ import musicapp.decompose.PlayerComponent
 import musicapp.network.models.topfiftycharts.Item
 import musicapp.player.MediaPlayerController
 import musicapp.player.MediaPlayerListener
+import musicapp.player.toMediaItem
 import musicapp_kmp.shared.generated.resources.*
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -190,7 +191,7 @@ private fun playTrack(
     trackList: List<Item>,
 ) {
     selectedTrack.track?.previewUrl?.let {
-        mediaPlayerController.prepare(it, listener = object : MediaPlayerListener {
+        mediaPlayerController.prepare(selectedTrack.track.toMediaItem(), listener = object : MediaPlayerListener {
             override fun onReady() {
                 isLoading.value = false
             }

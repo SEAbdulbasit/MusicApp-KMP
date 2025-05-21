@@ -57,7 +57,10 @@ class MusicRootImpl(
                 playlistId = playlistId,
                 output = output,
                 playingTrackId = playingTrackId,
-                chatDetailsInput = chartDetailsInput
+                chatDetailsInput = chartDetailsInput,
+                sleepTimerExpired = {
+                    mediaPlayerController.pause()
+                }
             )
         })
 

@@ -70,6 +70,7 @@ kotlin {
 
         commonMain.dependencies {
             with(compose) {
+                implementation("org.jetbrains.compose.material:material-icons-extended:1.6.10")
                 implementation(ui)
                 implementation(foundation)
                 implementation(material)

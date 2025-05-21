@@ -1,17 +1,17 @@
 [versions]
 
 assertk="0.28.1"
-kotlin="2.1.10"
-compose-plugin="1.7.1"
-kotlinx-coroutines-test="1.10.1"
-ktor="3.1.1"
+kotlin="2.1.21"
+compose-plugin="1.8.0"
+kotlinx-coroutines-test="1.10.2"
+ktor="3.1.3"
 decompose="3.3.0"
 essenty="2.5.0"
-media3="1.5.1"
-kotlinx-serialization ="1.8.0"
+media3="1.7.1"
+kotlinx-serialization ="1.8.1"
 vlcj = "4.8.2"
 image-loader="1.10.0"
-kotlinx-datetime = "0.6.0"
+kotlinx-datetime = "0.6.2"
 
 # Android
 androidx-activity-compose="1.10.1"

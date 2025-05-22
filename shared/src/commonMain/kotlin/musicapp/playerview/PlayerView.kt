@@ -11,8 +11,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -103,7 +103,7 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
             }
             Row(modifier = Modifier.align(Alignment.CenterVertically)) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     tint = Color(0xFFFACD66),
                     contentDescription = stringResource(Res.string.back),
                     modifier = Modifier.padding(end = 8.dp).size(32.dp).align(Alignment.CenterVertically)
@@ -143,7 +143,7 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                         })
                 )
                 Icon(
-                    imageVector = Icons.Default.ArrowForward,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                     tint = Color(0xFFFACD66),
                     contentDescription = stringResource(Res.string.forward),
                     modifier = Modifier.padding(end = 8.dp).size(32.dp).align(Alignment.CenterVertically)

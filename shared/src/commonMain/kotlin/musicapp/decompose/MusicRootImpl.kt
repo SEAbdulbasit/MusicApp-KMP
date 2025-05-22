@@ -1,15 +1,12 @@
 package musicapp.decompose
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.DelicateDecomposeApi
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
-import com.arkivanov.decompose.router.stack.ChildStack
-import com.arkivanov.decompose.router.stack.StackNavigation
-import com.arkivanov.decompose.router.stack.childStack
-import com.arkivanov.decompose.router.stack.pop
-import com.arkivanov.decompose.router.stack.push
+import com.arkivanov.decompose.router.stack.*
 import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +40,8 @@ class MusicRootImpl(
         componentContext: ComponentContext,
         api: SpotifyApi,
         mediaPlayerController: MediaPlayerController
-    ) : this(componentContext = componentContext,
+    ) : this(
+        componentContext = componentContext,
         mediaPlayerController = mediaPlayerController,
         dashboardMain = { childContext, output ->
             DashboardMainComponentImpl(
@@ -93,6 +91,7 @@ class MusicRootImpl(
         )
     }
 
+    @OptIn(DelicateDecomposeApi::class)
     private fun dashboardOutput(output: DashboardMainComponent.Output) {
         when (output) {
             is DashboardMainComponent.Output.PlaylistSelected -> navigation.push(
@@ -122,7 +121,8 @@ class MusicRootImpl(
         }
     }
 
-    private val player = childSlot(source = dialogNavigation,
+    private val player = childSlot(
+        source = dialogNavigation,
         serializer = serializer(),
         initialConfiguration = { null },
         key = "PlayerView",

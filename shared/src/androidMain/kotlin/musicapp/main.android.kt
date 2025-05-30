@@ -2,6 +2,13 @@ package com.example.musicapp_kmp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -22,7 +29,15 @@ import java.lang.System.identityHashCode
 
 @Composable
 fun MainAndroid(root: MusicRootImpl) {
-    Column(Modifier.background(color = Color(0xFF1A1E1F))) {
+    // Get the system bars insets and apply padding to avoid content being hidden behind the navigation bar
+    val systemBarsInsets = WindowInsets.systemBars.only(WindowInsetsSides.Bottom).asPaddingValues()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color(0xFF1A1E1F))
+            .padding(bottom = systemBarsInsets.calculateBottomPadding())
+    ) {
         val context = LocalContext.current
         CompositionLocalProvider(
             LocalImageLoader provides ImageLoader {
@@ -44,4 +59,3 @@ fun MainAndroid(root: MusicRootImpl) {
         }
     }
 }
-

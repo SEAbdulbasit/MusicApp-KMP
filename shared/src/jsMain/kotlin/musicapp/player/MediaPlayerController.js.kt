@@ -16,15 +16,32 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         mediaItem: TrackItem,
         listener: MediaPlayerListener
     ) {
+        this.listener = listener
+        this.currentTrack = mediaItem
+
+        if (trackList.isNotEmpty()) {
+            val index = trackList.indexOfFirst { it.id == mediaItem.id }
+            if (index >= 0) {
+                currentTrackIndex = index
+            }
+        }
+
+        listener.onBufferingStateChanged(true)
+
         audioElement.src = mediaItem.pathSource
         audioElement.addEventListener("canplaythrough", {
             // Audio is ready to play without interruption
+            listener.onBufferingStateChanged(false)
             listener.onReady()
             audioElement.play()
+            listener.onPlaybackStateChanged(true)
         })
 
         audioElement.onended = {
-            listener.onAudioCompleted()
+            val nextTrackPlayed = playNextTrack()
+            if (!nextTrackPlayed) {
+                listener.onAudioCompleted()
+            }
         }
         audioElement.addEventListener("error", {
             listener.onError()
@@ -34,14 +51,16 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
 
     actual fun start() {
         audioElement.play()
+        listener?.onPlaybackStateChanged(true)
     }
 
     actual fun pause() {
         audioElement.pause()
+        listener?.onPlaybackStateChanged(false)
     }
 
     actual fun seekTo(seconds: Long) {
-        audioElement.fastSeek(seconds.toDouble())
+        audioElement.currentTime = seconds / 1000.0
     }
 
     actual fun getCurrentPosition(): Long? {

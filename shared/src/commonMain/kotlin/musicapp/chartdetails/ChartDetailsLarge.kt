@@ -92,15 +92,6 @@ internal fun ChartDetailsScreenLarge(
             isAnyTimeIntervalSelected = { anyTimeIntervalSelected ->
                 isAnySleepTimerSelected = anyTimeIntervalSelected
             })
-
-    /*Icon(
-        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-        tint = Color(0xFFFACD66),
-        contentDescription = "Forward",
-        modifier = Modifier.padding(all = 8.dp).size(32.dp).clickable(onClick = {
-            chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack)
-        })
-    )*/
 }
 
 @OptIn(ExperimentalResourceApi::class)
@@ -256,7 +247,7 @@ internal fun ChartDetailsViewLarge(
                             )
                         )
                         Text(
-                            text = track.track?.artists?.map { it.name }?.joinToString(",")
+                            text = track.track?.artists?.joinToString(",") { it.name ?: "" }
                                 .orEmpty(),
                             style = MaterialTheme.typography.caption.copy(
                                 color = Color(

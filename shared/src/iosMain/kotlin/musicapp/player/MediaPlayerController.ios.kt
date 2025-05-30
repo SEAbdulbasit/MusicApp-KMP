@@ -284,8 +284,6 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
 
     private val observer: (CValue<CMTime>) -> Unit = { _ ->
         if (player.currentItem?.isPlaybackLikelyToKeepUp() == true) {
-            listener?.onReady()
-
             listener?.onBufferingStateChanged(false)
             listener?.onPlaybackStateChanged(isPlaying())
             setupRemoteCommands()

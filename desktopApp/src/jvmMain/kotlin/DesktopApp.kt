@@ -100,7 +100,7 @@ private fun SaveStateDialog(
                 }
 
                 TextButton(onClick = {
-                    onSaveState()
+//                    onSaveState()
                     onExitApplication()
                 }) {
                     Text(text = "Yes")

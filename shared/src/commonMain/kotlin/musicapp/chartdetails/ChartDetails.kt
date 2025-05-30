@@ -123,11 +123,11 @@ internal fun ChartDetailsView(
     onPlayAllClicked: (List<Item>) -> Unit,
     onPlayTrack: (String, List<Item>) -> Unit,
     onSleepTimerClicked: () -> Unit,
-    playingTrackId: Any
+    playingTrackId: String
 ) {
 
     val selectedTrack = remember { mutableStateOf(playingTrackId) }
-    val painter = rememberImagePainter(chartDetails.images?.first()?.url.orEmpty())
+    val (painter, playlistCoverPainter) = backgroundImage(chartDetails, playingTrackId)
 
     val sleepTimerIcon = if (isAnyTimeIntervalSelected)
         painterResource(Res.drawable.moon_fill)
@@ -161,7 +161,7 @@ internal fun ChartDetailsView(
         ) {
             item {
                 Image(
-                    painter = painter,
+                    painter = playlistCoverPainter,
                     contentDescription = chartDetails.images?.first()?.url.orEmpty(),
                     modifier = Modifier.padding(top = 100.dp, bottom = 24.dp).fillMaxWidth()
                         .aspectRatio(1f)

@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberImagePainter
@@ -104,7 +105,8 @@ internal fun ChartDetailsViewLarge(
     onSleepTimerClicked: () -> Unit,
     playingTrackId: String
 ) {
-    val painter = rememberImagePainter(chartDetails.images?.first()?.url.orEmpty())
+    val (painter, playlistCoverPainter) = backgroundImage(chartDetails, playingTrackId)
+
     val selectedTrack = remember { mutableStateOf(playingTrackId) }
 
     val sleepTimerIcon = if (isAnyTimeIntervalSelected)
@@ -144,7 +146,7 @@ internal fun ChartDetailsViewLarge(
             Box(modifier = Modifier.fillMaxSize()) {
                 Row(modifier = Modifier.padding(16.dp).align(Alignment.TopCenter)) {
                     Image(
-                        painter = painter,
+                        painter = playlistCoverPainter,
                         contentDescription = chartDetails.images?.first()?.url.orEmpty(),
                         modifier = Modifier.padding(top = 24.dp, bottom = 20.dp).height(284.dp)
                             .width(284.dp)
@@ -268,4 +270,19 @@ internal fun ChartDetailsViewLarge(
             }
         }
     }
+}
+
+@Composable
+fun backgroundImage(
+    chartDetails: TopFiftyCharts,
+    playingTrackId: String
+): Pair<Painter, Painter> {
+    val currentTrack = chartDetails.tracks?.items?.find { it.track?.id.orEmpty() == playingTrackId }
+
+    val backgroundImageUrl =
+        currentTrack?.track?.album?.images?.firstOrNull()?.url ?: chartDetails.images?.first()?.url.orEmpty()
+    val painter = rememberImagePainter(backgroundImageUrl)
+
+    val playlistCoverPainter = rememberImagePainter(chartDetails.images?.first()?.url.orEmpty())
+    return Pair(painter, playlistCoverPainter)
 }

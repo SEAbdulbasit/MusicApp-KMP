@@ -23,7 +23,6 @@ class MainActivity : ComponentActivity() {
     ) { isGranted: Boolean ->
         if (isGranted) {
             // Permission granted, proceed with showing notifications
-            Toast.makeText(this, "Notification permission granted", Toast.LENGTH_SHORT).show()
         } else {
             // Permission denied, inform the user about the consequences
             Toast.makeText(

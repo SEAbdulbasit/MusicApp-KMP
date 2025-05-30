@@ -10,7 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.arkivanov.decompose.defaultComponentContext
-import musicapp.MainAndroid
+import com.example.musicapp_kmp.MainAndroid
 import musicapp.decompose.MusicRootImpl
 import musicapp.network.SpotifyApiImpl
 import musicapp.player.PlayerServiceLocator

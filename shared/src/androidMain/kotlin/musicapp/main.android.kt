@@ -1,4 +1,4 @@
-package musicapp
+package com.example.musicapp_kmp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -15,8 +15,9 @@ import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.cache.memory.maxSizePercent
 import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.intercept.bitmapMemoryCacheConfig
-import com.seiko.imageloader.util.identityHashCode
+import musicapp.MainCommon
 import musicapp.decompose.MusicRootImpl
+import java.lang.System.identityHashCode
 
 
 @Composable
@@ -26,7 +27,7 @@ fun MainAndroid(root: MusicRootImpl) {
         CompositionLocalProvider(
             LocalImageLoader provides ImageLoader {
                 components {
-                    setupDefaultComponents()
+                    setupDefaultComponents(context)
                 }
                 interceptor {
                     bitmapMemoryCacheConfig(

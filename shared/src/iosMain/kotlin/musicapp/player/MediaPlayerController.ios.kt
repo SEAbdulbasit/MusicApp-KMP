@@ -216,7 +216,7 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
 
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo.toMap()
 
-        loadAlbumArtwork(track.artworkUrl ?: "")
+        loadAlbumArtwork(track.albumImageUrl)
     }
 
     private fun loadAlbumArtwork(urlString: String) {
@@ -247,7 +247,8 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
             }
         }
 
-        val url = NSURL.URLWithString(mediaItem.artworkUrl)
+        // Use pathSource for the audio URL instead of albumImageUrl
+        val url = NSURL.URLWithString(mediaItem.pathSource)
         if (url == null) {
             listener.onError()
             return

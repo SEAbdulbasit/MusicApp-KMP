@@ -23,7 +23,8 @@ import com.seiko.imageloader.intercept.bitmapMemoryCacheConfig
 import com.seiko.imageloader.util.identityHashCode
 import musicapp.decompose.MusicRootImpl
 import musicapp.network.SpotifyApiImpl
-import musicapp.player.PlatformContext
+import musicapp.player.MediaPlayerController
+import musicapp.utils.PlatformContext
 import platform.UIKit.UIViewController
 
 fun MainiOS(

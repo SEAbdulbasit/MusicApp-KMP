@@ -35,7 +35,10 @@ actual class MediaPlayerController actual constructor(val platformContext: music
 
             override fun finished(mediaPlayer: MediaPlayer?) {
                 super.finished(mediaPlayer)
-                listener?.onAudioCompleted()
+                val nextTrackPlayed = playNextTrack()
+                if (!nextTrackPlayed) {
+                    listener?.onAudioCompleted()
+                }
             }
 
             override fun error(mediaPlayer: MediaPlayer?) {
@@ -50,17 +53,43 @@ actual class MediaPlayerController actual constructor(val platformContext: music
         mediaItem: TrackItem,
         listener: MediaPlayerListener
     ) {
+        this.listener = listener
+        this.currentTrack = mediaItem
+
+        // Check if the path source is valid
+        if (mediaItem.pathSource.isNullOrBlank()) {
+            listener.onError()
+            return
+        }
+
         if (mediaPlayer == null) {
-            initMediaPlayer()
-            this.listener = listener
+            try {
+                initMediaPlayer()
+            } catch (e: Exception) {
+                listener.onError()
+                return
+            }
         }
 
         if (mediaPlayer?.status()?.isPlaying == true) {
             mediaPlayer?.controls()?.stop()
         }
 
+        listener.onBufferingStateChanged(true)
 
-        mediaPlayer?.media()?.play(mediaItem.pathSource)
+        try {
+            if (trackList.isNotEmpty()) {
+                val index = trackList.indexOfFirst { it.id == mediaItem.id }
+                if (index >= 0) {
+                    currentTrackIndex = index
+                }
+            }
+
+            mediaPlayer?.media()?.play(mediaItem.pathSource)
+            mediaPlayer?.controls()?.play()
+        } catch (e: Exception) {
+            listener.onError()
+        }
     }
 
     actual fun start() {

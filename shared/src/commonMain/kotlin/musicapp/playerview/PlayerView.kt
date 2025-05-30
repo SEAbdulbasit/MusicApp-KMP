@@ -41,11 +41,19 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
     val isPlaying = state.value.isPlaying
     val currentTrackId = state.value.playingTrackId
     val isBuffering = state.value.isBuffering
+    val isError = state.value.errorState
 
     if (trackList.isEmpty()) return
 
     val currentIndex = playerComponent.viewModel.getCurrentTrackIndex()
     val currentTrack = if (currentIndex >= 0) trackList[currentIndex] else return
+
+    LaunchedEffect(isError) {
+        if (isError) {
+            playerComponent.viewModel.setBuffering(true)
+            playerComponent.viewModel.playNextTrack()
+        }
+    }
 
     LaunchedEffect(currentTrackId) {
         if (currentTrackId.isNotEmpty()) {

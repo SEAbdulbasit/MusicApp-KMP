@@ -45,6 +45,7 @@ class PlayerViewModel(
                     errorState = false
                 )
             }
+            mediaPlayerController.start()
         }
 
         override fun onAudioCompleted() {
@@ -100,7 +101,8 @@ class PlayerViewModel(
             playingTrackId = currentTrack.id,
             currentPosition = currentPosition,
             duration = duration,
-            isPlaying = isPlaying
+            isPlaying = isPlaying,
+            errorState = false
         )
         playerViewState.value = newState
     }
@@ -115,6 +117,11 @@ class PlayerViewModel(
 
     fun playTrack(trackId: String) {
         val track = playerViewState.value.trackList.find { it.id == trackId } ?: return
+        updatePlayerState {
+            it.copy(
+                isBuffering = true
+            )
+        }
         mediaPlayerController.prepare(track, mediaPlayerListener)
     }
 
@@ -170,6 +177,10 @@ class PlayerViewModel(
         }
 
         mediaPlayerController.setTrackList(trackList, selectedTrack)
+
+        if (selectedTrack.isNotEmpty()) {
+            playTrack(selectedTrack)
+        }
     }
 
     fun rewind5Seconds() {

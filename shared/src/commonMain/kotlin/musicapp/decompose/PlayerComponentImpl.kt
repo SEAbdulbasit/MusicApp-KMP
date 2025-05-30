@@ -5,12 +5,13 @@ import com.arkivanov.essenty.instancekeeper.getOrCreate
 import kotlinx.coroutines.flow.SharedFlow
 import musicapp.network.models.topfiftycharts.Item
 import musicapp.player.MediaPlayerController
+import musicapp.player.TrackItem
 import musicapp.playerview.PlayerViewModel
 
 class PlayerComponentImpl(
     componentContext: ComponentContext,
     private val mediaPlayerController: MediaPlayerController,
-    private val trackList: List<Item>,
+    private val trackList: List<TrackItem>,
     private val selectedTrack: String,
     private val playerInputs: SharedFlow<PlayerComponent.Input>,
     val output: (PlayerComponent.Output) -> Unit
@@ -22,7 +23,7 @@ class PlayerComponentImpl(
                 mediaPlayerController = mediaPlayerController,
                 trackList = trackList,
                 playerInputs = playerInputs,
-                selectedTrack =selectedTrack
+                selectedTrack = selectedTrack
             )
         }
 

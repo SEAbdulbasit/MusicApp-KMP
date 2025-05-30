@@ -20,7 +20,7 @@ import musicapp.CommonMainDesktop
 import musicapp.decompose.MusicRootImpl
 import musicapp.network.SpotifyApiImpl
 import musicapp.player.MediaPlayerController
-import musicapp.player.PlatformContext
+import musicapp.utils.PlatformContext
 import java.awt.Dimension
 import java.awt.Toolkit
 import java.io.File

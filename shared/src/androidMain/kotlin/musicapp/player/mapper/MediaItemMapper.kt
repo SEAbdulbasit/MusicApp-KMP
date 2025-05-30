@@ -5,7 +5,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 
 
-fun musicapp.player.MediaItem.toMediaItem(): MediaItem {
+fun musicapp.player.TrackItem.toMediaItem(): MediaItem {
     val metadata = MediaMetadata.Builder()
         .setTitle(title)
         .setArtist(artist)

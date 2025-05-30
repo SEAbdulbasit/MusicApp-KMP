@@ -6,7 +6,7 @@ import com.arkivanov.essenty.lifecycle.resume
 import musicapp.decompose.MusicRootImpl
 import musicapp.network.SpotifyApiImpl
 import musicapp.player.MediaPlayerController
-import musicapp.player.PlatformContext
+import musicapp.utils.PlatformContext
 import org.jetbrains.skiko.wasm.onWasmReady
 
 @OptIn(ExperimentalComposeUiApi::class)

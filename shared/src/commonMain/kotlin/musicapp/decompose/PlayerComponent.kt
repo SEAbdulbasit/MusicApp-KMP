@@ -1,6 +1,6 @@
 package musicapp.decompose
 
-import musicapp.network.models.topfiftycharts.Item
+import musicapp.player.TrackItem
 import musicapp.playerview.PlayerViewModel
 
 
@@ -20,8 +20,8 @@ interface PlayerComponent {
     }
 
     sealed interface Input {
-        data class PlayTrack(val trackId: String, val tracksList: List<Item>) : Input
-        data class UpdateTracks(val tracksList: List<Item>) : Input
+        data class PlayTrack(val trackId: String, val tracksList: List<TrackItem>) : Input
+        data class UpdateTracks(val tracksList: List<TrackItem>) : Input
     }
 
 }

@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.serializer
 import musicapp.network.SpotifyApi
-import musicapp.network.models.topfiftycharts.Item
 import musicapp.player.MediaPlayerController
+import musicapp.player.TrackItem
 
 /**
  * Created by abdulbasit on 19/03/2023.
@@ -171,7 +171,7 @@ class MusicRootImpl(
 
     @Serializable
     private data class DialogConfig(
-        val playlist: List<Item>,
+        val playlist: List<TrackItem>,
         val selectedTrack: String = ""
     )
 }

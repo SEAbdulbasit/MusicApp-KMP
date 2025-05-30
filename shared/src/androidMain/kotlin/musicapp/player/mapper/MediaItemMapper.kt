@@ -9,7 +9,7 @@ fun musicapp.player.TrackItem.toMediaItem(): MediaItem {
     val metadata = MediaMetadata.Builder()
         .setTitle(title)
         .setArtist(artist)
-        .setArtworkUri(Uri.parse(artworkUrl))
+        .setArtworkUri(Uri.parse(albumImageUrl))
         .build()
 
     return MediaItem.Builder()

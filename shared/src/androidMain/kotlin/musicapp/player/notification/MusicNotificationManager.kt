@@ -74,9 +74,6 @@ class MusicNotificationManager(
         mediaSession: MediaSession
     ) {
         buildMusicNotification(mediaSession)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            startForegroundMusicService(mediaSessionService)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

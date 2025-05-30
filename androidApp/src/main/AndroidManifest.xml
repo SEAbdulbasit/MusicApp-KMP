@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
     <application
+            android:name=".MusicApplication"
             android:requestLegacyExternalStorage="true"
             android:label="Music App KMP"
             android:supportsRtl="true"

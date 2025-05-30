@@ -8,6 +8,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.session.MediaSession
 import musicapp.player.notification.MusicNotificationManager
+import musicapp.utils.PlatformContext
 
 @SuppressLint("UnsafeOptInUsageError")
 object PlayerServiceLocator {
@@ -17,6 +18,10 @@ object PlayerServiceLocator {
         if (!::appContext.isInitialized) {
             appContext = context
         }
+    }
+
+    fun isInitialized(): Boolean {
+        return ::appContext.isInitialized
     }
 
     val audioAttributes: AudioAttributes by lazy {

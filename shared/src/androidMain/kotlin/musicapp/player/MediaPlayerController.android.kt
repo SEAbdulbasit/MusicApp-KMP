@@ -57,6 +57,7 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         currentListener?.onTrackChanged(nextTrack.id)
 
         prepare(nextTrack, currentListener ?: return false)
+        updateNotification()
         return true
     }
 
@@ -72,6 +73,7 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         currentListener?.onTrackChanged(previousTrack.id)
 
         prepare(previousTrack, currentListener ?: return false)
+        updateNotification()
         return true
     }
 
@@ -87,6 +89,18 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         if (MediaService.isRunning) return
         val intent = Intent(platformContext.applicationContext, MediaService::class.java)
         ContextCompat.startForegroundService(platformContext.applicationContext, intent)
+    }
+
+    private fun updateNotification() {
+        if (MediaService.isRunning) {
+            // Send an intent to the service to update the notification without stopping/restarting
+            val intent = Intent(platformContext.applicationContext, MediaService::class.java)
+            intent.action = MediaService.ACTION_UPDATE_NOTIFICATION
+            ContextCompat.startForegroundService(platformContext.applicationContext, intent)
+        } else {
+            // If service is not running, start it
+            startMediaServiceIfNeeded()
+        }
     }
 
     private var playerListener: Player.Listener? = null
@@ -152,6 +166,10 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         player.setMediaItem(mediaItem.toMediaItem())
         player.prepare()
         player.play()
+
+        // Ensure notification is updated with new track info
+        startMediaServiceIfNeeded()
+        updateNotification()
     }
 
     actual fun start() {

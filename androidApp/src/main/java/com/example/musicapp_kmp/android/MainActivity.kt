@@ -9,12 +9,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
 import com.arkivanov.decompose.defaultComponentContext
 import musicapp.MainAndroid
 import musicapp.decompose.MusicRootImpl
 import musicapp.network.SpotifyApiImpl
-import musicapp.player.PlatformContext
 import musicapp.player.PlayerServiceLocator
 
 class MainActivity : ComponentActivity() {
@@ -73,8 +71,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PlayerServiceLocator.init(PlatformContext(applicationContext))
-        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         // Ask for notification permission first
         askNotificationPermission()

@@ -31,6 +31,8 @@ class MusicRootImpl(
     ) -> ChartDetailsComponent,
 ) : MusicRoot, ComponentContext by componentContext {
 
+    val scope: CoroutineScope = CoroutineScope(Dispatchers.Main.immediate)
+
     //to keep track of the playing track
     private var currentPlayingTrack = "-1"
     private val musicPlayerInput = MutableSharedFlow<PlayerComponent.Input>()
@@ -106,15 +108,15 @@ class MusicRootImpl(
         when (output) {
             is ChartDetailsComponent.Output.GoBack -> navigation.pop()
             is ChartDetailsComponent.Output.OnPlayAllSelected -> {
-                dialogNavigation.activate(DialogConfig(output.playlist))
-                CoroutineScope(Dispatchers.Default).launch {
+                dialogNavigation.activate(DialogConfig(output.playlist, output.playlist.first().id))
+                scope.launch {
                     musicPlayerInput.emit(PlayerComponent.Input.UpdateTracks(output.playlist))
                 }
             }
 
             is ChartDetailsComponent.Output.OnTrackSelected -> {
                 dialogNavigation.activate(DialogConfig(output.playlist, output.trackId))
-                CoroutineScope(Dispatchers.Default).launch {
+                scope.launch {
                     musicPlayerInput.emit(PlayerComponent.Input.PlayTrack(output.trackId, output.playlist))
                 }
             }
@@ -140,7 +142,7 @@ class MusicRootImpl(
                         PlayerComponent.Output.OnPlay -> TODO()
 
                         is PlayerComponent.Output.OnTrackUpdated -> {
-                            CoroutineScope(Dispatchers.Default).launch {
+                            scope.launch {
                                 currentPlayingTrack = it.trackId
                                 chatDetailsInput.emit(ChartDetailsComponent.Input.TrackUpdated(it.trackId))
                             }

@@ -270,6 +270,8 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         player.play()
 
         listener.onBufferingStateChanged(true)
+        listener.onPlaybackStateChanged(true)
+        currentTrack?.let { updateNowPlayingInfo(it) }
     }
 
     @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)

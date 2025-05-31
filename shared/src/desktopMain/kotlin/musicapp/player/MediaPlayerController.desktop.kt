@@ -1,132 +1,168 @@
 package musicapp.player
 
+import kotlinx.coroutines.*
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.player.base.MediaPlayer
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent
 import java.util.*
+import java.util.logging.Logger
 
 actual class MediaPlayerController actual constructor(val platformContext: musicapp.utils.PlatformContext) {
+
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     private var mediaPlayer: MediaPlayer? = null
     private var listener: MediaPlayerListener? = null
     private var currentTrack: TrackItem? = null
-
     private var trackList: List<TrackItem> = emptyList()
     private var currentTrackIndex: Int = -1
+    private val logger = Logger.getLogger(MediaPlayerController::class.java.name)
 
-    private fun initMediaPlayer() {
-        NativeDiscovery().discover()
-
-        mediaPlayer =
-                // see https://github.com/caprica/vlcj/issues/887#issuecomment-503288294 for why we're using CallbackMediaPlayerComponent for macOS.
-            if (isMacOS()) {
-                CallbackMediaPlayerComponent()
-            } else {
-                EmbeddedMediaPlayerComponent()
-            }.mediaPlayer()
-
-        mediaPlayer?.events()?.addMediaPlayerEventListener(object : MediaPlayerEventAdapter() {
-            override fun mediaPlayerReady(mediaPlayer: MediaPlayer?) {
-                super.mediaPlayerReady(mediaPlayer)
-                listener?.onReady()
-            }
-
-            override fun finished(mediaPlayer: MediaPlayer?) {
-                super.finished(mediaPlayer)
-                val nextTrackPlayed = playNextTrack()
-                if (!nextTrackPlayed) {
-                    listener?.onAudioCompleted()
-                }
-            }
-
-            override fun error(mediaPlayer: MediaPlayer?) {
-                super.error(mediaPlayer)
-                listener?.onError()
-            }
-        })
-
+    init {
+        System.setProperty("vlcj.log", "DEBUG")
     }
 
-    actual fun prepare(
-        mediaItem: TrackItem,
-        listener: MediaPlayerListener
-    ) {
+    private fun initMediaPlayer(): Boolean {
+        try {
+            NativeDiscovery().discover()
+            releaseMediaPlayer()
+
+            val component = if (isMacOS()) CallbackMediaPlayerComponent() else EmbeddedMediaPlayerComponent()
+            mediaPlayer = component.mediaPlayerFactory().mediaPlayers().newMediaPlayer()
+
+            mediaPlayer?.events()?.addMediaPlayerEventListener(object : MediaPlayerEventAdapter() {
+                override fun mediaPlayerReady(mediaPlayer: MediaPlayer?) {
+                    scope.launch { listener?.onReady() }
+                }
+
+                override fun finished(mediaPlayer: MediaPlayer?) {
+                    scope.launch {
+                        if (!playNextTrack()) {
+                            listener?.onAudioCompleted()
+                        }
+                    }
+                }
+
+                override fun error(mediaPlayer: MediaPlayer?) {
+                    scope.launch { listener?.onError() }
+                }
+
+                override fun playing(mediaPlayer: MediaPlayer?) {
+                    scope.launch { listener?.onPlaybackStateChanged(true) }
+                }
+
+                override fun paused(mediaPlayer: MediaPlayer?) {
+                    scope.launch { listener?.onPlaybackStateChanged(false) }
+                }
+
+                override fun buffering(mediaPlayer: MediaPlayer?, newCache: Float) {
+                    scope.launch { listener?.onBufferingStateChanged(newCache < 100f) }
+                }
+            })
+
+            return true
+        } catch (e: Exception) {
+            logger.severe("Failed to initialize media player: ${e.message}")
+            listener?.onError()
+            return false
+        }
+    }
+
+    private fun releaseMediaPlayer() {
+        try {
+            mediaPlayer?.controls()?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        } catch (e: Exception) {
+            logger.severe("Error releasing media player: ${e.message}")
+        }
+    }
+
+    actual fun prepare(mediaItem: TrackItem, listener: MediaPlayerListener) {
         this.listener = listener
         this.currentTrack = mediaItem
 
-        // Check if the path source is valid
         if (mediaItem.pathSource.isNullOrBlank()) {
             listener.onError()
             return
         }
 
-        if (mediaPlayer == null) {
+        scope.launch {
             try {
-                initMediaPlayer()
+                // Initialize player if needed
+                if (mediaPlayer == null) {
+                    if (!initMediaPlayer()) return@launch
+                }
+
+                // Update track index if in playlist
+                if (trackList.isNotEmpty()) {
+                    trackList.indexOfFirst { it.id == mediaItem.id }
+                        .takeIf { it >= 0 }
+                        ?.let { currentTrackIndex = it }
+                }
+
+                // Prepare and play media
+                mediaPlayer?.media()?.prepare(mediaItem.pathSource)
+                mediaPlayer?.controls()?.play()
+                listener.onBufferingStateChanged(true)
             } catch (e: Exception) {
-                listener.onError()
-                return
-            }
-        }
-
-        if (mediaPlayer?.status()?.isPlaying == true) {
-            mediaPlayer?.controls()?.stop()
-        }
-
-        listener.onBufferingStateChanged(true)
-
-        try {
-            if (trackList.isNotEmpty()) {
-                val index = trackList.indexOfFirst { it.id == mediaItem.id }
-                if (index >= 0) {
-                    currentTrackIndex = index
+                // Try to recover once
+                try {
+                    if (initMediaPlayer()) {
+                        mediaPlayer?.media()?.prepare(mediaItem.pathSource)
+                        mediaPlayer?.controls()?.play()
+                        listener.onBufferingStateChanged(true)
+                    } else {
+                        listener.onError()
+                    }
+                } catch (e: Exception) {
+                    listener.onError()
                 }
             }
+        }
+    }
 
-            mediaPlayer?.media()?.play(mediaItem.pathSource)
-            mediaPlayer?.controls()?.play()
+    private fun playTrackAt(index: Int): Boolean {
+        if (index < 0 || index >= trackList.size || listener == null) return false
+
+        currentTrackIndex = index
+        val track = trackList[index]
+        listener?.onTrackChanged(track.id)
+
+        try {
+            prepare(track, listener!!)
+            return true
         } catch (e: Exception) {
-            listener.onError()
+            listener?.onError()
+            return false
         }
     }
 
-    actual fun start() {
-        mediaPlayer?.controls()?.start()
+    actual fun playNextTrack(): Boolean {
+        if (trackList.isEmpty() || currentTrackIndex < 0) return false
+
+        val nextIndex = currentTrackIndex + 1
+        if (nextIndex >= trackList.size) return false
+
+        return playTrackAt(nextIndex)
     }
 
-    actual fun pause() {
-        mediaPlayer?.controls()?.pause()
+    actual fun playPreviousTrack(): Boolean {
+        if (trackList.isEmpty() || currentTrackIndex <= 0) return false
+
+        return playTrackAt(currentTrackIndex - 1)
     }
 
-    actual fun seekTo(seconds: Long) {
-        mediaPlayer?.controls()?.setTime(seconds)
-    }
-
-    actual fun getCurrentPosition(): Long? {
-        return mediaPlayer?.status()?.time()
-    }
-
-    actual fun getDuration(): Long? {
-        return mediaPlayer?.media()?.info()?.duration()
-    }
-
-    actual fun isPlaying(): Boolean {
-        return mediaPlayer?.status()?.isPlaying ?: false
-    }
-
-    private fun Any.mediaPlayer(): MediaPlayer {
-        return when (this) {
-            is CallbackMediaPlayerComponent -> mediaPlayer()
-            is EmbeddedMediaPlayerComponent -> mediaPlayer()
-            else -> throw IllegalArgumentException("You can only call mediaPlayer() on vlcj player component")
-        }
+    fun release() {
+        releaseMediaPlayer()
+        scope.cancel()
     }
 
     private fun isMacOS(): Boolean {
         val os = System.getProperty("os.name", "generic").lowercase(Locale.ENGLISH)
-        return os.indexOf("mac") >= 0 || os.indexOf("darwin") >= 0
+        return os.contains("mac") || os.contains("darwin")
     }
 
     actual fun setTrackList(trackList: List<TrackItem>, currentTrackId: String) {
@@ -134,46 +170,33 @@ actual class MediaPlayerController actual constructor(val platformContext: music
         this.currentTrackIndex = trackList.indexOfFirst { it.id == currentTrackId }.takeIf { it >= 0 } ?: 0
     }
 
-    actual fun playNextTrack(): Boolean {
-        if (trackList.isEmpty() || currentTrackIndex < 0) {
-            return false
-        }
-
-        val nextIndex = currentTrackIndex + 1
-        if (nextIndex >= trackList.size) {
-            return false
-        }
-
-        currentTrackIndex = nextIndex
-        val nextTrack = trackList[nextIndex]
-
-        listener?.onTrackChanged(nextTrack.id)
-
-        prepare(nextTrack, listener ?: return false)
-        return true
-    }
-
-    actual fun playPreviousTrack(): Boolean {
-        if (trackList.isEmpty() || currentTrackIndex <= 0) {
-            return false
-        }
-
-        val previousIndex = currentTrackIndex - 1
-        currentTrackIndex = previousIndex
-        val previousTrack = trackList[previousIndex]
-
-        listener?.onTrackChanged(previousTrack.id)
-
-        prepare(previousTrack, listener ?: return false)
-        return true
-    }
-
     actual fun getCurrentTrack(): TrackItem? {
-        currentTrack?.let { return it }
+        return currentTrack ?: trackList.getOrNull(currentTrackIndex)
+    }
 
-        if (trackList.isEmpty() || currentTrackIndex < 0 || currentTrackIndex >= trackList.size) {
-            return null
-        }
-        return trackList[currentTrackIndex]
+    actual fun start() {
+        mediaPlayer?.controls()?.play()
+        listener?.onPlaybackStateChanged(true)
+    }
+
+    actual fun pause() {
+        mediaPlayer?.controls()?.pause()
+        listener?.onPlaybackStateChanged(false)
+    }
+
+    actual fun getCurrentPosition(): Long? {
+        return mediaPlayer?.status()?.time()?.toLong() ?: 0L
+    }
+
+    actual fun getDuration(): Long? {
+        return mediaPlayer?.status()?.length() ?: 0L
+    }
+
+    actual fun seekTo(seconds: Long) {
+        mediaPlayer?.controls()?.setTime(seconds)
+    }
+
+    actual fun isPlaying(): Boolean {
+        return mediaPlayer?.status()?.isPlaying ?: false
     }
 }

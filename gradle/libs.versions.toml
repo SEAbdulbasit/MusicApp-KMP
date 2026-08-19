@@ -2,7 +2,7 @@
 
 assertk="0.28.1"
 kotlin="2.2.20"
-compose-plugin="1.9.0"
+compose-plugin="1.10.3"
 kotlinx-coroutines-test="1.10.2"
 ktor="3.3.1"
 decompose="3.4.0"
@@ -15,7 +15,7 @@ kotlinx-datetime = "0.7.1"
 
 # Android
 androidx-activity-compose="1.11.0"
-agp = "8.12.0"
+agp = "9.0.0"
 androidx-core = "1.17.0"
 
 [libraries]
@@ -75,6 +75,7 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 # Android
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 
 [bundles]
 

@@ -12,8 +12,6 @@ plugins {
 
 kotlin {
     androidTarget {
-        compilations.all {
-        }
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_1_8)
         }
@@ -127,7 +125,7 @@ kotlin {
 
 android {
     namespace = "com.example.musicapp_kmp"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         minSdk = 24
     }

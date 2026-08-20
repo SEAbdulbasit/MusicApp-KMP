@@ -267,6 +267,8 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
 
         startTimeObserver()
 
+        listener.onReady()
+
         player.play()
 
         listener.onBufferingStateChanged(true)

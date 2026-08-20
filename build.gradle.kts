@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.library).apply(false)
+    alias(libs.plugins.android.multiplatform.library).apply(false)
     alias(libs.plugins.jetbrains.compose).apply(false)
     alias(libs.plugins.android.application).apply(false)
     alias(libs.plugins.kotlin.android).apply(false)
@@ -7,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm).apply(false)
     alias(libs.plugins.kotlin.parcelize).apply(false)
     alias(libs.plugins.kotlinx.serialization).apply(false)
+    alias(libs.plugins.compose.compiler).apply(false)
 }
 
 allprojects {

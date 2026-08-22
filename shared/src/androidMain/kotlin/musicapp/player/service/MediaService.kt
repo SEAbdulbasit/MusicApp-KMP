@@ -31,8 +31,12 @@ class MediaService : MediaSessionService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         isRunning = true
 
+        // Force initialization of musicNotificationManager so the Notification Channel is created 
+        // before we build the initialNotification.
+        val manager = musicNotificationManager
+
         if (intent?.action == ACTION_UPDATE_NOTIFICATION) {
-            musicNotificationManager.startMusicNotificationService(
+            manager.startMusicNotificationService(
                 mediaSession = mediaSession,
                 mediaSessionService = this
             )
@@ -40,7 +44,7 @@ class MediaService : MediaSessionService() {
             val initialNotification = createInitialNotification()
             startForeground(MusicNotificationManager.NOTIFICATION_ID, initialNotification)
 
-            musicNotificationManager.startMusicNotificationService(
+            manager.startMusicNotificationService(
                 mediaSession = mediaSession,
                 mediaSessionService = this
             )

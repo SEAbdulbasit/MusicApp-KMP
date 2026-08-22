@@ -49,14 +49,6 @@ git clone https://github.com/SEAbdulbasit/MusicApp-KMP.git
   ./gradlew jsBrowserDevelopmentRun
   ```
 
-## Known Issues
-
-- When you click "Select All" on Android, Web, and Desktop, the app will autoplay the selected tracks and continue
-  playing the next track when the previous one ends.
-  On iOS, there are issues with the callbacks for `onReady` and `onVideoCompleted`
-  which is causing the player to not start automatically. I was unable to configure the callbacks but hopefully, will be
-  fixing that soon.
-
 ## Demo
 
 ![Screenshot 2023-03-05 at 4 44 45 PM](https://user-images.githubusercontent.com/33172684/222960302-eccb34b4-d77c-4c95-96af-3d4528323c42.png)

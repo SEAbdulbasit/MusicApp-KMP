@@ -52,6 +52,7 @@ import musicapp_kmp.shared.generated.resources.new_releases
 import musicapp_kmp.shared.generated.resources.tracks
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
+import musicapp.utils.shimmer
 
 
 /**
@@ -78,7 +79,7 @@ internal fun Loading() {
     Box(modifier = Modifier.fillMaxSize()) {
         CircularProgressIndicator(
             modifier = Modifier.align(Alignment.Center),
-            color = Color(0xFFFACD66),
+            color = MaterialTheme.colors.primary,
         )
     }
 }
@@ -89,7 +90,7 @@ internal fun Failure(message: String) {
         Text(
             text = message,
             modifier = Modifier.align(Alignment.Center),
-            style = MaterialTheme.typography.body1.copy(color = Color(0xFFFACD66))
+            style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.primary)
         )
     }
 }
@@ -101,7 +102,7 @@ internal fun DashboardView(
 ) {
     val listState = rememberScrollState()
     Column(
-        modifier = Modifier.background(color = Color(0xFF1D2123)).fillMaxSize()
+        modifier = Modifier.background(color = MaterialTheme.colors.background).fillMaxSize()
             .verticalScroll(listState)
             .padding(bottom = 32.dp)
     ) {
@@ -125,13 +126,13 @@ internal fun TopChartView(topFiftyCharts: TopFiftyCharts, navigateToDetails: (St
         Image(
             painter,
             topFiftyCharts.images?.first()?.url.orEmpty(),
-            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(20.dp)),
+            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(20.dp)).shimmer(),
             contentScale = ContentScale.Crop
         )
         Column(modifier = Modifier.padding(16.dp).align(Alignment.BottomStart)) {
             Text(
                 topFiftyCharts.name.orEmpty(),
-                style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Bold),
+                style = MaterialTheme.typography.h4,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 color = Color.White
@@ -145,7 +146,7 @@ internal fun TopChartView(topFiftyCharts: TopFiftyCharts, navigateToDetails: (St
             Row(modifier = Modifier.padding(top = 40.dp)) {
                 Icon(
                     imageVector = Icons.Filled.FavoriteBorder,
-                    tint = Color(0xFFFACD66),
+                    tint = MaterialTheme.colors.primary,
                     contentDescription = stringResource(Res.string.explore_details),
                     modifier = Modifier.size(30.dp).align(Alignment.Top)
                 )
@@ -171,7 +172,7 @@ internal fun FeaturedPlayLists(
             stringResource(Res.string.featured_playlist),
             style = MaterialTheme.typography.h6.copy(
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFEFEEE0)
+                color = MaterialTheme.colors.onBackground
             ),
             modifier = Modifier.padding(start = 16.dp)
         )
@@ -186,7 +187,7 @@ internal fun FeaturedPlayLists(
             items(items = featuredPlayList.playlists?.items ?: emptyList()) { playList ->
                 Box(
                     modifier = Modifier.width(232.dp).clip(RoundedCornerShape(20.dp))
-                        .background(Color(0xFF1A1E1F))
+                        .background(MaterialTheme.colors.surface)
                         .clickable(onClick = { navigateToDetails(playList.id.orEmpty()) })
                 ) {
                     Column(
@@ -199,12 +200,12 @@ internal fun FeaturedPlayLists(
                             painter,
                             playList.images?.first()?.url.orEmpty(),
                             modifier = Modifier.clip(RoundedCornerShape(20.dp)).width(100.dp)
-                                .height(100.dp),
+                                .height(100.dp).shimmer(),
                             contentScale = ContentScale.Crop
                         )
                         Text(
                             text = playList.name.orEmpty(),
-                            style = MaterialTheme.typography.body1.copy(color = Color.White),
+                            style = MaterialTheme.typography.body1,
                             modifier = Modifier.padding(top = 16.dp),
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1
@@ -222,13 +223,13 @@ internal fun FeaturedPlayLists(
                         )
                         Text(
                             text = "${(playList.tracks?.total ?: 0)} ${stringResource(Res.string.tracks)}",
-                            style = MaterialTheme.typography.body2.copy(color = Color.White),
+                            style = MaterialTheme.typography.body2,
                             modifier = Modifier.padding(top = 24.dp)
                         )
                     }
                     Icon(
                         imageVector = Icons.Default.Favorite,
-                        tint = Color(0xFFFACD66),
+                        tint = MaterialTheme.colors.primary,
                         contentDescription = stringResource(Res.string.favorite),
                         modifier = Modifier.padding(top = 16.dp, end = 16.dp).size(30.dp)
                             .align(Alignment.TopEnd)
@@ -250,7 +251,7 @@ internal fun NewReleases(
             stringResource(Res.string.new_releases),
             style = MaterialTheme.typography.h6.copy(
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFEFEEE0)
+                color = MaterialTheme.colors.onBackground
             ),
             modifier = Modifier.padding(start = 16.dp)
         )
@@ -272,13 +273,13 @@ internal fun NewReleases(
                             painter,
                             album.images?.first()?.url.orEmpty(),
                             modifier = Modifier.width(153.dp).height(153.dp)
-                                .clip(RoundedCornerShape(20.dp))
+                                .clip(RoundedCornerShape(20.dp)).shimmer()
                                 .clickable(onClick = { navigateToDetails(album.id.orEmpty()) }),
                             contentScale = ContentScale.Crop
                         )
                         Text(
                             text = album.name.orEmpty(),
-                            style = MaterialTheme.typography.caption.copy(color = Color.White),
+                            style = MaterialTheme.typography.caption,
                             modifier = Modifier.padding(top = 16.dp),
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1

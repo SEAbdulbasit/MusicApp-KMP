@@ -78,7 +78,7 @@ internal fun ChartDetailsScreen(
         Icon(
             Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(Res.string.go_back),
-            tint = Color(0xFFFACD66),
+            tint = MaterialTheme.colors.primary,
         )
     }
 
@@ -102,7 +102,7 @@ internal fun Loading() {
     Box(modifier = Modifier.fillMaxSize()) {
         CircularProgressIndicator(
             modifier = Modifier.align(Alignment.Center),
-            color = Color(0xFFFACD66),
+            color = MaterialTheme.colors.primary,
         )
     }
 }
@@ -187,7 +187,7 @@ internal fun ChartDetailsView(
                     OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
                     Icon(
                         painter = sleepTimerIcon,
-                        tint = Color(0xFFFACD66),
+                        tint = MaterialTheme.colors.primary,
                         contentDescription = stringResource(Res.string.sleep_timer),
                         modifier = Modifier.size(40.dp).padding(start = 16.dp)
                             .clickable(onClick = {
@@ -237,7 +237,7 @@ internal fun ChartDetailsView(
                             if (active) {
                                 Icon(
                                     imageVector = Icons.Default.PlayArrow,
-                                    tint = Color(0xFFFACD66),
+                                    tint = MaterialTheme.colors.primary,
                                     contentDescription = stringResource(Res.string.play_all),
                                     modifier = Modifier.size(40.dp)
                                         .clip(RoundedCornerShape(5.dp))
@@ -294,7 +294,7 @@ internal fun OptionChips(onPlayAllClicked: (List<Item>) -> Unit, items: List<Ite
         Row {
             Icon(
                 imageVector = Icons.Default.PlayArrow,
-                tint = Color(0xFFFACD66),
+                tint = MaterialTheme.colors.primary,
                 contentDescription = stringResource(Res.string.play_all),
                 modifier = Modifier.padding(end = 8.dp).size(16.dp)
                     .align(Alignment.CenterVertically)

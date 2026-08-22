@@ -66,7 +66,7 @@ internal fun DashboardViewLarge(
 ) {
     val listState = rememberScrollState()
     Column(
-        modifier = Modifier.background(color = Color(0xFF1D2123)).fillMaxSize()
+        modifier = Modifier.background(color = MaterialTheme.colors.background).fillMaxSize()
             .verticalScroll(listState).padding(bottom = 32.dp)
     ) {
         TopChartViewLarge(dashboardState.topFiftyCharts, navigateToDetails)
@@ -95,7 +95,7 @@ internal fun TopChartViewLarge(
         Column(modifier = Modifier.padding(16.dp).align(Alignment.BottomStart)) {
             Text(
                 topFiftyCharts.name.orEmpty(),
-                style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Bold),
+                style = MaterialTheme.typography.h4,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 color = Color.White
@@ -109,7 +109,7 @@ internal fun TopChartViewLarge(
             Row(modifier = Modifier.padding(top = 40.dp)) {
                 Icon(
                     imageVector = Icons.Filled.FavoriteBorder,
-                    tint = Color(0xFFFACD66),
+                    tint = MaterialTheme.colors.primary,
                     contentDescription = stringResource(Res.string.explore_details),
                     modifier = Modifier.size(30.dp).align(Alignment.Top)
                 )

@@ -78,7 +78,7 @@ internal fun ChartDetailsScreenLarge(
         Icon(
             Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(Res.string.forward),
-            tint = Color(0xFFFACD66),
+            tint = MaterialTheme.colors.primary,
             modifier = Modifier.padding(all = 16.dp).size(32.dp)
         )
     }
@@ -176,7 +176,7 @@ internal fun ChartDetailsViewLarge(
                             OptionChips(onPlayAllClicked, chartDetails.tracks?.items ?: emptyList())
                             Icon(
                                 painter = sleepTimerIcon,
-                                tint = Color(0xFFFACD66),
+                                tint = MaterialTheme.colors.primary,
                                 contentDescription = stringResource(Res.string.sleep_timer),
                                 modifier = Modifier.size(40.dp).padding(start = 16.dp)
                                     .clickable(onClick = {
@@ -231,7 +231,7 @@ internal fun ChartDetailsViewLarge(
                         if (active) {
                             Icon(
                                 imageVector = Icons.Default.PlayArrow,
-                                tint = Color(0xFFFACD66),
+                                tint = MaterialTheme.colors.primary,
                                 contentDescription = stringResource(Res.string.play_all),
                                 modifier = Modifier.size(40.dp)
                                     .clip(RoundedCornerShape(5.dp))

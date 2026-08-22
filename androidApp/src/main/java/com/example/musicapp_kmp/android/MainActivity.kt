@@ -8,8 +8,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
 import com.arkivanov.decompose.defaultComponentContext
 import com.example.musicapp_kmp.MainAndroid
 import musicapp.decompose.MusicRootImpl
@@ -72,8 +72,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Configure window to handle insets properly
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        // Configure window for edge-to-edge
+        enableEdgeToEdge()
 
         // Ask for notification permission first
         askNotificationPermission()

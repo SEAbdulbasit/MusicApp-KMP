@@ -207,6 +207,16 @@ class PlayerViewModel(
         playerViewState.value = newState
     }
 
+    fun seekTo(position: Long) {
+        mediaPlayerController.seekTo(position)
+        updatePlayerState()
+    }
+
+    fun closePlayer() {
+        mediaPlayerController.pause()
+        playerViewState.value = PlayerViewState(trackList = emptyList())
+    }
+
     override fun onDestroy() {
         viewModelScope.cancel()
     }

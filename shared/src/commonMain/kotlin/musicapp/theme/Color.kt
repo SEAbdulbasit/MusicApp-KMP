@@ -22,7 +22,7 @@ val playerBackgroundColor = Color(0xCC101010)
 val loadingOverlayColor = Color(0x80000000)
 
 // Browse screen colors
-val selectedItemBackgroundColor = Color(0xCCFACD66)
+val selectedItemBackgroundColor = accentColor
 val itemBackgroundColor = Color(0xFF33373B)
 
 val gradientBrush = Brush.linearGradient(
@@ -30,3 +30,9 @@ val gradientBrush = Brush.linearGradient(
     start = Offset(0f, 0f),
     end = Offset(0f, Float.POSITIVE_INFINITY)
 )
+
+// Dark
+val darkBackground = Color(0xFF0F0F13)
+val darkSurface = Color(0xFF16161D)
+val textPrimary = Color(0xFFFFFFFF)
+val textSecondary = Color(0xFFA0A0A0)

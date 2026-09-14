@@ -1,22 +1,22 @@
 [versions]
 
 assertk="0.28.1"
-kotlin="2.2.20"
+kotlin="2.4.20"
 compose-plugin="1.10.3"
-kotlinx-coroutines-test="1.10.2"
-ktor="3.3.1"
-decompose="3.4.0"
-essenty="2.5.0"
-media3="1.8.0"
-kotlinx-serialization ="1.9.0"
+kotlinx-coroutines-test="1.11.0"
+ktor="3.5.2"
+decompose="3.5.0"
+essenty="2.6.0"
+media3="1.11.1"
+kotlinx-serialization ="1.11.0"
 vlcj = "4.11.0"
 image-loader="1.10.0"
-kotlinx-datetime = "0.7.1"
+kotlinx-datetime = "0.8.0"
 
 # Android
-androidx-activity-compose="1.11.0"
-agp = "9.0.0"
-androidx-core = "1.17.0"
+androidx-activity-compose="1.13.0"
+agp = "8.12.0"
+androidx-core = "1.18.0"
 
 [libraries]
 # AndroidX
@@ -33,7 +33,7 @@ essenty-lifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = 
 #decompose
 decompose={ module = "com.arkivanov.decompose:decompose", version.ref = "decompose"}
 #decompose-compose={ module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose"}
-decompose-compose="com.arkivanov.decompose:extensions-compose-experimental:3.4.0"
+decompose-compose="com.arkivanov.decompose:extensions-compose-experimental:3.5.0"
 
 # Ktor
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test" }

@@ -15,9 +15,12 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.blur.BlurRadiusSpec
+import androidx.compose.ui.graphics.blur.BlurStop
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberImagePainter
@@ -71,6 +74,25 @@ internal fun ChartDetailsScreen(
                 }
             )
     }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(90.dp)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xE61D2123),
+                        Color.Transparent
+                    )
+                )
+            )
+            .blur {
+                radius = BlurRadiusSpec.verticalGradient(
+                    startRadius = 24.dp,
+                    endRadius = 0.dp
+                )
+            }
+    )
     IconButton(
         onClick = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack) },
         modifier = Modifier.padding(top = 40.dp, start = 16.dp, end = 16.dp).size(32.dp)
@@ -142,7 +164,12 @@ internal fun ChartDetailsView(
         Image(
             painter = painter,
             contentDescription = chartDetails.images?.first()?.url.orEmpty(),
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().blur {
+                radius = BlurRadiusSpec.verticalGradient(
+                    startRadius = 0.dp,
+                    endRadius = 24.dp
+                )
+            },
             contentScale = ContentScale.Crop
         )
         Box(
@@ -156,7 +183,17 @@ internal fun ChartDetailsView(
         )
 
         LazyColumn(
-            modifier = Modifier.padding(horizontal = 30.dp),
+            modifier = Modifier
+                .padding(horizontal = 30.dp)
+                .blur {
+                    radius = BlurRadiusSpec.verticalGradient(
+                        listOf(
+                            BlurStop(fraction = 0.0f, radius = 20.dp),
+                            BlurStop(fraction = 0.12f, radius = 0.dp),
+                            BlurStop(fraction = 1.0f, radius = 0.dp)
+                        )
+                    )
+                },
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             item {

@@ -32,8 +32,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.blur.BlurRadiusSpec
+import androidx.compose.ui.graphics.blur.BlurStop
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -103,6 +106,15 @@ internal fun DashboardView(
     val listState = rememberScrollState()
     Column(
         modifier = Modifier.background(color = MaterialTheme.colors.background).fillMaxSize()
+            .blur {
+                radius = BlurRadiusSpec.verticalGradient(
+                    listOf(
+                        BlurStop(fraction = 0.0f, radius = 20.dp),
+                        BlurStop(fraction = 0.08f, radius = 0.dp),
+                        BlurStop(fraction = 1.0f, radius = 0.dp)
+                    )
+                )
+            }
             .verticalScroll(listState)
             .padding(bottom = 32.dp)
     ) {
@@ -126,7 +138,12 @@ internal fun TopChartView(topFiftyCharts: TopFiftyCharts, navigateToDetails: (St
         Image(
             painter,
             topFiftyCharts.images?.first()?.url.orEmpty(),
-            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(20.dp)).shimmer(),
+            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(20.dp)).blur {
+                radius = BlurRadiusSpec.verticalGradient(
+                    startRadius = 0.dp,
+                    endRadius = 20.dp
+                )
+            }.shimmer(),
             contentScale = ContentScale.Crop
         )
         Column(modifier = Modifier.padding(16.dp).align(Alignment.BottomStart)) {

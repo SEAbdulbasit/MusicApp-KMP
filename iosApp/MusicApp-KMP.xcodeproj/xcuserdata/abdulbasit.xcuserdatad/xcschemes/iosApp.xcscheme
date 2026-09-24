@@ -16,8 +16,7 @@
       </BuildActionEntries>
    </BuildAction>
    <LaunchAction
-      useCustomWorkingDirectory = "YES"
-      customWorkingDirectory = "/Users/abdulbasit/AndroidStudioProjects/MusicAppKMP"
+      useCustomWorkingDirectory = "NO"
       buildConfiguration = "Debug"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable>

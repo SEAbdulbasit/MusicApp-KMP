@@ -2,7 +2,7 @@
 
 assertk="0.28.1"
 kotlin="2.4.20"
-compose-plugin="1.10.3"
+compose-plugin="1.13.0-alpha02+dev4861"
 kotlinx-coroutines-test="1.11.0"
 ktor="3.5.2"
 decompose="3.5.0"
@@ -15,7 +15,7 @@ kotlinx-datetime = "0.8.0"
 
 # Android
 androidx-activity-compose="1.13.0"
-agp = "8.12.0"
+agp = "9.1.0"
 androidx-core = "1.18.0"
 
 [libraries]

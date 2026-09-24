@@ -13,7 +13,7 @@ plugins {
 kotlin {
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_1_8)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
 
@@ -33,7 +33,6 @@ kotlin {
 //    }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).filter { it.konanTarget.family == Family.IOS }
@@ -68,7 +67,7 @@ kotlin {
 
         commonMain.dependencies {
             with(compose) {
-                implementation("org.jetbrains.compose.material:material-icons-extended:1.6.10")
+                implementation(materialIconsExtended)
                 implementation(ui)
                 implementation(foundation)
                 implementation(material)
@@ -85,7 +84,7 @@ kotlin {
                 implementation(ktor.content.negotiation)
                 api(bundles.decompose)
                 implementation(image.loader)
-                implementation(essenty.lifecycle)
+                api(essenty.lifecycle)
             }
         }
 
@@ -125,8 +124,12 @@ kotlin {
 
 android {
     namespace = "com.example.musicapp_kmp"
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig {
         minSdk = 24
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }

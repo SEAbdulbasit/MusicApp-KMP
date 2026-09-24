@@ -9,12 +9,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
@@ -29,11 +32,19 @@ import androidx.compose.runtime.*
 import kotlinx.coroutines.delay
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.blur.BlurRadiusSpec
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.seiko.imageloader.rememberImagePainter
@@ -44,6 +55,7 @@ import musicapp.utils.shimmer
 import musicapp_kmp.shared.generated.resources.*
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import kotlin.math.roundToInt
 
 @Composable
 internal fun PlayerView(playerComponent: PlayerComponent) {
@@ -64,7 +76,6 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
 
     LaunchedEffect(Unit){
         playerComponent.viewModel.syncWithMediaPlayer()
-
     }
 
     LaunchedEffect(isError) {
@@ -126,6 +137,8 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
             currentTrack = currentTrack,
             isPlaying = isPlaying,
             isBuffering = isBuffering,
+            currentPosition = currentPosition,
+            duration = duration,
             onExpand = { isExpanded = true },
             onPlayPause = { playerComponent.viewModel.togglePlayPause() },
             onPrevious = {
@@ -148,6 +161,8 @@ internal fun CompactPlayer(
     currentTrack: TrackItem,
     isPlaying: Boolean,
     isBuffering: Boolean,
+    currentPosition: Long,
+    duration: Long,
     onExpand: () -> Unit,
     onPlayPause: () -> Unit,
     onPrevious: () -> Unit,
@@ -156,99 +171,157 @@ internal fun CompactPlayer(
     onForward: () -> Unit,
     onClose: () -> Unit
 ) {
+    val haptic = LocalHapticFeedback.current
+    var horizontalDragOffset by remember { mutableStateOf(0f) }
+
     Box(
-        modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)
-            .padding(spacingMedium).clickable(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xE625292B))
+            .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onExpand
             )
-    ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            val painter = rememberImagePainter(url = currentTrack.albumImageUrl)
-            Box(modifier = Modifier.clip(MaterialTheme.shapes.small).width(49.dp).height(49.dp)) {
-                Image(
-                    painter = painter,
-                    contentDescription = currentTrack.albumImageUrl,
-                    modifier = Modifier.clip(MaterialTheme.shapes.small).width(49.dp).height(49.dp).shimmer(),
-                    contentScale = ContentScale.Crop
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures(
+                    onDragEnd = {
+                        if (horizontalDragOffset < -50f) {
+                            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                            onNext()
+                        } else if (horizontalDragOffset > 50f) {
+                            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                            onPrevious()
+                        }
+                        horizontalDragOffset = 0f
+                    },
+                    onHorizontalDrag = { _, dragAmount ->
+                        horizontalDragOffset += dragAmount
+                    }
                 )
-                if (isBuffering) {
-                    Box(modifier = Modifier.fillMaxSize().background(loadingOverlayColor)) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center).padding(spacingSmall),
-                            color = MaterialTheme.colors.primary,
-                        )
+            }
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val painter = rememberImagePainter(url = currentTrack.albumImageUrl)
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .size(46.dp)
+                ) {
+                    Image(
+                        painter = painter,
+                        contentDescription = currentTrack.albumImageUrl,
+                        modifier = Modifier.fillMaxSize().shimmer(),
+                        contentScale = ContentScale.Crop
+                    )
+                    if (isBuffering) {
+                        Box(modifier = Modifier.fillMaxSize().background(loadingOverlayColor)) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.align(Alignment.Center).padding(spacingSmall),
+                                color = MaterialTheme.colors.primary,
+                                strokeWidth = 2.5.dp
+                            )
+                        }
                     }
                 }
+                Column(
+                    Modifier
+                        .weight(1f)
+                        .padding(horizontal = 12.dp)
+                        .align(Alignment.CenterVertically)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        if (isPlaying) {
+                            EqualizerBars(
+                                isPlaying = true,
+                                modifier = Modifier.padding(end = 6.dp),
+                                maxHeight = 12.dp
+                            )
+                        }
+                        Text(
+                            text = currentTrack.title,
+                            style = MaterialTheme.typography.subtitle1.copy(
+                                color = MaterialTheme.colors.onSurface,
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            modifier = Modifier.weight(1f, fill = false).basicMarquee(Int.MAX_VALUE),
+                            maxLines = 1
+                        )
+                    }
+                    Text(
+                        text = currentTrack.artist,
+                        style = MaterialTheme.typography.caption.copy(
+                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f)
+                        ),
+                        modifier = Modifier.padding(top = 2.dp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        tint = MaterialTheme.colors.primary,
+                        contentDescription = stringResource(Res.string.back),
+                        modifier = Modifier
+                            .padding(end = 6.dp)
+                            .size(26.dp)
+                            .clickable {
+                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                onPrevious()
+                            }
+                    )
+                    PlayPauseButton(
+                        modifier = Modifier.size(34.dp),
+                        isPlaying = isPlaying,
+                        onTogglePlayPause = {
+                            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                            onPlayPause()
+                        }
+                    )
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        tint = MaterialTheme.colors.primary,
+                        contentDescription = stringResource(Res.string.forward),
+                        modifier = Modifier
+                            .padding(start = 6.dp)
+                            .size(26.dp)
+                            .clickable {
+                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                onNext()
+                            }
+                    )
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        tint = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
+                        contentDescription = "Close Player",
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .size(22.dp)
+                            .clickable {
+                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                onClose()
+                            }
+                    )
+                }
             }
-            Column(Modifier.weight(1f).padding(start = spacingSmall).align(Alignment.Top)) {
-                Text(
-                    text = currentTrack.title, style = MaterialTheme.typography.subtitle1.copy(
-                        color = MaterialTheme.colors.onSurface
-                    ),
-                    modifier = Modifier.fillMaxWidth().basicMarquee(Int.MAX_VALUE)
-                )
-                Text(
-                    text = currentTrack.artist,
-                    style = MaterialTheme.typography.subtitle1.copy(
-                        color = MaterialTheme.colors.onSurface
-                    ),
-                    modifier = Modifier.padding(top = spacingSmall)
-                )
-            }
-            Row(modifier = Modifier.align(Alignment.CenterVertically)) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    tint = MaterialTheme.colors.primary,
-                    contentDescription = stringResource(Res.string.back),
-                    modifier = Modifier.padding(end = spacingSmall).size(iconSizeMedium)
-                        .align(Alignment.CenterVertically)
-                        .clickable(onClick = onPrevious)
-                )
-                Icon(
-                    painter = painterResource(Res.drawable.rewind),
-                    tint = MaterialTheme.colors.primary,
-                    contentDescription = stringResource(Res.string.rewind_5_sec),
-                    modifier = Modifier
-                        .padding(end = spacingSmall)
-                        .size(iconSizeMedium)
-                        .align(Alignment.CenterVertically)
-                        .clickable(onClick = onRewind)
-                )
-                PlayPauseButton(
-                    modifier = Modifier.padding(end = spacingSmall).size(iconSizeMedium)
-                        .align(Alignment.CenterVertically),
-                    isPlaying = isPlaying,
-                    onTogglePlayPause = onPlayPause
-                )
-                Icon(
-                    painter = painterResource(Res.drawable.forward),
-                    tint = MaterialTheme.colors.primary,
-                    contentDescription = stringResource(Res.string.forward_5_sec),
-                    modifier = Modifier
-                        .padding(end = spacingSmall)
-                        .size(iconSizeMedium)
-                        .align(Alignment.CenterVertically)
-                        .clickable(onClick = onForward)
-                )
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                    tint = MaterialTheme.colors.primary,
-                    contentDescription = stringResource(Res.string.forward),
-                    modifier = Modifier.padding(end = spacingSmall).size(iconSizeMedium)
-                        .align(Alignment.CenterVertically)
-                        .clickable(onClick = onNext)
-                )
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    tint = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
-                    contentDescription = "Close Player",
-                    modifier = Modifier.padding(start = spacingSmall).size(iconSizeMedium)
-                        .align(Alignment.CenterVertically)
-                        .clickable(onClick = onClose)
-                )
-            }
+            val progress = if (duration > 0) (currentPosition.toFloat() / duration.toFloat()).coerceIn(0f, 1f) else 0f
+            LinearProgressIndicator(
+                progress = progress,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.5.dp),
+                color = MaterialTheme.colors.primary,
+                backgroundColor = Color(0x22FACD66)
+            )
         }
     }
 }
@@ -269,11 +342,29 @@ internal fun FullScreenPlayer(
     onSeek: (Long) -> Unit,
     onClose: () -> Unit
 ) {
+    val haptic = LocalHapticFeedback.current
+    var verticalDragOffset by remember { mutableStateOf(0f) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
             .systemBarsPadding()
+            .offset { IntOffset(0, verticalDragOffset.coerceAtLeast(0f).roundToInt()) }
+            .pointerInput(Unit) {
+                detectVerticalDragGestures(
+                    onDragEnd = {
+                        if (verticalDragOffset > 100f) {
+                            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                            onCollapse()
+                        }
+                        verticalDragOffset = 0f
+                    },
+                    onVerticalDrag = { _, dragAmount ->
+                        verticalDragOffset += dragAmount
+                    }
+                )
+            }
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -284,7 +375,10 @@ internal fun FullScreenPlayer(
                 tint = MaterialTheme.colors.onBackground,
                 modifier = Modifier
                     .size(32.dp)
-                    .clickable(onClick = onCollapse)
+                    .clickable {
+                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        onCollapse()
+                    }
             )
             Icon(
                 imageVector = Icons.Default.Close,
@@ -292,38 +386,59 @@ internal fun FullScreenPlayer(
                 tint = MaterialTheme.colors.onBackground,
                 modifier = Modifier
                     .size(32.dp)
-                    .clickable(onClick = onClose)
+                    .clickable {
+                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        onClose()
+                    }
             )
         }
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(28.dp))
         
         val painter = rememberImagePainter(url = currentTrack.albumImageUrl)
 
-
         Box(
-            modifier = Modifier
-                .size(200.dp)
-                .clip(RoundedCornerShape(32.dp)),
             contentAlignment = Alignment.Center
         ) {
-            Image(
-                painter = painter,
-                contentDescription = currentTrack.albumImageUrl,
-                modifier = Modifier.fillMaxSize().shimmer(),
-                contentScale = ContentScale.Crop
-            )
-            if (isBuffering) {
-                Box(modifier = Modifier.fillMaxSize().background(loadingOverlayColor)) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center).padding(spacingMedium),
-                        color = MaterialTheme.colors.primary,
-                        strokeWidth = 4.dp
+            // Ambient Glow behind album artwork
+            Box(
+                modifier = Modifier
+                    .size(240.dp)
+                    .background(
+                        brush = Brush.radialGradient(
+                            colors = listOf(
+                                MaterialTheme.colors.primary.copy(alpha = 0.35f),
+                                Color.Transparent
+                            )
+                        ),
+                        shape = CircleShape
                     )
+                    .blur(28.dp)
+            )
+            Box(
+                modifier = Modifier
+                    .size(200.dp)
+                    .clip(RoundedCornerShape(32.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painter,
+                    contentDescription = currentTrack.albumImageUrl,
+                    modifier = Modifier.fillMaxSize().shimmer(),
+                    contentScale = ContentScale.Crop
+                )
+                if (isBuffering) {
+                    Box(modifier = Modifier.fillMaxSize().background(loadingOverlayColor)) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center).padding(spacingMedium),
+                            color = MaterialTheme.colors.primary,
+                            strokeWidth = 4.dp
+                        )
+                    }
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Text(
             text = currentTrack.title,
@@ -353,7 +468,10 @@ internal fun FullScreenPlayer(
         Slider(
             value = progress,
             onValueChange = { newProgress ->
-                if (duration > 0) onSeek((newProgress * duration).toLong())
+                if (duration > 0) {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    onSeek((newProgress * duration).toLong())
+                }
             },
             colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colors.primary,
@@ -376,20 +494,29 @@ internal fun FullScreenPlayer(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 tint = MaterialTheme.colors.primary,
                 contentDescription = stringResource(Res.string.back),
-                modifier = Modifier.size(36.dp).clickable(onClick = onPrevious)
+                modifier = Modifier.size(36.dp).clickable {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    onPrevious()
+                }
             )
             Icon(
                 painter = painterResource(Res.drawable.rewind),
                 tint = MaterialTheme.colors.primary,
                 contentDescription = stringResource(Res.string.rewind_5_sec),
-                modifier = Modifier.clip(CircleShape).size(36.dp).clickable(onClick = onRewind)
+                modifier = Modifier.clip(CircleShape).size(36.dp).clickable {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    onRewind()
+                }
             )
             Box(
                 modifier = Modifier
                     .size(72.dp)
                     .clip(CircleShape)
                     .background(MaterialTheme.colors.primary)
-                    .clickable(onClick = onPlayPause),
+                    .clickable {
+                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        onPlayPause()
+                    },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -403,13 +530,19 @@ internal fun FullScreenPlayer(
                 painter = painterResource(Res.drawable.forward),
                 tint = MaterialTheme.colors.primary,
                 contentDescription = stringResource(Res.string.forward_5_sec),
-                modifier = Modifier.clip(CircleShape).size(36.dp).clickable(onClick = onForward)
+                modifier = Modifier.clip(CircleShape).size(36.dp).clickable {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    onForward()
+                }
             )
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 tint = MaterialTheme.colors.primary,
                 contentDescription = stringResource(Res.string.forward),
-                modifier = Modifier.size(36.dp).clickable(onClick = onNext)
+                modifier = Modifier.size(36.dp).clickable {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    onNext()
+                }
             )
         }
     }

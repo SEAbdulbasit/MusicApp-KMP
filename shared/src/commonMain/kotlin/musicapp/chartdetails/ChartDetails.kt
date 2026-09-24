@@ -22,12 +22,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.blur.BlurRadiusSpec
 import androidx.compose.ui.graphics.blur.BlurStop
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberImagePainter
 import musicapp.decompose.ChartDetailsComponent
 import musicapp.network.models.topfiftycharts.Item
 import musicapp.network.models.topfiftycharts.TopFiftyCharts
 import musicapp.player.toMediaItem
+import musicapp.playerview.EqualizerBars
 import musicapp_kmp.shared.generated.resources.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -77,7 +79,7 @@ internal fun ChartDetailsScreen(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(90.dp)
+            .height(120.dp)
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
@@ -234,11 +236,15 @@ internal fun ChartDetailsView(
                 }
             }
             itemsIndexed(chartDetails.tracks?.items ?: emptyList()) { index, track ->
+                val isCurrentTrack = track.track?.id.orEmpty() == selectedTrack.value
+                val titleColor = if (isCurrentTrack) Color(0xFF1D2123) else Color(0XFFEFEEE0)
+                val subtitleColor = if (isCurrentTrack) Color(0xFF33373B) else Color(0XFFEFEEE0)
+
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(20.dp))
                         .fillMaxWidth().background(
-                            if (track.track?.id.orEmpty() == selectedTrack.value) Color(0xCCFACD66)
+                            if (isCurrentTrack) Color(0xCCFACD66)
                             else Color(0xFF33373B)
                         )
                         .padding(16.dp)
@@ -286,25 +292,30 @@ internal fun ChartDetailsView(
                             Text(
                                 text = track.track?.name.orEmpty(),
                                 style = MaterialTheme.typography.caption.copy(
-                                    color = Color(
-                                        0XFFEFEEE0
-                                    )
+                                    color = titleColor,
+                                    fontWeight = if (isCurrentTrack) FontWeight.Bold else FontWeight.Normal
                                 )
                             )
                             Text(
                                 text = track.track?.artists?.map { it.name }?.joinToString(",")
                                     .orEmpty(),
                                 style = MaterialTheme.typography.caption.copy(
-                                    color = Color(
-                                        0XFFEFEEE0
-                                    )
+                                    color = subtitleColor
                                 ),
                                 modifier = Modifier.padding(top = 8.dp)
                             )
                         }
+                        if (isCurrentTrack) {
+                            EqualizerBars(
+                                isPlaying = true,
+                                modifier = Modifier.align(Alignment.CenterVertically).padding(end = 8.dp),
+                                color = Color(0xFF1D2123),
+                                maxHeight = 14.dp
+                            )
+                        }
                         Text(
                             text = "${(((track.track?.durationMs ?: 0) / (1000 * 60)) % 60)}:${(((track.track?.durationMs ?: 0) / (1000)) % 60)}",
-                            style = MaterialTheme.typography.caption.copy(color = Color(0XFFEFEEE0)),
+                            style = MaterialTheme.typography.caption.copy(color = titleColor),
                             modifier = Modifier.align(
                                 Alignment.Bottom
                             )

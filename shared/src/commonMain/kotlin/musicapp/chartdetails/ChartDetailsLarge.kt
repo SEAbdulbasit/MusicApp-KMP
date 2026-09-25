@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.blur.BlurStop
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberImagePainter
 import musicapp.decompose.ChartDetailsComponent
@@ -79,10 +80,12 @@ internal fun ChartDetailsScreenLarge(
             }
         )
     }
+    val topInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(90.dp)
+            .height(topInset + 64.dp)
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
@@ -98,12 +101,14 @@ internal fun ChartDetailsScreenLarge(
                 )
             }
     )
-    IconButton(onClick = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack) }) {
+    IconButton(
+        onClick = { chartDetailsComponent.onOutPut(ChartDetailsComponent.Output.GoBack) },
+        modifier = Modifier.padding(top = topInset + 4.dp, start = 16.dp, end = 16.dp).size(32.dp)
+    ) {
         Icon(
             Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(Res.string.forward),
             tint = MaterialTheme.colors.primary,
-            modifier = Modifier.padding(all = 16.dp).size(32.dp)
         )
     }
 
@@ -165,14 +170,16 @@ internal fun ChartDetailsViewLarge(
         )
     }
 
+    val topInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+
     LazyColumn(
         modifier = Modifier
             .padding(horizontal = 63.dp)
             .blur {
                 radius = BlurRadiusSpec.verticalGradient(
                     listOf(
-                        BlurStop(fraction = 0.0f, radius = 20.dp),
-                        BlurStop(fraction = 0.12f, radius = 0.dp),
+                        BlurStop(fraction = 0.0f, radius = 24.dp),
+                        BlurStop(fraction = 0.16f, radius = 0.dp),
                         BlurStop(fraction = 1.0f, radius = 0.dp)
                     )
                 )
@@ -183,11 +190,11 @@ internal fun ChartDetailsViewLarge(
 
         item {
             Box(modifier = Modifier.fillMaxSize()) {
-                Row(modifier = Modifier.padding(16.dp).align(Alignment.TopCenter)) {
+                Row(modifier = Modifier.padding(top = topInset + 44.dp, start = 16.dp, end = 16.dp, bottom = 16.dp).align(Alignment.TopCenter)) {
                     Image(
                         painter = playlistCoverPainter,
                         contentDescription = chartDetails.images?.first()?.url.orEmpty(),
-                        modifier = Modifier.padding(top = 24.dp, bottom = 20.dp).height(284.dp)
+                        modifier = Modifier.padding(bottom = 20.dp).height(284.dp)
                             .width(284.dp)
                             .aspectRatio(1f).clip(RoundedCornerShape(25.dp)),
                         contentScale = ContentScale.Crop,
@@ -288,15 +295,19 @@ internal fun ChartDetailsViewLarge(
                             style = MaterialTheme.typography.caption.copy(
                                 color = titleColor,
                                 fontWeight = if (isCurrentTrack) FontWeight.Bold else FontWeight.Normal
-                            )
+                            ),
+                            maxLines = 1,
+                            overflow = Ellipsis
                         )
                         Text(
-                            text = track.track?.artists?.joinToString(",") { it.name ?: "" }
+                            text = track.track?.artists?.joinToString(", ") { it.name ?: "" }
                                 .orEmpty(),
                             style = MaterialTheme.typography.caption.copy(
                                 color = subtitleColor
                             ),
-                            modifier = Modifier.padding(top = 8.dp)
+                            modifier = Modifier.padding(top = 8.dp),
+                            maxLines = 1,
+                            overflow = Ellipsis
                         )
                     }
                     if (isCurrentTrack) {
@@ -307,8 +318,11 @@ internal fun ChartDetailsViewLarge(
                             maxHeight = 14.dp
                         )
                     }
+                    val totalSeconds = (track.track?.durationMs ?: 0) / 1000
+                    val minutes = totalSeconds / 60
+                    val seconds = totalSeconds % 60
                     Text(
-                        text = "${(((track.track?.durationMs ?: 0) / (1000 * 60)) % 60)}:${(((track.track?.durationMs ?: 0) / (1000)) % 60)}",
+                        text = "$minutes:${seconds.toString().padStart(2, '0')}",
                         style = MaterialTheme.typography.caption.copy(color = titleColor),
                         modifier = Modifier.align(
                             Alignment.Bottom

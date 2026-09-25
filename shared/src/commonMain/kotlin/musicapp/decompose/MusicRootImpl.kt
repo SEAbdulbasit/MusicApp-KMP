@@ -6,6 +6,7 @@ import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
+import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.router.stack.*
 import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
@@ -129,17 +130,21 @@ class MusicRootImpl(
         initialConfiguration = { null },
         key = "PlayerView",
         handleBackButton = true,
-        childFactory = { config, _ ->
+        childFactory = { config, childComponentContext ->
             PlayerComponentImpl(
-                componentContext = componentContext,
+                componentContext = childComponentContext,
                 mediaPlayerController = mediaPlayerController,
                 trackList = config.playlist,
                 selectedTrack = config.selectedTrack,
                 playerInputs = musicPlayerInput,
                 output = {
                     when (it) {
-                        PlayerComponent.Output.OnPause -> TODO()
-                        PlayerComponent.Output.OnPlay -> TODO()
+                        PlayerComponent.Output.OnPause -> mediaPlayerController.pause()
+                        PlayerComponent.Output.OnPlay -> mediaPlayerController.start()
+                        PlayerComponent.Output.OnClose -> {
+                            mediaPlayerController.pause()
+                            dialogNavigation.dismiss()
+                        }
 
                         is PlayerComponent.Output.OnTrackUpdated -> {
                             scope.launch {

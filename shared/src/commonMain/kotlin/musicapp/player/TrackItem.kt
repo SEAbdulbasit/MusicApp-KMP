@@ -16,7 +16,7 @@ fun Track.toMediaItem(): TrackItem {
     return TrackItem(
         id = id ?: "",
         title = name.toString(),
-        artist = artists?.joinToString(",") { it.name ?: "" }.toString(),
+        artist = artists?.joinToString(", ") { it.name ?: "" }.toString(),
         albumImageUrl = album?.images?.first()?.url.orEmpty(),
         pathSource = previewUrl.toString()
     )

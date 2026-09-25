@@ -8,12 +8,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -104,13 +108,15 @@ internal fun DashboardView(
     navigateToDetails: (String) -> Unit
 ) {
     val listState = rememberScrollState()
+    val topInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+
     Column(
         modifier = Modifier.background(color = MaterialTheme.colors.background).fillMaxSize()
             .blur {
                 radius = BlurRadiusSpec.verticalGradient(
                     listOf(
-                        BlurStop(fraction = 0.0f, radius = 20.dp),
-                        BlurStop(fraction = 0.08f, radius = 0.dp),
+                        BlurStop(fraction = 0.0f, radius = 24.dp),
+                        BlurStop(fraction = 0.16f, radius = 0.dp),
                         BlurStop(fraction = 1.0f, radius = 0.dp)
                     )
                 )
@@ -118,6 +124,7 @@ internal fun DashboardView(
             .verticalScroll(listState)
             .padding(bottom = 32.dp)
     ) {
+        Spacer(modifier = Modifier.height(topInset + 4.dp))
         TopChartView(dashboardState.topFiftyCharts, navigateToDetails)
         FeaturedPlayLists(dashboardState.featuredPlayList, navigateToDetails)
         NewReleases(dashboardState.newReleasedAlbums, navigateToDetails)

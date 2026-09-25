@@ -124,7 +124,10 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
             onRewind = { playerComponent.viewModel.rewind5Seconds() },
             onForward = { playerComponent.viewModel.forward5Seconds() },
             onSeek = { playerComponent.viewModel.seekTo(it) },
-            onClose = { playerComponent.viewModel.closePlayer() }
+            onClose = {
+                playerComponent.viewModel.closePlayer()
+                playerComponent.onOutPut(PlayerComponent.Output.OnClose)
+            }
         )
     }
 
@@ -149,9 +152,10 @@ internal fun PlayerView(playerComponent: PlayerComponent) {
                 playerComponent.viewModel.setBuffering(true)
                 playerComponent.viewModel.playNextTrack()
             },
-            onRewind = { playerComponent.viewModel.rewind5Seconds() },
-            onForward = { playerComponent.viewModel.forward5Seconds() },
-            onClose = { playerComponent.viewModel.closePlayer() }
+            onClose = {
+                playerComponent.viewModel.closePlayer()
+                playerComponent.onOutPut(PlayerComponent.Output.OnClose)
+            }
         )
     }
 }
@@ -167,8 +171,6 @@ internal fun CompactPlayer(
     onPlayPause: () -> Unit,
     onPrevious: () -> Unit,
     onNext: () -> Unit,
-    onRewind: () -> Unit,
-    onForward: () -> Unit,
     onClose: () -> Unit
 ) {
     val haptic = LocalHapticFeedback.current
@@ -177,6 +179,7 @@ internal fun CompactPlayer(
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .windowInsetsPadding(WindowInsets.navigationBars)
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0xE625292B))
@@ -235,7 +238,7 @@ internal fun CompactPlayer(
                 Column(
                     Modifier
                         .weight(1f)
-                        .padding(horizontal = 12.dp)
+                        .padding(horizontal = 10.dp)
                         .align(Alignment.CenterVertically)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -253,34 +256,39 @@ internal fun CompactPlayer(
                                 fontWeight = FontWeight.SemiBold
                             ),
                             modifier = Modifier.weight(1f, fill = false).basicMarquee(Int.MAX_VALUE),
-                            maxLines = 1
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                     Text(
-                        text = currentTrack.artist,
+                        text = currentTrack.artist.replace(",", ", "),
                         style = MaterialTheme.typography.caption.copy(
                             color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f)
                         ),
-                        modifier = Modifier.padding(top = 2.dp),
+                        modifier = Modifier.padding(top = 2.dp).basicMarquee(Int.MAX_VALUE),
                         maxLines = 1,
+                        softWrap = false,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         tint = MaterialTheme.colors.primary,
                         contentDescription = stringResource(Res.string.back),
                         modifier = Modifier
-                            .padding(end = 6.dp)
-                            .size(26.dp)
+                            .size(24.dp)
                             .clickable {
                                 haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                                 onPrevious()
                             }
                     )
                     PlayPauseButton(
-                        modifier = Modifier.size(34.dp),
+                        modifier = Modifier.size(32.dp),
                         isPlaying = isPlaying,
                         onTogglePlayPause = {
                             haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
@@ -292,8 +300,7 @@ internal fun CompactPlayer(
                         tint = MaterialTheme.colors.primary,
                         contentDescription = stringResource(Res.string.forward),
                         modifier = Modifier
-                            .padding(start = 6.dp)
-                            .size(26.dp)
+                            .size(24.dp)
                             .clickable {
                                 haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                                 onNext()
@@ -304,8 +311,8 @@ internal fun CompactPlayer(
                         tint = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
                         contentDescription = "Close Player",
                         modifier = Modifier
-                            .padding(start = 8.dp)
-                            .size(22.dp)
+                            .padding(start = 2.dp)
+                            .size(20.dp)
                             .clickable {
                                 haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                                 onClose()
@@ -444,13 +451,18 @@ internal fun FullScreenPlayer(
             text = currentTrack.title,
             style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold),
             color = MaterialTheme.colors.onBackground,
-            modifier = Modifier.fillMaxWidth().basicMarquee(Int.MAX_VALUE)
+            modifier = Modifier.fillMaxWidth().basicMarquee(Int.MAX_VALUE),
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis
         )
         Text(
-            text = currentTrack.artist,
+            text = currentTrack.artist.replace(",", ", "),
             style = MaterialTheme.typography.subtitle2,
             color = MaterialTheme.colors.onBackground.copy(alpha = 0.7f),
-            modifier = Modifier.padding(top = 4.dp).fillMaxWidth(),
+            modifier = Modifier.padding(top = 4.dp).fillMaxWidth().basicMarquee(Int.MAX_VALUE),
+            maxLines = 1,
+            softWrap = false,
             overflow = TextOverflow.Ellipsis
         )
         

@@ -16,6 +16,7 @@ interface PlayerComponent {
     sealed class Output {
         data object OnPause : Output()
         data object OnPlay : Output()
+        data object OnClose : Output()
         data class OnTrackUpdated(val trackId: String) : Output()
     }
 

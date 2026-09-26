@@ -56,3 +56,5 @@ fun initializePlatformContext(viewController: UIViewController) {
 actual fun getPlatformContext(): PlatformContext {
     return platformContext ?: PlatformContext()
 }
+
+actual val isAndroidPlatform: Boolean = false

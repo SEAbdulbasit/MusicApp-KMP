@@ -6,3 +6,5 @@ actual class PlatformContext
 actual fun getPlatformContext(): PlatformContext {
     return PlatformContext()
 }
+
+actual val isAndroidPlatform: Boolean = false

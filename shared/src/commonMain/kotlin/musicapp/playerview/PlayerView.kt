@@ -419,7 +419,7 @@ internal fun FullScreenPlayer(
                         ),
                         shape = CircleShape
                     )
-                    .blur(28.dp)
+                    .blur(musicapp.utils.AppBlurConfig.ambientGlowBlurRadius)
             )
             Box(
                 modifier = Modifier

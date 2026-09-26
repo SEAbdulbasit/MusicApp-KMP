@@ -5,3 +5,5 @@ package musicapp.utils
 expect class PlatformContext
 
 expect fun getPlatformContext(): PlatformContext
+
+expect val isAndroidPlatform: Boolean

@@ -77,13 +77,7 @@ internal fun DashboardViewLarge(
     Column(
         modifier = Modifier.background(color = MaterialTheme.colors.background).fillMaxSize()
             .blur {
-                radius = BlurRadiusSpec.verticalGradient(
-                    listOf(
-                        BlurStop(fraction = 0.0f, radius = 24.dp),
-                        BlurStop(fraction = 0.16f, radius = 0.dp),
-                        BlurStop(fraction = 1.0f, radius = 0.dp)
-                    )
-                )
+                radius = BlurRadiusSpec.verticalGradient(musicapp.utils.AppBlurConfig.headerBlurStops)
             }
             .verticalScroll(listState).padding(bottom = 32.dp)
     ) {
@@ -111,7 +105,7 @@ internal fun TopChartViewLarge(
             modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(20.dp)).blur {
                 radius = BlurRadiusSpec.verticalGradient(
                     startRadius = 0.dp,
-                    endRadius = 20.dp
+                    endRadius = musicapp.utils.AppBlurConfig.imageCardBlurRadius
                 )
             },
             contentScale = ContentScale.Crop

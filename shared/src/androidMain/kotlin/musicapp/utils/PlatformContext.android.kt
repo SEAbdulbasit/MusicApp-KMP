@@ -6,6 +6,8 @@ import androidx.compose.ui.platform.LocalContext
 
 actual class PlatformContext(val applicationContext: Context)
 
+actual val isAndroidPlatform: Boolean = true
+
 
 // Global variable to store the application context
 private var applicationContext: Context? = null

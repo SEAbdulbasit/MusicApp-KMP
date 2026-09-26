@@ -96,7 +96,7 @@ internal fun ChartDetailsScreenLarge(
             )
             .blur {
                 radius = BlurRadiusSpec.verticalGradient(
-                    startRadius = 24.dp,
+                    startRadius = musicapp.utils.AppBlurConfig.topBarBackdropBlurRadius,
                     endRadius = 0.dp
                 )
             }
@@ -154,7 +154,7 @@ internal fun ChartDetailsViewLarge(
             modifier = Modifier.fillMaxSize().blur {
                 radius = BlurRadiusSpec.verticalGradient(
                     startRadius = 0.dp,
-                    endRadius = 24.dp
+                    endRadius = musicapp.utils.AppBlurConfig.imageCardBlurRadius
                 )
             },
             contentScale = ContentScale.Crop
@@ -176,13 +176,7 @@ internal fun ChartDetailsViewLarge(
         modifier = Modifier
             .padding(horizontal = 63.dp)
             .blur {
-                radius = BlurRadiusSpec.verticalGradient(
-                    listOf(
-                        BlurStop(fraction = 0.0f, radius = 24.dp),
-                        BlurStop(fraction = 0.16f, radius = 0.dp),
-                        BlurStop(fraction = 1.0f, radius = 0.dp)
-                    )
-                )
+                radius = BlurRadiusSpec.verticalGradient(musicapp.utils.AppBlurConfig.headerBlurStops)
             },
         contentPadding = PaddingValues(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
